@@ -1,7 +1,7 @@
 # saas-identity-platform-swift 功能树
 
-> SaaS 多租户多应用身份平台 — SwiftUI iOS 前端。consumes `saas-identity-platform-shared` TypeSpec SSOT。
-> F 级别镜像 shared BASE 功能（与 react/vue/nextjs 兄弟前端仓同编号双账本）。全部 规划（待实现）。
+> SaaS 多租户多应用身份平台 — SwiftUI iOS 前端。consumes `saas-identity-platform-shared` TypeSpec SSOT（需求与 API 基线；API 只用 shared 生成物）。
+> F 级别镜像 shared BASE 功能（与 react/vue/nextjs 兄弟前端仓同编号双账本；react 仓仅为 UI/交互参照实现，非基线）。全部 规划（待实现）。
 > **前端 only 仓**：不实现任何后端；后端可在 saas 家族 nextjs / springboot / aspnetcore 之间切换（同契约异实现）。
 > 状态推进路径：规划 → 开发中 → 已上线。子项级（I 级）等第一个需求落地时再拆，不预拆。
 

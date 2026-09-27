@@ -1,8 +1,8 @@
 # SaaS身份平台 · SwiftUI iOS 前端
 
-SaaS 多租户多应用身份平台的 SwiftUI iOS 前端 —— 需求与功能基线跟随 `../saas-identity-platform-react`（同契约异实现镜像仓），前端 only。
+SaaS 多租户多应用身份平台的 SwiftUI iOS 前端。需求与 API 基线 = `saas-identity-platform-shared` TypeSpec SSOT；react 仓仅为 UI/交互参照实现。
 
-本仓**不绑书稿**：需求按 react 仓走；技术栈基线（Xcode 16.2 + Swift 6.0 + iOS 18 SDK，受构建机 Intel Air / macOS 14.5 天花板约束）。API 面只认 `saas-identity-platform-shared` TypeSpec SSOT，后端可在 nextjs / springboot / aspnetcore 之间切换。
+本仓**不绑书稿**：技术栈基线（Xcode 16.2 + Swift 6.0 + iOS 18 SDK，受构建机 Intel Air / macOS 14.5 天花板约束）。API 面只认 `saas-identity-platform-shared` TypeSpec 生成物（openapi.yaml → Swift client），后端可在 nextjs / springboot / aspnetcore 之间切换。
 
 ## 快速开始
 
@@ -31,7 +31,9 @@ git push && ssh home-mac "git -C <仓路径> pull && swift build && swift test"
 
 ## 需求基线
 
-跟随 `../saas-identity-platform-react`：M/F 编号与 react 仓功能树逐条对齐（shared BASE 双账本），需求变更以 react 仓为上游。
+- **需求与 API 基线 = `saas-identity-platform-shared` TypeSpec SSOT**：行为规格读 `tsp/*.tsp`，API client 只用 shared 仓 `generated/openapi/openapi.yaml` 生成的 Swift 代码（禁手写接口层，suite 硬规则 §4）。
+- 范围：M00/M01/M04 三模块 13 F；M/F 编号沿用 react 仓功能树（同 shared BASE 双账本），便于跨仓对照。
+- UI/交互参照：`../saas-identity-platform-react`（参照实现，非基线）。
 
 ## 快速链接
 

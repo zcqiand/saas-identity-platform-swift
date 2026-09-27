@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "project": "saas-identity-platform-swift",
+  "functions": {
+    "modules": 3,
+    "features": 13,
+    "items": 0
+  },
+  "warnings_total": 0,
+  "warnings": {},
+  "unreachable_shipped": [],
+  "function_map": {}
+}

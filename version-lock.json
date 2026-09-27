@@ -1,0 +1,9 @@
+{
+  "comment": "基线受构建机 home-mac（Intel MacBook Air，macOS 封顶 14 Sonoma）约束：Xcode 26 需 macOS 15.4+，故书稿 6.2/26 基线降档至 Xcode 16.x 天花板。",
+  "version_lock": {
+    "xcode": "16.2",
+    "swift": "6.0",
+    "ios_sdk": "18",
+    "build_host": "home-mac@100.102.99.114 (Tailscale, Intel x86_64, macOS 14.5)"
+  }
+}

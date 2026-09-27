@@ -1,0 +1,15 @@
+.state/trace.json
+.state/gate.json
+
+# Claude 临时文件
+.claude/
+.superpowers/
+.mcp.json
+
+# Swift / SPM
+.build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+DerivedData/
+Package.resolved

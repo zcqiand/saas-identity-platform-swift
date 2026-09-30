@@ -1,13 +1,26 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "项目已初始化，等待第一个需求",
-  "done": ["脚手架生成，门禁全绿"],
-  "next": "跑 /req <需求原话> 落第一份需求文档，同时把 docs/functions/function-tree.md 填成真实功能清单",
-  "open_questions": [],
+  "current_task": "REQ-2026-001 登录直进切片 T-0~T-3 全部完成（c5ba558 已推），开发中待人走 AC 清单验收",
+  "done": [
+    "T-0 tree-change 获批：M01/M01.F01/M01.F04 规划→开发中（base sha e9b62955，提案存档 .state/tree-change.json）",
+    "T-1 生成链 2b8bdd8：gen-shared.sh 一键再生（共享 saas-identity-platform-shared OpenAPI → swift5 生成物 11 API，marker d294477）+ Package.swift 三 target + project.yml（lab 八坑 + ATS）+ remote_gate.py 升级含 xcodebuild 段，远门 build 绿",
+    "T-2 CoreKit 4c3c222：红先行（测试先红 → 实现）SessionStore 三态 + AuthViewModel 三缝 + 14 个新测试，L4 绿 15 测试 0 失败；trace_cmd 移植挂 M01.F01/M01.F04",
+    "T-3 App 壳 c5ba558：三态路由 + Config/Login/Account + KeychainTokenStore + APIGlue 401 拦截全走生成物（AC-6 grep 无手写端点串）；design-map M01 两行补齐",
+    "全门绿（L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）"
+  ],
+  "next": "待人走 AC-1~AC-6 验收清单（REQ-2026-001 §2）：home-mac iPhone 16 模拟器装 SaaSIdentity 构建（远门 L2 产物在 ~/swift-builds/saas-identity-platform-swift DerivedData Debug-iphoneos），后端探活 http://100.127.95.66:5101（saas 家族 dev，探 / 或 POST /api/v1/auth/login；/api/v1/health 不存在是已知假红）→ 人工「通过」后按 lab 流程三台账翻已上线（function-tree 2 行 / design-map 2 行 / README + REQ 状态）→ 后续需求（M01.F02/F03 租户成员、M04.F03 OAuth 授权码流）",
+  "open_questions": [
+    "saas-console redirectUris 种子漂移（家族遗留人裁项）",
+    "lab swift 34 条 L5 软告警（流程文档缺口）待人工裁定是否同样适用于本仓树",
+    "simulator xcodebuild test 段（lab swift 同款机器态问题）是否值得排查恢复"
+  ],
   "dont": [
     "不要改 .harness/stack.json 让门变松",
-    "不要给 skip 的测试挂功能 ID"
+    "不要给 skip 的测试挂功能 ID",
+    "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）",
+    "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser 非 CurrentUser、token 字段叫 accessToken、登录必带 clientId、无 CurrentUserSession 生成模型（快照 struct 在 CoreKit 本地定义）——别照抄 lab SessionStore",
+    "saas 后端探活别打 /api/v1/health（404 不存在）；打 / 或 POST /api/v1/auth/login"
   ],
-  "last_gate_passed_at": null
+  "last_gate_passed_at": "2026-09-30T10:15:00+08:00"
 }

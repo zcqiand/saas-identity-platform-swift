@@ -1,18 +1,19 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "4fecd8575c00ae66",
+  "base_sha": "19e717f49ba01cf5",
+  "summary": "REQ-2026-002 GA：租户成员与切换切片人工验收通过（AC-1~5 全绿，2026-09-30），M01.F03 开发中→已上线。成员关系列表（meListMyTenants）+ 点选切换（meSwitchTenant 换发 token 对入账）已上线：CoreKit adoptSwitch/refreshTenants（e44afc0）、App 租户段交互（e49ce34）、22 tests 0 failures、全门绿软告警 0、live 探针闭环（switch→新 token /me 反映新租户）。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-002-tenant-membership-switch.md"
+    "docs/requirements/REQ-2026-002-tenant-membership-switch.md",
+    "docs/design/design-function-map.md"
   ],
-  "summary": "REQ-2026-002 租户成员与切换切片（M01.F03 规划→开发中，父行 M01 已是开发中不动）：账户页从「只展示 currentTenantId」升级为「成员关系列表 + 点选切换」。API 面只认生成物（硬规则 §4）：MeAPI.meListMyTenants（GET /api/v1/me/tenants → [TenantMembership]）+ MeAPI.meSwitchTenant（POST /api/v1/me/tenants/{tenantId}/switch → SwitchTenantResponse{accessToken,refreshToken,expiresAt,tenantId}）。契约形状已核：切换换发的是新 token 对（非 LoginResponse，与 lab 的 switch-tenant 同形不同名），SessionStore 需新增 adoptSwitch 入账路径。非范围：租户名富化（memberships 只带 tenantId，显示 UUID；拉 admin/tenants 富化是家族既有人裁缝）、M00.F02 tenant-admin 成员管理面、菜单树（M04.F04）。",
   "changes": [
     {
       "id": "M01.F03",
       "action": "变更",
       "name": "租户成员",
-      "reason": "REQ-2026-002：当前用户的跨租户成员关系列表（meListMyTenants 生成物）+ 切换（meSwitchTenant 换发 token 落 Keychain、currentTenantId 更新、失败保原会话）。首切片已把显示缝留好（AccountView currentTenantId 展示位），本切片补交互"
+      "reason": "REQ-2026-002 GA：人工验收通过（2026-09-30），开发中→已上线"
     }
   ]
 }

@@ -1,0 +1,126 @@
+# XcodeGen 工程定义（REQ-2026-001：工程 SaaSIdentityPlatform / App target
+# SaaSIdentity / bundle com.zcqiand.SaaSIdentity / 显示名「身份平台」）。
+# 真源 = 本文件；.xcodeproj 不入仓（.gitignore *.xcodeproj），远程门 L2 每次
+# `~/tools/xcodegen generate` 再生（构建机无 brew/sudo，xcodegen 装在 ~/tools），
+# Mac 侧 IDE 打开前也跑同命令。
+# SWIFT_VERSION 5.0 = SPM 侧 .swiftLanguageMode(.v5) 的 xcodebuild 等价物，
+# 原因同 Package.swift 注释：生成层 + bootstrap 读写 static var 的 Swift 5 并发模式。
+name: SaaSIdentityPlatform
+options:
+  bundleIdPrefix: com.zcqiand
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+packages:
+  AnyCodable:
+    url: https://github.com/Flight-School/AnyCodable
+    exactVersion: 0.6.7
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGNING_ALLOWED: "NO"
+    # 注意：GENERATE_INFOPLIST_FILE 不能放 base——YES 会顶掉 App target 的
+    # INFOPLIST_FILE（生成模式忽略源 plist，CFBundleVersion 丢失 → 安装拒）。
+    # 只给两个 framework target 开（见各自 settings），App 显式 NO。
+    # XcodeGen 不写 PRODUCT_NAME，Xcode 16.2 下 $(TARGET_NAME) 默认链没兜住
+    # → 产物名解析空 → 多 target 产物撞同一条 .framework 路径（Multiple commands
+    # produce）。显式钉死。（lab-management-system-swift 同款八坑）
+    PRODUCT_NAME: "$(TARGET_NAME)"
+    # Intel Mac（x86_64）：Xcode 16 给模拟器目标默认掺 arm64，SPM 依赖只编出
+    # x86_64 模块 →「could not find module for arm64-apple-ios-simulator」。
+    # 只豁免模拟器侧 arm64，真机 arm64 不动。
+    EXCLUDED_ARCHS[sdk=iphonesimulator*]: arm64
+  configs:
+    # @testable import 需要 -enable-testing；Xcode GUI 模板默认给 Debug 写
+    # ENABLE_TESTABILITY=YES，XcodeGen 裸生成不带，必须显式补。
+    Debug:
+      ENABLE_TESTABILITY: YES
+targets:
+  SaasSharedGenerated:
+    type: framework
+    platform: iOS
+    sources:
+      - Generated/Sources
+    settings:
+      base:
+        # framework 裸生成缺 Info.plist → 组装出的 .framework 只有裸二进制，
+        # simctl install/真机安装全拒（「无法安装」+ installd stat Info.plist
+        # No such file）。Xcode GUI 模板默认 YES，XcodeGen 不给——显式补。
+        GENERATE_INFOPLIST_FILE: "YES"
+        # install name 不钉 @rpath 会成绝对路径 /Library/Frameworks/...（XcodeGUI
+        # 模板默认 @rpath）→ 装上即 dyld 崩「Library not loaded」。App 侧
+        # LD_RUNPATH 钉 @executable_path/Frameworks（见 SaaSIdentity target），
+        # 两处配对才可加载。
+        DYLIB_INSTALL_NAME_BASE: "@rpath"
+    dependencies:
+      - package: AnyCodable
+  CoreKit:
+    type: framework
+    platform: iOS
+    sources:
+      - Sources/CoreKit
+    settings:
+      base:
+        # 同 SaasSharedGenerated：framework 必须显式生成 Info.plist + @rpath。
+        GENERATE_INFOPLIST_FILE: "YES"
+        DYLIB_INSTALL_NAME_BASE: "@rpath"
+    dependencies:
+      - target: SaasSharedGenerated
+      - package: AnyCodable
+  CoreKitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests/CoreKitTests
+    dependencies:
+      - target: CoreKit
+  SaaSIdentity:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/App
+    settings:
+      base:
+        # 有自己的 info.path（INFOPLIST_FILE）；生成模式会忽略源 plist 丢
+        # CFBundleVersion，显式关掉（base 层没设，这里写 NO 防呆）。
+        GENERATE_INFOPLIST_FILE: "NO"
+        # XcodeGen 裸生成的 LD_RUNPATH_SEARCH_PATHS 默认只有构建目录
+        # PackageFrameworks（Xcode GUI 模板默认 @executable_path/Frameworks）→
+        # 装进容器后 @rpath 解析到构建目录绝对路径（被 RuntimeRoot 映射成不
+        # 存在路径）→ dyld「Library not loaded」即崩。嵌进 .app/Frameworks 的
+        # CoreKit/SaasSharedGenerated 靠它解析。注意键名是 LD_RUNPATH_SEARCH_PATHS，
+        # 写 LD_RUNPATH 链接器不消费（lab swift 实测踩过）。
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/Frameworks"
+    dependencies:
+      - target: CoreKit
+      # XcodeGen 默认不传递嵌入：只写 CoreKit 时 app/Frameworks 里没有
+      # SaasSharedGenerated，CoreKit 运行时加载 @rpath/SaasSharedGenerated
+      # 即崩（lab swift 实测踩过）。必须显式直接依赖才能一并嵌入。
+      - target: SaasSharedGenerated
+    info:
+      path: Sources/App/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDisplayName: 身份平台
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # 家族 dev 后端是明文 http://<LAN/Tailscale IP>:<port>（ADR-0019 口径，
+        # ConfigView 用户显式配 baseURL）；iOS ATS 默认拦一切非本地明文连接 →
+        # 不开例外则配置页存的 http baseURL 全部请求被系统掐死
+        #（NSURLErrorAppTransportSecurity；lab swift 9870abc 同款事故）。
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+schemes:
+  CoreKit:
+    build:
+      targets:
+        CoreKit: all
+    test:
+      targets:
+        - CoreKitTests
+  SaaSIdentity:
+    build:
+      targets:
+        SaaSIdentity: all

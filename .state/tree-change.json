@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "approved": true,
+  "base_sha": "e9b629559f6cf007",
+  "summary": "REQ-2026-001 登录直进切片（M01 + M01.F01 + M01.F04）：三行 规划→开发中，无新增/废弃。saas-identity-platform-swift 开工首个切片，家族兄弟前端仓同款（config → 密码登录 → whoami 账户页 → 登出）。API 面只认生成物（硬规则 §4）：gen-shared.sh 镜像 lab swift 配方（TypeSpec → OpenAPI.yaml → openapi-generator swift5 urlsession），产 SaasSharedGenerated target。契约形状已核：POST /auth/login {username,password,clientId} → LoginResponse{user,availableTenants,userId,currentTenantId?,accessToken?}；POST /auth/logout；GET /me whoami。连带基建：Package.swift 三 target 接线、project.yml（lab swift 八坑 + ATS 9870abc 同款）、App 壳（ConfigView/LoginView/AccountView）。非范围：租户切换、OAuth 授权码流、菜单树、admin/tenant 配置面。",
+  "changes": [
+    {
+      "id": "M01",
+      "action": "变更",
+      "name": "用户管理",
+      "reason": "REQ-2026-001：首个切片开工，父行 规划→开发中（F01/F04 两子行进开发中，F02/F03 仍在规划）"
+    },
+    {
+      "id": "M01.F01",
+      "action": "变更",
+      "name": "用户维护",
+      "reason": "REQ-2026-001：whoami 账户页（GET /me CurrentUser 渲染 + 401 拦截回登录），AC-3/AC-5 覆盖"
+    },
+    {
+      "id": "M01.F04",
+      "action": "变更",
+      "name": "SSO 登录",
+      "reason": "REQ-2026-001：密码登录 UI + 登出（POST /auth/login 换 JWT 落 Keychain + POST /auth/logout 清理），AC-1/2/4 覆盖；树行说明「密码登录 UI + 登出（本地清理）」即此形态，OAuth 授权码流留后续需求"
+    }
+  ]
+}

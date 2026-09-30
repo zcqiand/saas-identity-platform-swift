@@ -1,0 +1,7 @@
+{
+  "api_synced_sha": "d2944774d05f387bb2cdd5d4cc9180cdb18681a5",
+  "api_synced_at": "2026-09-30T01:49:39.677898+00:00",
+  "api_synced_cmd": "gen-shared.sh",
+  "shared_sha": "d2944774d05f387bb2cdd5d4cc9180cdb18681a5",
+  "consumer_repo": "saas-identity-platform-swift"
+}

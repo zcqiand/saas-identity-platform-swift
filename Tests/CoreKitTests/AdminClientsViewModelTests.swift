@@ -3,11 +3,13 @@ import SaasSharedGenerated
 @testable import CoreKit
 
 /// REQ-2026-005 T-1：应用维护 ViewModel（OAuth client CRUD）。
+/// REQ-2026-006 T-1：应用启用/停用（M04.F02 setStatus 第六缝）。
 /// Seams 模式同 MembersViewModel/OAuthViewModel：CoreKit 只管状态机，网络实现
 /// 由 App 层 APIGlue（生成物 AdminClientsAPI 唯一入口）供（T-2），单测注入 fake。
 /// list 不传分页（Q1：live 实证 0-indexed，nil 全量）；delete 是危险操作走确认
 /// 流（AC-4）；create/update 成功用返回的 OAuthClient 原位更新，失败红字列表
-/// 不动可重试（AC-5）。
+/// 不动可重试（AC-5）。status 切换寻址 clientId 字符串非 UUID（Q1），成功原位
+/// 替换行不重拉（Q3）。
 @MainActor
 final class AdminClientsViewModelTests: XCTestCase {
 
@@ -231,6 +233,87 @@ final class AdminClientsViewModelTests: XCTestCase {
         XCTAssertEqual(deleted, "erp", "delete 缝收到 clientId（AC-4）")
         XCTAssertEqual(vm.clients.map(\.clientId), ["crm"], "删除后原位移除（AC-4）")
         XCTAssertEqual(vm.clients.count, 1, "其他行完整保留")
+    }
+
+    func testSetStatusDisableReplacesRowInPlaceWithoutReload() async {
+    // fn: M04.F02
+        var listCalls = 0
+        var received: (clientId: String, status: Int)?
+        let disabled = makeClient(id: erpID, clientId: "erp", name: "企业资源计划系统", status: 0)
+        let vm = AdminClientsViewModel(seams: .init(
+            listClients: { listCalls += 1; return self.seedList },
+            getClient: { _ in throw SeamStubError.notUsed },
+            createClient: { _ in throw SeamStubError.notUsed },
+            updateClient: { _, _ in throw SeamStubError.notUsed },
+            deleteClient: { _ in throw SeamStubError.notUsed },
+            setClientStatus: { clientId, status in
+                received = (clientId, status)
+                return disabled
+            }
+        ))
+        _ = await vm.load()
+        let ok = await vm.setStatus("erp", 0)
+        XCTAssertTrue(ok, "停用成功（AC-1）")
+        XCTAssertEqual(received?.clientId, "erp", "status 缝寻址 clientId 字符串（Q1：非 UUID）")
+        XCTAssertEqual(received?.status, 0, "停用传 status=0")
+        XCTAssertEqual(vm.clients.first { $0.clientId == "erp" }?.status, 0,
+                       "成功原位替换行（AC-3）")
+        XCTAssertEqual(vm.clients.count, 2, "列表长度不变（原位替换非重拉）")
+        XCTAssertEqual(listCalls, 1, "不重拉列表（AC-3）")
+    }
+
+    func testSetStatusEnablePassesOneAndReplacesRow() async {
+    // fn: M04.F02
+        var receivedStatus: Int?
+        let enabled = makeClient(id: erpID, clientId: "erp", name: "企业资源计划系统", status: 1)
+        let vm = AdminClientsViewModel(seams: .init(
+            listClients: { self.seedList },
+            getClient: { _ in throw SeamStubError.notUsed },
+            createClient: { _ in throw SeamStubError.notUsed },
+            updateClient: { _, _ in throw SeamStubError.notUsed },
+            deleteClient: { _ in throw SeamStubError.notUsed },
+            setClientStatus: { _, status in
+                receivedStatus = status
+                return enabled
+            }
+        ))
+        _ = await vm.load()
+        let ok = await vm.setStatus("erp", 1)
+        XCTAssertTrue(ok, "启用成功（AC-1：启用直通）")
+        XCTAssertEqual(receivedStatus, 1, "启用传 status=1")
+        XCTAssertEqual(vm.clients.first { $0.clientId == "erp" }?.status, 1, "行随返回体刷新")
+    }
+
+    func testSetStatusFailureKeepsRowAndRetryable() async {
+    // fn: M04.F02
+        var reject = true
+        let vm = AdminClientsViewModel(seams: .init(
+            listClients: { self.seedList },
+            getClient: { _ in throw SeamStubError.notUsed },
+            createClient: { _ in throw SeamStubError.notUsed },
+            updateClient: { _, _ in throw SeamStubError.notUsed },
+            deleteClient: { _ in throw SeamStubError.notUsed },
+            setClientStatus: { _, _ in
+                if reject {
+                    throw ErrorResponse.error(404, nil, nil, URLError(.badServerResponse))
+                }
+                return self.makeClient(id: self.erpID, clientId: "erp", name: "企业资源计划系统", status: 0)
+            }
+        ))
+        _ = await vm.load()
+        let ok = await vm.setStatus("erp", 0)
+        XCTAssertFalse(ok, "404 = 失败（AC-4）")
+        if case .failed(let message) = vm.phase {
+            XCTAssertTrue(message.contains("404"), "红字带 HTTP 码（AC-4），实际：\(message)")
+        } else {
+            XCTFail("phase 应为 failed，实际 \(vm.phase)")
+        }
+        XCTAssertEqual(vm.clients.first { $0.clientId == "erp" }?.status, 1, "失败行不动（AC-4）")
+
+        reject = false
+        let retry = await vm.setStatus("erp", 0)
+        XCTAssertTrue(retry, "同一 VM 可直接重试（AC-4）")
+        XCTAssertEqual(vm.clients.first { $0.clientId == "erp" }?.status, 0)
     }
 
     func testDeleteFailureKeepsRowAndRetryable() async {

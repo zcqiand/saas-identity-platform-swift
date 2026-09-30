@@ -2,12 +2,14 @@ import Foundation
 import SaasSharedGenerated
 
 // REQ-2026-005 T-1：应用维护（M04.F01：OAuth client CRUD + 公共元数据）。
+// REQ-2026-006 T-1：应用启用/停用（M04.F02 setStatus 第六缝）。
 // 平台 admin 视角，Seams 模式同 MembersViewModel/OAuthViewModel：网络实现由
 // App 层 APIGlue（生成物 AdminClientsAPI 唯一入口）供（T-2），单测注入 fake。
 // list 不传分页（live 探针实证分页 0-indexed，nil 全量，翻页 UI 非范围）。
 // create/update/delete 成功原位维护列表（不重拉）；失败只置 phase 红字，
 // 列表不动可重试（AC-5 惯例）。delete 是危险操作（服务端吊销该 client 全部
-// token），确认流在 App 层 AlertDialog，本层只执行。
+// token），确认流在 App 层 AlertDialog，本层只执行。status 切换寻址 clientId
+// 字符串非 UUID（live 实证），成功用返回的 OAuthClient 原位替换行。
 
 /// OAuth client 管理状态机：列表 → 创建 / 编辑 / 删除。
 @MainActor
@@ -19,19 +21,22 @@ public final class AdminClientsViewModel: ObservableObject {
         public var createClient: (_ request: CreateOAuthClientRequest) async throws -> OAuthClient
         public var updateClient: (_ clientId: String, _ request: UpdateOAuthClientRequest) async throws -> OAuthClient
         public var deleteClient: (_ clientId: String) async throws -> Void
+        public var setClientStatus: (_ clientId: String, _ status: Int) async throws -> OAuthClient
 
         public init(
             listClients: @escaping () async throws -> AdminClientsListClients200Response = { throw SessionStoreError("listClients 缝未注入") },
             getClient: @escaping (_ clientId: String) async throws -> OAuthClient = { _ in throw SessionStoreError("getClient 缝未注入") },
             createClient: @escaping (_ request: CreateOAuthClientRequest) async throws -> OAuthClient = { _ in throw SessionStoreError("createClient 缝未注入") },
             updateClient: @escaping (_ clientId: String, _ request: UpdateOAuthClientRequest) async throws -> OAuthClient = { _, _ in throw SessionStoreError("updateClient 缝未注入") },
-            deleteClient: @escaping (_ clientId: String) async throws -> Void = { _ in throw SessionStoreError("deleteClient 缝未注入") }
+            deleteClient: @escaping (_ clientId: String) async throws -> Void = { _ in throw SessionStoreError("deleteClient 缝未注入") },
+            setClientStatus: @escaping (_ clientId: String, _ status: Int) async throws -> OAuthClient = { _, _ in throw SessionStoreError("setClientStatus 缝未注入") }
         ) {
             self.listClients = listClients
             self.getClient = getClient
             self.createClient = createClient
             self.updateClient = updateClient
             self.deleteClient = deleteClient
+            self.setClientStatus = setClientStatus
         }
     }
 
@@ -105,6 +110,25 @@ public final class AdminClientsViewModel: ObservableObject {
         do {
             try await seams.deleteClient(clientId)
             clients.removeAll { $0.clientId == clientId }
+            phase = .idle
+            return true
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return false
+        }
+    }
+
+    /// 启用/停用 client（REQ-2026-006，M04.F02）。寻址 clientId 字符串非 UUID
+    /// （Q1）；status 1=启用 0=停用。成功用返回的 OAuthClient 原位替换行（Q3，
+    /// 不重拉）；停用确认流在 App 层，本层只执行。
+    @discardableResult
+    public func setStatus(_ clientId: String, _ status: Int) async -> Bool {
+        phase = .busy
+        do {
+            let updated = try await seams.setClientStatus(clientId, status)
+            if let index = clients.firstIndex(where: { $0.clientId == clientId }) {
+                clients[index] = updated
+            }
             phase = .idle
             return true
         } catch {

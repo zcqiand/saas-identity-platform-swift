@@ -1,31 +1,31 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-002 租户成员与切换 已上线（6fee976，2026-09-30 人工验收 AC-1~5 全绿）；全仓等下一个需求",
+  "current_task": "REQ-2026-003 成员角色绑定（M01.F02）T-0~T-2 已交付（9d09f08，全门绿 ×2）；待人验收 AC-1~5",
   "done": [
-    "T-0 dda8cb9：tree-change 获批（base sha 4fecd857）M01.F03 规划→开发中；requirements 台账 + REQ 文档落盘",
-    "T-1 e44afc0：红先行（7 条挂 M01.F03 编译红实证）→ SessionStore.adoptSwitch（SwitchTenantResponse 新 token 对入账，fail-fast 不动原会话）/refreshTenants（真值覆盖落快照，Q1）/快照增可选 expiresAt（Q2）；AuthViewModel Seams 增 switchTenant/listTenants（缺省抛错）+ switchTenant 成功 whoami 重拉；22 tests 0 failures",
-    "T-2 e49ce34：APIGlue 两缝全走生成物（meListMyTenants/meSwitchTenantWithRequestBuilder）；AccountView 租户段列表 + ✓ 当前标记 + 点选切换 + whoami 重拉 + session.refresh() 重渲；design-map M01.F03 行；AC-5 grep 无手写端点串（仅注释）",
-    "全门绿 ×2（T-2 后与 GA 翻转后：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）",
-    "GA 6fee976：人工验收通过，function-tree/design-map/README/REQ 四处翻已上线（M01 父行留开发中，F02 规划）；GA 提案 base sha 19e717f4（已上线翻转不属 mirror 免批类，走人工 --approve）",
-    "mirror 免批通道（人裁选项 A）：tree_change.py --apply + _validate_mirror，ADR-0042 已写并随 suite gitlink 推送（213d6c2）；完整补丁 .state/tree_change.proposed.py 待人落盘"
+    "T-0 9507f0f：tree-change 获批（base sha dc61332a，mirror 类）M01.F02 规划→开发中；REQ-2026-003 文档落盘；L5 一度红（REQ 文档写 M01.F02.I01 字面悬空引用——本仓不拆 I 级，改溯源措辞）后绿",
+    "T-1 7b2b4e5：红先行（MembersViewModelTests 5 条编译红实证，home-mac 远门 exit 1）→ MembersViewModel 三缝（listMembers/listRoles/assignRoles 抛错缺省）+ currentTenantId nil fail-fast（Q1）+ assign 全量覆盖原位更新成员行（Q3）；27 tests 0 failures",
+    "T-2 9d09f08：APIGlue 三缝全走生成物（TenantMembersAPI/TenantRolesAPI WithRequestBuilder）；MembersView + RoleAssignView（预勾选当前角色防误清，保存全量覆盖，失败红字留页可重试）；AccountView 租户段 NavigationLink 入口；design-map M01.F02 行；AC-5 grep 无手写端点串",
+    "全门绿 ×2（T-2 后：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）；已 push 9d09f08 + suite gitlink aa800fd"
   ],
-  "next": "等下一个需求：候选 M01.F02（角色成员）、M04.F03（OAuth 授权码流）、M00/M04 配置面（镜像类走 mirror --apply 免批——前提：人已落盘补丁；GA/废弃仍人工 --approve）；生成链已一键化（scripts/gen-shared.sh），新切片直接 red-first",
+  "next": "等人验收 AC-1~5：模拟器装 9d09f08 构建 → alice 登录（当前租户 001）→ 账户页租户段进「成员角色」→ AC-1 列表（alice/bob + admin/member 角色）→ AC-2 勾 bob 改角色保存原位更新 → AC-3 先切租户 002 再进成员页保存 → 403 红字列表不动 → AC-4 断后端报红。验收「通过」后走 GA：四处翻已上线（function-tree M01.F02 / design-map / README / REQ）+ M01 父行翻已上线（F02 是 M01 最后一个 F）",
   "open_questions": [
-    "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，落完跑一次 --report/--status 验证）",
-    "租户名富化（memberships 只带 tenantId，UI 显示 UUID；拉 admin/tenants 富化留后续 REQ）",
+    "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，落完跑一次 --report/--status 验证）——REQ-003 T-0 仍走人工 --approve 通道",
+    "租户名富化（memberships/成员页都显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
     "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",
     "saas-console redirectUris 种子漂移（家族遗留人裁项）"
   ],
   "dont": [
     "不要改 .harness/stack.json 让门变松",
     "不要给 skip 的测试挂功能 ID",
-    "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）",
+    "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）；remote_gate.py 在项目仓 scripts/ 下不是 suite scripts/",
     "home-mac 同一构建目录禁并发：gate.py 与 remote_gate.py 同时跑会撞 build.db 锁（database is locked）——2026-09-30 实证，串行跑",
     "本机 push 别带 GIT_CONFIG_GLOBAL=/dev/null envfix（那是构建机 SPM 专用，本机会屏蔽凭据 helper → could not read Username）",
     "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser、token 字段 accessToken、登录必带 clientId、meSwitchTenant 的 tenantId 是 String 非 UUID、SwitchTenantResponse 四字段全非可选（accessToken 空串才是 fail-fast 面）——别照抄 lab",
     "saas 后端探活别打 /api/v1/health（404）；打 / 或 POST /api/v1/auth/login",
-    "Seams 抛错缺省闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）"
+    "Seams 抛错缺省闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）",
+    "REQ 文档别写 I 级子项 ID 字面（M01.F02.I01 类）——本仓功能树不拆 I 级，L5 直接悬空引用红；溯源描述用「对应 shared 同编号 F 的子项」措辞",
+    "App 层新文件直接引用生成物类型（TenantMemberUserView 类）必须 import SaasSharedGenerated——swift test 只编 CoreKit 不报，xcodebuild App target 才炸（2026-09-30 实证）"
   ],
-  "last_gate_passed_at": "2026-09-30T14:40:00+08:00"
+  "last_gate_passed_at": "2026-09-30T17:20:00+08:00"
 }

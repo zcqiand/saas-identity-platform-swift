@@ -49,4 +49,16 @@ enum APIGlue {
     static let whoami: () async throws -> CurrentUser = {
         try await run { MeAPI.meWhoamiWithRequestBuilder() }
     }
+
+    // MARK: - 租户成员（M01.F03，REQ-2026-002）
+
+    /// 当前用户跨租户成员关系（AC-1）：GET /me/tenants → [TenantMembership]。
+    static let listTenants: () async throws -> [TenantMembership] = {
+        try await run { MeAPI.meListMyTenantsWithRequestBuilder() }
+    }
+
+    /// 切换租户（AC-2）：POST /me/tenants/{tenantId}/switch → 换发新 token 对。
+    static let switchTenant: (String) async throws -> SwitchTenantResponse = { tenantId in
+        try await run { MeAPI.meSwitchTenantWithRequestBuilder(tenantId: tenantId) }
+    }
 }

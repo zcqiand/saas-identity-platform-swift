@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 批准 2026-09-30，base sha f22087e5；提案存档 .state/tree-change.json） |
+| 状态 | **已上线**（2026-09-30 人工验收 AC-1~5 通过；T-0 批准 base sha f22087e5，GA 免批令牌 base sha efda5bac） |
 | 关联 ADR | ADR-0019（显式配置口径沿用） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M04.F01 已上线：admin-clients.tsp I01~I05 + clients.tsp:10 公共元数据 I06）；前置 REQ-001~004 已上线基座 |
 
@@ -66,8 +66,8 @@ M04 第二个落地 F：**应用维护**（BASE 已上线，Swift 侧 规划）�
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F01 规划→开发中 | 对齐 | Claude | — | 已完成（2026-09-30 人工批准） |
-| T-1 | CoreKit 红先行：AdminClientsViewModel 五缝 + 测试挂 M04.F01 | 开发 | Claude | 0.5d | 待开始 |
-| T-2 | App：ApplicationsView/ClientDetailView/ClientCreateView + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 待开始 |
+| T-1 | CoreKit 红先行：AdminClientsViewModel 五缝 + 测试挂 M04.F01 | 开发 | Claude | 0.5d | 已完成（5997a3d，45 tests 0 failures） |
+| T-2 | App：ApplicationsView/ClientDetailView/ClientCreateView + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（c7cc651，人工验收 AC-1~5 通过 2026-09-30） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

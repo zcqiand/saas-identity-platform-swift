@@ -1,18 +1,20 @@
 {
   "schema": 1,
   "approved": true,
-  "summary": "REQ-2026-005 应用维护切片（M04.F01 规划→开发中）：AdminClientsAPI 五缝（list/get/create/update/delete，分页 live 实证 0-indexed 传 nil 全量）+ ClientsAPI 公共元数据 + AdminClientsViewModel（delete 确认流，create/update 原位更新）+ ApplicationsView/ClientDetailView/ClientCreateView。契约形状：redirectUris/grantTypes/scopes 是 String 逗号串（DB 形态直出）；create 的 clientSecret 必填；status 本切片只读（切换是 M04.F02）。非范围：status 切换 UI、翻页、密钥轮换。",
+  "mirror": true,
+  "summary": "REQ-2026-005 应用维护切片 GA（M04.F01 开发中→已上线）：人工验收 AC-1~5 通过（2026-09-30）。AdminClientsAPI 五缝（list 不传分页 0-indexed 规避 / create 追加 / update/delete 原位维护行，删除二次确认吊销 token）+ ClientsAPI 公共元数据 + ApplicationsView/ClientDetailView/ClientCreateView（逗号串原样透传，secret 必填录入且详情不返明文）。远程 swift test 45 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。本切片后 M04 剩 F02/F04。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-005-app-maintenance-slice.md"
+    "docs/requirements/REQ-2026-005-app-maintenance-slice.md",
+    "docs/design/design-function-map.md"
   ],
   "changes": [
     {
       "id": "M04.F01",
       "action": "变更",
       "name": "应用维护",
-      "reason": "REQ-2026-005：OAuth client CRUD + 公共元数据（BASE 已上线，Swift 侧镜像落地；对应 shared BASE 同编号 F 的 I01~I06 子项，admin-clients.tsp + clients.tsp）。本切片后 M04 剩 F02/F04"
+      "reason": "REQ-2026-005 GA：OAuth client CRUD + 公共元数据已上线（生成物 AdminClientsAPI/ClientsAPI；对应 shared BASE 同编号 F 的 I01~I06 子项）。M04 父行不动（F02/F04 仍规划）"
     }
   ],
-  "base_sha": "f22087e5f3c24c85"
+  "base_sha": "efda5bac2059ca64"
 }

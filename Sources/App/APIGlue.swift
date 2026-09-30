@@ -1,4 +1,5 @@
 import CoreKit
+import Foundation
 import SaasSharedGenerated
 
 // REQ-2026-001 T-3：App 层 API 胶水——生成层 completion 回调 → async 桥，
@@ -172,6 +173,32 @@ enum APIGlue {
                 adminClientsSetClientStatusRequest: AdminClientsSetClientStatusRequest(status: status)
             )
         }
+    }
+
+    // MARK: - 租户维护（M00.F01，REQ-2026-007）
+
+    /// 租户全量清单（AC-1）：GET /admin/tenants。不传分页——分页 0-indexed
+    /// 同族（live 实证 page=0/不传全量），nil 拉，翻页 UI 非范围。
+    /// 名字带 All 区别于 M01.F03 的 listTenants（meListMyTenants 成员关系）。
+    static let listAllTenants: () async throws -> AdminTenantsListTenants200Response = {
+        try await run { AdminTenantsAPI.adminTenantsListTenantsWithRequestBuilder() }
+    }
+
+    /// 新建租户（AC-2）：POST /admin/tenants（tenantKey 重复 409）。
+    static let createTenant: (CreateTenantRequest) async throws -> Tenant = { request in
+        try await run { AdminTenantsAPI.adminTenantsCreateTenantWithRequestBuilder(createTenantRequest: request) }
+    }
+
+    /// 更新租户（AC-3）：PATCH /admin/tenants/{id}（partial；status 字符串枚举）。
+    /// 路径寻址 UUID id 非 key（live 实证，与 admin/clients 口径相反）。
+    static let updateTenant: (UUID, UpdateTenantRequest) async throws -> Tenant = { id, request in
+        try await run { AdminTenantsAPI.adminTenantsUpdateTenantWithRequestBuilder(id: id.uuidString, updateTenantRequest: request) }
+    }
+
+    /// 删除租户（AC-2，级联危险操作）：DELETE /admin/tenants/{id}，204 空 body；
+    /// App 层确认后才调。
+    static let deleteTenant: (UUID) async throws -> Void = { id in
+        _ = try await run { AdminTenantsAPI.adminTenantsDeleteTenantWithRequestBuilder(id: id.uuidString) }
     }
 
     /// 公共 client 元数据（I06）：GET /clients/{clientId}，匿名可读三字段。

@@ -1,4 +1,5 @@
 import CoreKit
+import SaasSharedGenerated
 import SwiftUI
 
 // REQ-2026-001 T-3（AC-3/AC-4，M01.F01）：账户页——whoami 渲染当前用户
@@ -12,6 +13,10 @@ struct AccountView: View {
     let session: AppSession
 
     @StateObject private var vm: AuthViewModel
+
+    /// REQ-2026-007（AC-5）租户名富化：admin/tenants 的 id→name 映射，进页拉
+    /// 一次。403/失败静默降级显示 UUID（非 admin 用户不炸、不重试轰炸）。
+    @State private var tenantNames: [UUID: String] = [:]
 
     init(session: AppSession) {
         self.session = session
@@ -51,8 +56,12 @@ struct AccountView: View {
                     NavigationLink("应用维护（OAuth client 管理）") {
                         ApplicationsView()
                     }
+                    // M00.F01（REQ-2026-007）入口：平台 admin 视角管理租户。
+                    NavigationLink("租户管理（平台 admin）") {
+                        TenantsAdminView()
+                    }
                 } header: {
-                    Text("应用管理")
+                    Text("平台管理")
                 }
                 Section {
                     LabeledContent("后端", value: session.store.baseURL ?? "—")
@@ -60,9 +69,7 @@ struct AccountView: View {
                 } header: {
                     Text("连接")
                 } footer: {
-                    // memberships 只带 tenantId；租户名富化（admin/tenants）是家族
-                    // 既有人裁缝，Swift 侧留后续需求，这里显示 UUID 不兜底字面量。
-                    Text("租户显示为 tenantId（租户名富化留后续需求）")
+                    Text("租户段显示真名（admin/tenants 富化；无权限时显示 tenantId）")
                 }
                 Section {
                     Button("登出", role: .destructive) {
@@ -88,6 +95,11 @@ struct AccountView: View {
                 _ = await vm.whoami()
                 _ = await vm.listTenants()
                 session.refresh()
+                // AC-5 富化：拉一次 admin/tenants 建 id→name；403/失败静默降级
+                // UUID（非 admin 用户、断网都不炸不重试）。
+                if let page = try? await APIGlue.listAllTenants() {
+                    tenantNames = Dictionary(uniqueKeysWithValues: page.items.map { ($0.id, $0.name) })
+                }
             }
         }
     }
@@ -111,7 +123,7 @@ struct AccountView: View {
                 } label: {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(membership.tenantId.uuidString)
+                            Text(tenantNames[membership.tenantId] ?? membership.tenantId.uuidString)
                                 .font(.footnote.monospaced())
                             Text("角色 \(membership.roleIds.joined(separator: "、")) · \(membership.status.rawValue)")
                                 .font(.caption2)

@@ -2,19 +2,19 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-005 应用维护切片 GA（M04.F01 开发中→已上线）：人工验收 AC-1~5 通过（2026-09-30）。AdminClientsAPI 五缝（list 不传分页 0-indexed 规避 / create 追加 / update/delete 原位维护行，删除二次确认吊销 token）+ ClientsAPI 公共元数据 + ApplicationsView/ClientDetailView/ClientCreateView（逗号串原样透传，secret 必填录入且详情不返明文）。远程 swift test 45 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。本切片后 M04 剩 F02/F04。",
+  "summary": "REQ-2026-006 应用启用/停用切片 T-0（M04.F02 规划→开发中）：AdminClientsViewModel 增第六缝 setClientStatus（PATCH status 0/1，返回 OAuthClient 原位替换行），ClientDetailView Toggle + 停用确认；API 面唯一入口 adminClientsSetClientStatus 生成物。live 探针实证：路径寻址 clientId 字符串非 UUID、status 只认 0/1 其余 400、未知 client 404。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-005-app-maintenance-slice.md",
+    "docs/requirements/REQ-2026-006-client-status-toggle-slice.md",
     "docs/design/design-function-map.md"
   ],
   "changes": [
     {
-      "id": "M04.F01",
+      "id": "M04.F02",
       "action": "变更",
-      "name": "应用维护",
-      "reason": "REQ-2026-005 GA：OAuth client CRUD + 公共元数据已上线（生成物 AdminClientsAPI/ClientsAPI；对应 shared BASE 同编号 F 的 I01~I06 子项）。M04 父行不动（F02/F04 仍规划）"
+      "name": "应用启用/停用",
+      "reason": "REQ-2026-006 T-0：client status 切换（生成物 AdminClientsAPI.adminClientsSetClientStatus；对应 shared BASE 同编号 F 的 I06 子项）。REQ-005 遗留的只读尾巴换真开关。M04 父行不动（F04 仍规划）"
     }
   ],
-  "base_sha": "efda5bac2059ca64"
+  "base_sha": "42c457eb5a04be5a"
 }

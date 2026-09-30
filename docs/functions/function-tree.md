@@ -49,7 +49,7 @@
 | 功能 ID | 功能名称 | 说明 | 状态 |
 |---|---|---|---|
 | M04.F01 | 应用维护 | 应用 CRUD + 公共 client 元数据 | 已上线 |
-| M04.F02 | 应用启用/停用 | `status` 切换；禁用后 OAuth/token 端点立即拒绝 | 规划 |
+| M04.F02 | 应用启用/停用 | `status` 切换；禁用后 OAuth/token 端点立即拒绝 | 开发中 |
 | M04.F03 | 身份认证 | OAuth authorize + token + refresh | 已上线 |
 | M04.F04 | 菜单管理 | 菜单 CRUD + 结构 + 当前用户菜单 | 规划 |
 

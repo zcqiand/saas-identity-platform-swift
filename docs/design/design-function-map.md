@@ -15,6 +15,7 @@
 | M04.F03 | OAuthView（签发授权码 → 换 token → 刷新；code/state 回显，token 对/scope/tenantId/expiresAt 渲染）/ AccountView OAuth 段入口 | POST /api/v1/oauth/authorize、POST /api/v1/oauth/token（OauthAPI.oAuthAuthorize/oAuthToken 生成物，双 grant authorization_code + refresh_token） | oauth_client / oauth 授权码与 token 台账（后端账，本仓不落表；token 对入 SessionStore/Keychain） | M04.F03 | — | 已上线 |
 | M04.F01 | ApplicationsView（client 列表 + 新建 sheet）/ ClientDetailView（详情只读 + 编辑 + 删除二次确认）/ ClientCreateView（注册，secret 必填）/ AccountView 应用管理段入口 | GET/POST /api/v1/admin/clients、GET/PUT/DELETE /api/v1/admin/clients/{clientId}、GET /api/v1/clients/{clientId}（AdminClientsAPI/ClientsAPI 生成物；分页 0-indexed 传 nil 全量） | oauth_client（后端账，本仓不落表；删除吊销 token 由后端落账） | M04.F01 | — | 已上线 |
 | M04.F02 | ClientDetailView 启用状态段（Toggle 停用二次确认、启用直通）/ ApplicationsView 状态徽标随切换刷新 | PATCH /api/v1/admin/clients/{clientId}/status（AdminClientsAPI.adminClientsSetClientStatus 生成物；路径寻址 clientId 字符串非 UUID） | oauth_client（后端账，本仓不落表；停用即 authorize/token 立即拒绝由后端落账） | M04.F02 | — | 已上线 |
+| M00.F01 | TenantsAdminView（租户列表 + 新建 sheet）/ TenantEditView（改名 + status Picker + 删除二次确认）/ AccountView 租户段富化（admin/tenants id→name 映射，403 降级 UUID） | GET/POST /api/v1/admin/tenants、PATCH/DELETE /api/v1/admin/tenants/{id}（AdminTenantsAPI 生成物；分页 0-indexed 传 nil 全量；路径寻址 UUID id 非 key） | sys_tenant（后端账，本仓不落表；删除级联语义由后端落账） | M00.F01 | — | 开发中 |
 
 ## 约定
 

@@ -2,19 +2,19 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-006 应用启用/停用切片 GA（M04.F02 开发中→已上线）：人工验收 AC-1~5 通过（2026-09-30）。setStatus 第六缝（寻址 clientId 字符串非 UUID，status 0/1）+ APIGlue 生成物 builder + ClientDetailView 启用状态 Toggle（停用二次确认）。远程 swift test 48 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。本切片后 M04 剩 F04 菜单管理。",
+  "summary": "REQ-2026-007 租户维护切片 T-0（M00.F01 规划→开发中）：AdminTenantsViewModel 四缝（list/create/update/delete，寻址 UUID id 非 key，分页 0-indexed 传 nil 全量，TenantStatus 字符串枚举 active/suspended，tenantKey 重复 409）+ TenantsAdminView/TenantEditView/TenantCreateView + AccountView 租户段富化（admin/tenants id→name，403 降级 UUID）。API 面唯一入口 AdminTenantsAPI 生成物。live 探针实证：寻址 UUID、status 字符串枚举、409/404/400 边界、DELETE 204 空 body。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-006-client-status-toggle-slice.md",
+    "docs/requirements/REQ-2026-007-tenant-admin-slice.md",
     "docs/design/design-function-map.md"
   ],
   "changes": [
     {
-      "id": "M04.F02",
+      "id": "M00.F01",
       "action": "变更",
-      "name": "应用启用/停用",
-      "reason": "REQ-2026-006 GA：client status 切换已上线（人工验收 AC-1~5 通过 2026-09-30，见 REQ-2026-006 T-2 行）。M04 父行不动（F04 仍规划）"
+      "name": "租户维护",
+      "reason": "REQ-2026-007 T-0：平台 admin 租户 CRUD + 租户名富化（生成物 AdminTenantsAPI；对应 shared BASE 同编号 F 的 I01~I05 子项）。顺带清 M01.F03 的 UUID 显示遗留。M00 父行不动（F02~F05 仍规划）"
     }
   ],
-  "base_sha": "67f55e84b9489dc2"
+  "base_sha": "f536d038d109eab3"
 }

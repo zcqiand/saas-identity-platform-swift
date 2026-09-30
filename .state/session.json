@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-005 应用维护切片 GA 已上线（1763ad2，2026-09-30 人工验收 AC-1~5 通过）；M01 全收口 + M04 已上线 F01/F03，剩 F02/F04",
+  "current_task": "REQ-2026-006 应用启用/停用切片 GA 已上线（fc782b8，2026-09-30 人工验收 AC-1~5 通过）；M01 全收口 + M04 已上线 F01/F02/F03，剩 F04",
   "done": [
-    "REQ-2026-004 OAuth 授权码切片 GA 已上线（5ca7ef2，人工验收 AC-1~4 通过；M04.F03 收口）",
-    "T-0 70574d6：tree-change 人工批准（base sha f22087e5）M04.F01 规划→开发中；REQ-2026-005 文档落盘（AC-1~6、澄清 Q1~Q3）",
-    "T-1 5997a3d：红先行 → AdminClientsViewModel 五缝（list 不传分页 / create 追加 / update/delete 原位维护行 / 失败红字列表不动可重试）；45 tests 0 failures",
-    "T-2 c7cc651：APIGlue 六缝走生成物；ApplicationsView + ClientDetailView（删除二次确认）+ ClientCreateView；AccountView 入口；AC-6 grep 干净；全门绿",
-    "GA 1763ad2：mirror+GA 扩档免批通道首用——人裁「不要每次批准」→ 补丁落盘 scripts/tree_change.py（GA 免批前提 = REQ 文档已记录人工验收通过，--apply 自查自批，令牌 sha efda5bac）→ M04.F01 已上线；L5 复验绿"
+    "REQ-2026-005 应用维护切片 GA 已上线（1763ad2，人工验收 AC-1~5 通过；M04.F01 收口）",
+    "REQ-2026-006 T-0 bca2f18：mirror 免批（42c457eb）M04.F02 规划→开发中；live 探针钉死契约（PATCH 寻址 clientId 字符串非 UUID、status 只认 0/1 其余 400、返完整 OAuthClient 原位替换行）；REQ-006 落盘",
+    "T-1 5beb8d7：红先行（extra argument 'setClientStatus' 编译红）→ 第六缝 setStatus + 3 测试挂 M04.F02；48 tests 0 failures 连跑两轮；顺手修存量 flaky 21c0534（MembersViewModel 两缝断言改比集合，async let 并发顺序不定，双轮红实证）",
+    "T-2 bc1d632：APIGlue setClientStatus 生成物 builder；ClientDetailView 启用状态 Toggle（启用直通/停用二次确认，vm.clients 唯一真相渲染取活行）；7 门全绿；gitlink 710b60d",
+    "GA fc782b8：免批通道 --apply（令牌 67f55e84，凭 REQ-006 T-2 行验收记录）→ M04.F02 已上线；L5 复验绿"
   ],
-  "next": "等下一个需求：候选 M04.F02 应用启用/停用（adminClientsSetClientStatus 已生成，最小切片）、M04.F04 菜单管理、M00.F01~F05；T-0（规划→开发中）与 GA（开发中→已上线，凭 REQ 验收记录）都走 --apply 免批，不再找人工批令牌；废弃仍人工 --approve",
+  "next": "等下一个需求：候选 M04.F04 菜单管理、M00.F01~F05；T-0 与 GA 走 --apply 免批，仍需：REQ 提案 + 人工验收「通过」；另待人裁：bob 对 admin 接口也 200（鉴权面归后端/契约测试范围）",
   "open_questions": [
     "租户名富化（UI 显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
     "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",

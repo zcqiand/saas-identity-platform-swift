@@ -19,7 +19,8 @@ struct ApplicationsView: View {
             getClient: APIGlue.getClient,
             createClient: APIGlue.createClient,
             updateClient: APIGlue.updateClient,
-            deleteClient: APIGlue.deleteClient
+            deleteClient: APIGlue.deleteClient,
+            setClientStatus: APIGlue.setClientStatus
         )))
     }
 
@@ -45,7 +46,7 @@ struct ApplicationsView: View {
             } header: {
                 Text("OAuth 应用（平台 admin）")
             } footer: {
-                Text("共 \(vm.clients.count) 个 · status 切换是 M04.F02 范围，这里只读")
+                Text("共 \(vm.clients.count) 个 · 停用后该应用的 authorize/token 立即被拒绝（详情页可切换）")
             }
             if case .failed(let message) = vm.phase {
                 Section {
@@ -70,8 +71,10 @@ struct ApplicationsView: View {
     }
 }
 
-/// 详情 + 编辑 + 删除（AC-2/AC-3/AC-4）：只读段原样展示逗号串字段；编辑段
-/// 保存走 partial UpdateOAuthClientRequest；删除走二次确认（服务端吊销该
+/// 详情 + 编辑 + 删除 + 启用状态（REQ-2026-005 AC-2~AC-4 / REQ-2026-006
+/// AC-1~AC-4）：只读段原样展示逗号串字段；编辑段保存走 partial
+/// UpdateOAuthClientRequest；启用状态段 Toggle（启用直通、停用二次确认——
+/// 停用即该应用 authorize/token 立即拒绝）；删除走二次确认（服务端吊销该
 /// client 全部 token，不可逆），成功 dismiss 返回列表（行已原位移除）。
 struct ClientDetailView: View {
     @ObservedObject var vm: AdminClientsViewModel
@@ -82,17 +85,56 @@ struct ClientDetailView: View {
     @State private var grantTypes: String = ""
     @State private var scopes: String = ""
     @State private var showDeleteConfirm = false
+    @State private var showDisableConfirm = false
     @Environment(\.dismiss) private var dismiss
+
+    /// vm.clients 是唯一真相（setStatus/update 原位替换行后导航快照会陈旧），
+    /// 渲染取活行，取不到（已被删除）回退导航快照。
+    private var current: OAuthClient {
+        vm.clients.first { $0.clientId == client.clientId } ?? client
+    }
 
     var body: some View {
         Form {
             Section("详情（只读）") {
-                LabeledContent("clientId", value: client.clientId)
+                LabeledContent("clientId", value: current.clientId)
                     .font(.footnote.monospaced())
-                LabeledContent("状态", value: client.status == 1 ? "启用" : "停用")
-                LabeledContent("access 有效期", value: "\(client.accessTokenValidity)s")
-                LabeledContent("refresh 有效期", value: "\(client.refreshTokenValidity)s")
-                LabeledContent("自动批准", value: client.autoApprove ? "是" : "否")
+                LabeledContent("状态", value: current.status == 1 ? "启用" : "停用")
+                LabeledContent("access 有效期", value: "\(current.accessTokenValidity)s")
+                LabeledContent("refresh 有效期", value: "\(current.refreshTokenValidity)s")
+                LabeledContent("自动批准", value: current.autoApprove ? "是" : "否")
+            }
+            Section {
+                // REQ-2026-006（M04.F02）：启用直通（无损），停用走确认
+                // dialog（立即拒绝该应用的 authorize/token）。失败时列表行
+                // 不动，Toggle 随 Binding 回弹原状态（AC-4）。
+                Toggle("启用", isOn: Binding(
+                    get: { current.status == 1 },
+                    set: { enabled in
+                        if enabled {
+                            Task { _ = await vm.setStatus(current.clientId, 1) }
+                        } else {
+                            showDisableConfirm = true
+                        }
+                    }
+                ))
+                .disabled(vm.phase == .busy)
+                .confirmationDialog(
+                    "停用 \(current.clientId)？",
+                    isPresented: $showDisableConfirm,
+                    titleVisibility: .visible
+                ) {
+                    Button("停用（其 authorize/token 立即拒绝）", role: .destructive) {
+                        Task { _ = await vm.setStatus(current.clientId, 0) }
+                    }
+                    Button("取消", role: .cancel) {}
+                } message: {
+                    Text("该应用的所有授权与刷新请求将立即被后端拒绝；重新启用即恢复")
+                }
+            } header: {
+                Text("启用状态")
+            } footer: {
+                Text("status 切换立即生效，服务端不落审计（BASE I06）")
             }
             Section {
                 TextField("应用名称", text: $clientName)

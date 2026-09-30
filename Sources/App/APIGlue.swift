@@ -162,6 +162,18 @@ enum APIGlue {
         _ = try await run { AdminClientsAPI.adminClientsDeleteClientWithRequestBuilder(clientId: clientId) }
     }
 
+    /// 启用/停用（REQ-2026-006，M04.F02）：PATCH /admin/clients/{clientId}/status。
+    /// 路径寻址 clientId 字符串非 UUID（live 实证）；status 1=启用 0=停用，
+    /// 其余 400。停用后该 client 的 authorize/token 立即被后端拒绝。
+    static let setClientStatus: (String, Int) async throws -> OAuthClient = { clientId, status in
+        try await run {
+            AdminClientsAPI.adminClientsSetClientStatusWithRequestBuilder(
+                clientId: clientId,
+                adminClientsSetClientStatusRequest: AdminClientsSetClientStatusRequest(status: status)
+            )
+        }
+    }
+
     /// 公共 client 元数据（I06）：GET /clients/{clientId}，匿名可读三字段。
     static let publicClient: (String) async throws -> OAuthClientPublicInfo = { clientId in
         try await run { ClientsAPI.clientsGetClientWithRequestBuilder(clientId: clientId) }

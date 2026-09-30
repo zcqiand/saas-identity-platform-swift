@@ -61,8 +61,8 @@ REQ-005 切片里 status 是只读尾巴（「status 切换是 M04.F02 范围，
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F02 规划→开发中（mirror 免批 --apply） | 对齐 | Claude | — | 已完成（2026-09-30） |
-| T-1 | CoreKit 红先行：AdminClientsViewModel 第六缝 setStatus + 测试挂 M04.F02 | 开发 | Claude | 0.25d | 进行中 |
-| T-2 | App：APIGlue status 缝 + ClientDetailView Toggle（停用确认）+ 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.25d | 待开始 |
+| T-1 | CoreKit 红先行：AdminClientsViewModel 第六缝 setStatus + 测试挂 M04.F02 | 开发 | Claude | 0.25d | 已完成（5beb8d7，48 tests 0 failures 连跑两轮；顺手修存量 flaky 21c0534） |
+| T-2 | App：APIGlue status 缝 + ClientDetailView Toggle（停用确认）+ 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.25d | 已完成（2026-09-30，xcodebuild BUILD SUCCEEDED + 本地 7 门全绿，AC-5 grep 干净） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

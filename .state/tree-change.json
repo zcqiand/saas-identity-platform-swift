@@ -1,25 +1,18 @@
 {
   "schema": 1,
   "approved": true,
-  "summary": "REQ-2026-003 成员角色绑定 GA（人工验收 2026-09-30 通过）：M01.F02 开发中→已上线；M01 模块父行开发中→已上线（F02 是 M01 最后一个未上线 F，F01/F03/F04 已上线，模块收口）。四处台账同步：function-tree（F 行+M01 父行）/ design-function-map（M01.F02 行翻已上线）/ requirements/README（REQ-2026-003 翻已上线）/ REQ 文档（状态+T-1/T-2 任务行）。代码基线 9d09f08 已 push，全门绿 ×2。",
+  "summary": "REQ-2026-004 OAuth 授权码切片（M04.F03 规划→开发中）：OauthAPI.oAuthAuthorize（scope 必填，state 回传校验）+ oAuthToken 双 grant（authorization_code / refresh_token，live 探针实证免 clientSecret）+ SessionStore.adoptOAuthToken 入账（token 对换新 + tenantId/expiresAt，adoptSwitch fail-fast 同款）+ OAuthView（签发授权码 → 换 token → 刷新）。前置已落地：shared 种子 873c9d3 补 saas-console 三件套（saasidentity://oauth/callback + openid/profile + 双 grant）+ saas_dev 重灌，live 四步链路全绿。非范围：ASWebAuthenticationSession（JSON API 不需要）、client_credentials、token 撤销、多 client UI。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-003-member-role-binding.md",
-    "docs/design/design-function-map.md"
+    "docs/requirements/REQ-2026-004-oauth-code-slice.md"
   ],
   "changes": [
     {
-      "id": "M01.F02",
+      "id": "M04.F03",
       "action": "变更",
-      "name": "角色成员",
-      "reason": "REQ-2026-003 GA：成员角色全量覆盖分配上线（MembersViewModel 三缝 + MembersView/RoleAssignView，AC-1~5 人工验收通过 2026-09-30）"
-    },
-    {
-      "id": "M01",
-      "action": "变更",
-      "name": "用户管理",
-      "reason": "模块收口：M01 全部 4 F（F01 用户维护/F02 角色成员/F03 租户成员/F04 SSO 登录）已上线，父行随之翻已上线"
+      "name": "身份认证",
+      "reason": "REQ-2026-004：OAuth authorize + token 双 grant + refresh（BASE 已上线，Swift 侧镜像落地；shared M04.F03.I01/I02 对应生成物 oAuthAuthorize/oAuthToken）。本切片后 M04 剩 F01/F02/F04"
     }
   ],
-  "base_sha": "742c7bc324e0a415"
+  "base_sha": "721f4a177cde233e"
 }

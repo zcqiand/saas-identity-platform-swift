@@ -55,10 +55,10 @@ SSO 浏览器授权码流（M01.F04 树行既定的密码登录形态先行，OA
 
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
-| T-0 | tree-change 提案：M01.F01 + M01.F04 规划→开发中（父行 M01 联动）；REQ 台账行 | 对齐 | Claude | — | 待批 |
-| T-1 | 生成链：gen-shared.sh + Generated/SaasSharedGenerated 产物 committed + Package.swift 三 target 接线 + marker | 基建 | Claude | 0.5d | 待开始 |
-| T-2 | CoreKit 红先行：SessionStore + AuthViewModel + 测试挂 ID（trace_cmd 移植 lab swift 版） | 开发 | Claude | 1d | 待开始 |
-| T-3 | App 壳：project.yml（八坑 + ATS）+ Config/Login/Account 三 View + APIGlue 缝 + 远门 build 含 App target + 全门绿 + push + gitlink | 开发 | Claude | 1d | 待开始 |
+| T-0 | tree-change 提案：M01.F01 + M01.F04 规划→开发中（父行 M01 联动）；REQ 台账行 | 对齐 | Claude | — | 完成 |
+| T-1 | 生成链：gen-shared.sh + Generated/SaasSharedGenerated 产物 committed + Package.swift 三 target 接线 + marker | 基建 | Claude | 0.5d | 完成（2b8bdd8，远门 build 绿含 xcodebuild App target） |
+| T-2 | CoreKit 红先行：SessionStore + AuthViewModel + 测试挂 ID（trace_cmd 移植 lab swift 版） | 开发 | Claude | 1d | 完成（4c3c222，红先行：测试先红 → 实现 → L4 绿 15 测试 0 失败） |
+| T-3 | App 壳：project.yml（八坑 + ATS）+ Config/Login/Account 三 View + APIGlue 缝 + 远门 build 含 App target + 全门绿 + push + gitlink | 开发 | Claude | 1d | 完成（设计映射已补；AC-6 grep 无手写端点串） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

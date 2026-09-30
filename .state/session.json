@@ -1,17 +1,18 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-002 租户成员与切换 开发中（T-0~T-2 全完成，全门绿软告警 0，等人工 AC-1~5 验收）",
+  "current_task": "REQ-2026-002 租户成员与切换 已上线（6fee976，2026-09-30 人工验收 AC-1~5 全绿）；全仓等下一个需求",
   "done": [
     "T-0 dda8cb9：tree-change 获批（base sha 4fecd857）M01.F03 规划→开发中；requirements 台账 + REQ 文档落盘",
     "T-1 e44afc0：红先行（7 条挂 M01.F03 编译红实证）→ SessionStore.adoptSwitch（SwitchTenantResponse 新 token 对入账，fail-fast 不动原会话）/refreshTenants（真值覆盖落快照，Q1）/快照增可选 expiresAt（Q2）；AuthViewModel Seams 增 switchTenant/listTenants（缺省抛错）+ switchTenant 成功 whoami 重拉；22 tests 0 failures",
     "T-2 e49ce34：APIGlue 两缝全走生成物（meListMyTenants/meSwitchTenantWithRequestBuilder）；AccountView 租户段列表 + ✓ 当前标记 + 点选切换 + whoami 重拉 + session.refresh() 重渲；design-map M01.F03 行；AC-5 grep 无手写端点串（仅注释）",
-    "全门绿：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0",
-    "mirror 免批通道（人裁选项 A）：tree_change.py 增 --apply + _validate_mirror（镜像 shared 登记 / 随已批 REQ 推进开发中），ADR-0042 已写；完整补丁在 .state/tree_change.proposed.py 待人落盘（hook 拦模型写 scripts/，设计使然）"
+    "全门绿 ×2（T-2 后与 GA 翻转后：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）",
+    "GA 6fee976：人工验收通过，function-tree/design-map/README/REQ 四处翻已上线（M01 父行留开发中，F02 规划）；GA 提案 base sha 19e717f4（已上线翻转不属 mirror 免批类，走人工 --approve）",
+    "mirror 免批通道（人裁选项 A）：tree_change.py --apply + _validate_mirror，ADR-0042 已写并随 suite gitlink 推送（213d6c2）；完整补丁 .state/tree_change.proposed.py 待人落盘"
   ],
-  "next": "1) 人落盘 mirror 补丁：cp output/saas-identity-platform-swift/.state/tree_change.proposed.py scripts/tree_change.py 后跑 --report 验证；2) home-mac iPhone 16 模拟器（UDID 2C939AD9-5565-4069-94C6-0D0D70514C7F）装新包供人工走 AC-1~5（dev 后端 http://100.127.95.66:5101，alice/dev123456 + clientId saas-console，alice 有 2 membership 可点选切换）；3) 验收「通过」后翻已上线（GA 翻转仍走人工 --approve，mirror 免批不含已上线）",
+  "next": "等下一个需求：候选 M01.F02（角色成员）、M04.F03（OAuth 授权码流）、M00/M04 配置面（镜像类走 mirror --apply 免批——前提：人已落盘补丁；GA/废弃仍人工 --approve）；生成链已一键化（scripts/gen-shared.sh），新切片直接 red-first",
   "open_questions": [
-    "mirror 补丁落盘与 --report 实测（脚本我已用 PYTHONPATH 自测 --status/--report 正常，免批类拦截逻辑未实测需真镜像场景）",
+    "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，落完跑一次 --report/--status 验证）",
     "租户名富化（memberships 只带 tenantId，UI 显示 UUID；拉 admin/tenants 富化留后续 REQ）",
     "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",
     "saas-console redirectUris 种子漂移（家族遗留人裁项）"
@@ -21,9 +22,10 @@
     "不要给 skip 的测试挂功能 ID",
     "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）",
     "home-mac 同一构建目录禁并发：gate.py 与 remote_gate.py 同时跑会撞 build.db 锁（database is locked）——2026-09-30 实证，串行跑",
+    "本机 push 别带 GIT_CONFIG_GLOBAL=/dev/null envfix（那是构建机 SPM 专用，本机会屏蔽凭据 helper → could not read Username）",
     "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser、token 字段 accessToken、登录必带 clientId、meSwitchTenant 的 tenantId 是 String 非 UUID、SwitchTenantResponse 四字段全非可选（accessToken 空串才是 fail-fast 面）——别照抄 lab",
     "saas 后端探活别打 /api/v1/health（404）；打 / 或 POST /api/v1/auth/login",
-    "Seams 新缝给了抛错缺省闭包，但闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）"
+    "Seams 抛错缺省闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）"
   ],
-  "last_gate_passed_at": "2026-09-30T14:05:00+08:00"
+  "last_gate_passed_at": "2026-09-30T14:40:00+08:00"
 }

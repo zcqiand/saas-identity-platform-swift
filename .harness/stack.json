@@ -6,17 +6,32 @@
   "gates": {
     "L2": {
       "name": "构建（home-mac 远程）",
-      "cmd": ["python", "scripts/remote_gate.py", "build"],
+      "cmd": [
+        "python",
+        "scripts/remote_gate.py",
+        "build"
+      ],
       "fix": "先探 ssh home-mac 是否可达（Tailscale；Mac 睡眠 = 超时）。红在编译错就回代码修；构建机环境问题 exit 2 停下问人。"
     },
     "L4": {
       "name": "测试（home-mac 远程）",
-      "cmd": ["python", "scripts/remote_gate.py", "test"],
+      "cmd": [
+        "python",
+        "scripts/remote_gate.py",
+        "test"
+      ],
       "fix": "先让测试变绿，再谈重构。若测试本身有误，改测试前必须先说明理由。"
     }
   },
-  "trace_cmd": [],
+  "trace_cmd": [
+    "python",
+    "scripts/trace_cmd.py"
+  ],
   "trace_env": {},
-  "source_dirs": ["Sources"],
-  "test_dirs": ["Tests"]
+  "source_dirs": [
+    "Sources"
+  ],
+  "test_dirs": [
+    "Tests"
+  ]
 }

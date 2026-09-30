@@ -1,27 +1,29 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-001 已上线（7c1be67，2026-09-30 人工验收 AC-1~6 全绿）；全仓等下一个需求",
+  "current_task": "REQ-2026-002 租户成员与切换 开发中（T-0~T-2 全完成，全门绿软告警 0，等人工 AC-1~5 验收）",
   "done": [
-    "T-0 tree-change 获批：M01/M01.F01/M01.F04 规划→开发中（base sha e9b62955，提案存档 .state/tree-change.json）",
-    "T-1 生成链 2b8bdd8：gen-shared.sh 一键再生（共享 saas-identity-platform-shared OpenAPI → swift5 生成物 11 API，marker d294477）+ Package.swift 三 target + project.yml（lab 八坑 + ATS）+ remote_gate.py 升级含 xcodebuild 段，远门 build 绿",
-    "T-2 CoreKit 4c3c222：红先行（测试先红 → 实现）SessionStore 三态 + AuthViewModel 三缝 + 14 个新测试，L4 绿 15 测试 0 失败；trace_cmd 移植挂 M01.F01/M01.F04",
-    "T-3 App 壳 c5ba558：三态路由 + Config/Login/Account + KeychainTokenStore + APIGlue 401 拦截全走生成物（AC-6 grep 无手写端点串）；design-map M01 两行补齐",
-    "全门绿（L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）",
-    "GA 7c1be67：人工验收通过，function-tree/design-map/README/REQ 四处翻已上线（M01 父行留开发中，F02/F03 规划）"
+    "T-0 dda8cb9：tree-change 获批（base sha 4fecd857）M01.F03 规划→开发中；requirements 台账 + REQ 文档落盘",
+    "T-1 e44afc0：红先行（7 条挂 M01.F03 编译红实证）→ SessionStore.adoptSwitch（SwitchTenantResponse 新 token 对入账，fail-fast 不动原会话）/refreshTenants（真值覆盖落快照，Q1）/快照增可选 expiresAt（Q2）；AuthViewModel Seams 增 switchTenant/listTenants（缺省抛错）+ switchTenant 成功 whoami 重拉；22 tests 0 failures",
+    "T-2 e49ce34：APIGlue 两缝全走生成物（meListMyTenants/meSwitchTenantWithRequestBuilder）；AccountView 租户段列表 + ✓ 当前标记 + 点选切换 + whoami 重拉 + session.refresh() 重渲；design-map M01.F03 行；AC-5 grep 无手写端点串（仅注释）",
+    "全门绿：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0",
+    "mirror 免批通道（人裁选项 A）：tree_change.py 增 --apply + _validate_mirror（镜像 shared 登记 / 随已批 REQ 推进开发中），ADR-0042 已写；完整补丁在 .state/tree_change.proposed.py 待人落盘（hook 拦模型写 scripts/，设计使然）"
   ],
-  "next": "等下一个需求：候选 M01.F02/F03（角色成员/租户成员）、M04.F03（OAuth 授权码流）、M00/M04 配置面（走 /tree-change 提案）；生成链已一键化（scripts/gen-shared.sh），新切片直接 red-first",
+  "next": "1) 人落盘 mirror 补丁：cp output/saas-identity-platform-swift/.state/tree_change.proposed.py scripts/tree_change.py 后跑 --report 验证；2) home-mac iPhone 16 模拟器（UDID 2C939AD9-5565-4069-94C6-0D0D70514C7F）装新包供人工走 AC-1~5（dev 后端 http://100.127.95.66:5101，alice/dev123456 + clientId saas-console，alice 有 2 membership 可点选切换）；3) 验收「通过」后翻已上线（GA 翻转仍走人工 --approve，mirror 免批不含已上线）",
   "open_questions": [
-    "saas-console redirectUris 种子漂移（家族遗留人裁项）",
-    "lab swift 34 条 L5 软告警（流程文档缺口）待人工裁定是否同样适用于本仓树",
-    "simulator xcodebuild test 段（lab swift 同款机器态问题）是否值得排查恢复"
+    "mirror 补丁落盘与 --report 实测（脚本我已用 PYTHONPATH 自测 --status/--report 正常，免批类拦截逻辑未实测需真镜像场景）",
+    "租户名富化（memberships 只带 tenantId，UI 显示 UUID；拉 admin/tenants 富化留后续 REQ）",
+    "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",
+    "saas-console redirectUris 种子漂移（家族遗留人裁项）"
   ],
   "dont": [
     "不要改 .harness/stack.json 让门变松",
     "不要给 skip 的测试挂功能 ID",
     "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）",
-    "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser 非 CurrentUser、token 字段叫 accessToken、登录必带 clientId、无 CurrentUserSession 生成模型（快照 struct 在 CoreKit 本地定义）——别照抄 lab SessionStore",
-    "saas 后端探活别打 /api/v1/health（404 不存在）；打 / 或 POST /api/v1/auth/login"
+    "home-mac 同一构建目录禁并发：gate.py 与 remote_gate.py 同时跑会撞 build.db 锁（database is locked）——2026-09-30 实证，串行跑",
+    "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser、token 字段 accessToken、登录必带 clientId、meSwitchTenant 的 tenantId 是 String 非 UUID、SwitchTenantResponse 四字段全非可选（accessToken 空串才是 fail-fast 面）——别照抄 lab",
+    "saas 后端探活别打 /api/v1/health（404）；打 / 或 POST /api/v1/auth/login",
+    "Seams 新缝给了抛错缺省闭包，但闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）"
   ],
-  "last_gate_passed_at": "2026-09-30T10:15:00+08:00"
+  "last_gate_passed_at": "2026-09-30T14:05:00+08:00"
 }

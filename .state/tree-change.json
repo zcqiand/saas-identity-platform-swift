@@ -1,19 +1,25 @@
 {
   "schema": 1,
   "approved": true,
-  "mirror": true,
-  "base_sha": "dc61332a1ab95f11",
-  "summary": "REQ-2026-003 成员角色绑定切片（M01.F02 规划→开发中，M01 父行已开发中不动）：成员列表（tenantMembersListTenantUsers）+ 角色全量覆盖分配（tenantMembersAssignTenantMemberRoles，shared tenant-members.tsp:43 全量覆盖语义）+ 角色清单（tenantRolesListSysRoles 供勾选）。租户上下文复用 REQ-002 切换成果（SessionStore.currentTenantId，nil fail-fast）。非范围：成员邀请/状态/删除（M00.F02 维度）、角色 CRUD（M00.F03）、角色↔菜单授权（M00.F04）、分页 UI。dev 种子已探活：alice@001 admin（正用例）、@002 普通 member（403 反用例）。",
+  "summary": "REQ-2026-003 成员角色绑定 GA（人工验收 2026-09-30 通过）：M01.F02 开发中→已上线；M01 模块父行开发中→已上线（F02 是 M01 最后一个未上线 F，F01/F03/F04 已上线，模块收口）。四处台账同步：function-tree（F 行+M01 父行）/ design-function-map（M01.F02 行翻已上线）/ requirements/README（REQ-2026-003 翻已上线）/ REQ 文档（状态+T-1/T-2 任务行）。代码基线 9d09f08 已 push，全门绿 ×2。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-003-member-role-binding.md"
+    "docs/requirements/REQ-2026-003-member-role-binding.md",
+    "docs/design/design-function-map.md"
   ],
   "changes": [
     {
       "id": "M01.F02",
       "action": "变更",
       "name": "角色成员",
-      "reason": "REQ-2026-003：给 member 分配角色（member→role binding，shared M01.F02.I01 对应生成物 tenantMembersAssignTenantMemberRoles 全量覆盖）。M01 最后一个规划态 F，本切片后 M01 收口"
+      "reason": "REQ-2026-003 GA：成员角色全量覆盖分配上线（MembersViewModel 三缝 + MembersView/RoleAssignView，AC-1~5 人工验收通过 2026-09-30）"
+    },
+    {
+      "id": "M01",
+      "action": "变更",
+      "name": "用户管理",
+      "reason": "模块收口：M01 全部 4 F（F01 用户维护/F02 角色成员/F03 租户成员/F04 SSO 登录）已上线，父行随之翻已上线"
     }
-  ]
+  ],
+  "base_sha": "742c7bc324e0a415"
 }

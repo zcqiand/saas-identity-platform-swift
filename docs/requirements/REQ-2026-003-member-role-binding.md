@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 批准 2026-09-30，base sha dc61332a；提案存档 .state/tree-change.json，mirror 类） |
+| 状态 | **已上线**（2026-09-30 人工验收 AC-1~5 全绿；GA 提案 base sha 742c7bc3，人工 --approve；T-0 提案 base sha dc61332a） |
 | 关联 ADR | ADR-0019（显式配置口径沿用）；ADR-0042（mirror 免批通道，若补丁已落盘可 --apply） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（tenant-members.tsp:43）；REQ-001/002 已上线基座（SessionStore 三态 / Seams 缝模式 / APIGlue） |
 
@@ -60,8 +60,8 @@ BASE 同编号 F 的 assign 子项，`tenant-members.tsp:43`）。与 M00.F02 �
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M01.F02 规划→开发中 | 对齐 | Claude | — | 已完成（2026-09-30 人工批准） |
-| T-1 | CoreKit 红先行：MembersViewModel 三缝 + 测试挂 M01.F02 | 开发 | Claude | 0.5d | 待开始 |
-| T-2 | App：MembersView + AccountView 入口 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 待开始 |
+| T-1 | CoreKit 红先行：MembersViewModel 三缝 + 测试挂 M01.F02 | 开发 | Claude | 0.5d | 已完成（7b2b4e5，27 tests 0 failures） |
+| T-2 | App：MembersView + AccountView 入口 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（9d09f08，全门绿 ×2，人工验收通过） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

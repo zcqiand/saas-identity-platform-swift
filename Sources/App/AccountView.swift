@@ -46,6 +46,14 @@ struct AccountView: View {
                     LabeledContent("成员关系数", value: "\(session.store.tenants.count)")
                 }
                 tenantsSection
+                // M04.F01（REQ-2026-005）入口：平台 admin 视角管理 OAuth client。
+                Section {
+                    NavigationLink("应用维护（OAuth client 管理）") {
+                        ApplicationsView()
+                    }
+                } header: {
+                    Text("应用管理")
+                }
                 Section {
                     LabeledContent("后端", value: session.store.baseURL ?? "—")
                     LabeledContent("应用", value: session.store.clientId ?? "—")

@@ -13,6 +13,7 @@
 | M01.F03 | AccountView 租户段（成员关系列表 + ✓ 当前标记 + 点选切换） | GET /api/v1/me/tenants、POST /api/v1/me/tenants/{tenantId}/switch（MeAPI.meListMyTenants/meSwitchTenant 生成物） | tenant_membership（只读；切换换发 token 对不落表） | M01.F03 | — | 已上线 |
 | M01.F04 | ConfigView（baseURL+clientId）/ LoginView（密码登录）/ AccountView（登出） | POST /api/v1/auth/login、POST /api/v1/auth/logout（AuthAPI.sessionsLogin/sessionsLogout 生成物） | oauth_client / sys_user（后端账，本仓不落表） | M01.F04 | — | 已上线 |
 | M04.F03 | OAuthView（签发授权码 → 换 token → 刷新；code/state 回显，token 对/scope/tenantId/expiresAt 渲染）/ AccountView OAuth 段入口 | POST /api/v1/oauth/authorize、POST /api/v1/oauth/token（OauthAPI.oAuthAuthorize/oAuthToken 生成物，双 grant authorization_code + refresh_token） | oauth_client / oauth 授权码与 token 台账（后端账，本仓不落表；token 对入 SessionStore/Keychain） | M04.F03 | — | 已上线 |
+| M04.F01 | ApplicationsView（client 列表 + 新建 sheet）/ ClientDetailView（详情只读 + 编辑 + 删除二次确认）/ ClientCreateView（注册，secret 必填）/ AccountView 应用管理段入口 | GET/POST /api/v1/admin/clients、GET/PUT/DELETE /api/v1/admin/clients/{clientId}、GET /api/v1/clients/{clientId}（AdminClientsAPI/ClientsAPI 生成物；分页 0-indexed 传 nil 全量） | oauth_client（后端账，本仓不落表；删除吊销 token 由后端落账） | M04.F01 | — | 开发中 |
 
 ## 约定
 

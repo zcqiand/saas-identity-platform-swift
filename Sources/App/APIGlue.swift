@@ -132,4 +132,38 @@ enum APIGlue {
             )
         }
     }
+
+    // MARK: - 应用维护（M04.F01，REQ-2026-005）
+
+    /// client 全量清单（AC-1）：GET /admin/clients。不传分页——live 实证
+    /// 分页 0-indexed（page=1 是第二页偏移出界），nil 全量，翻页 UI 非范围。
+    static let listClients: () async throws -> AdminClientsListClients200Response = {
+        try await run { AdminClientsAPI.adminClientsListClientsWithRequestBuilder() }
+    }
+
+    /// client 详情（AC-2）：GET /admin/clients/{clientId}（密钥不返明文，模型无此字段）。
+    static let getClient: (String) async throws -> OAuthClient = { clientId in
+        try await run { AdminClientsAPI.adminClientsGetClientWithRequestBuilder(clientId: clientId) }
+    }
+
+    /// 注册新 client（AC-4）：POST /admin/clients（clientSecret 必填录入）。
+    static let createClient: (CreateOAuthClientRequest) async throws -> OAuthClient = { request in
+        try await run { AdminClientsAPI.adminClientsCreateClientWithRequestBuilder(createOAuthClientRequest: request) }
+    }
+
+    /// 更新 client（AC-3）：PUT /admin/clients/{clientId}（partial 请求只提交改动字段）。
+    static let updateClient: (String, UpdateOAuthClientRequest) async throws -> OAuthClient = { clientId, request in
+        try await run { AdminClientsAPI.adminClientsUpdateClientWithRequestBuilder(clientId: clientId, updateOAuthClientRequest: request) }
+    }
+
+    /// 删除 client（AC-4，危险操作）：DELETE /admin/clients/{clientId}，服务端
+    /// 吊销该 client 名下全部 token；App 层确认后才调。
+    static let deleteClient: (String) async throws -> Void = { clientId in
+        _ = try await run { AdminClientsAPI.adminClientsDeleteClientWithRequestBuilder(clientId: clientId) }
+    }
+
+    /// 公共 client 元数据（I06）：GET /clients/{clientId}，匿名可读三字段。
+    static let publicClient: (String) async throws -> OAuthClientPublicInfo = { clientId in
+        try await run { ClientsAPI.clientsGetClientWithRequestBuilder(clientId: clientId) }
+    }
 }

@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-004 OAuth 授权码切片 GA 已上线（5ca7ef2，2026-09-30 人工验收 AC-1~4 通过）；M01 全收口 + M04.F03 落地，M04 剩 F01/F02/F04",
+  "current_task": "REQ-2026-005 应用维护切片已推 origin（c7cc651，开发中），等人工验收 AC-1~5 后 GA 翻转",
   "done": [
-    "前置：shared 种子 873c9d3 补 saas-console 三件套（saasidentity://oauth/callback + openid/profile + 双 grant）+ saas_dev 重灌 + live 四步链路全绿（authorize scope 必填 / token 免 clientSecret / refresh 轮换 / state 回传）",
-    "T-0 72a20d2：tree-change 人工批准（base sha 721f4a17）M04.F03 规划→开发中；REQ-2026-004 文档落盘（AC-1~5、澄清 Q1~Q3）",
-    "T-1 ee5f6dc：红先行（cannot find OAuthViewModel 编译红实证）→ OAuthViewModel 三缝（authorize/exchangeCode/refreshToken，state 自生成+回传校验 fail-fast，scope 恒传 openid）+ SessionStore.adoptOAuthToken（token 对换新 + tenantId 对齐 + expiresAt=now+expiresIn，fail-fast 不动原会话）；37 tests 0 failures",
-    "T-2 0ba1818：APIGlue 三缝走 OauthAPI 生成物；OAuthView 三段（签发→换 token→刷新，code/state/token 对/scope/tenantId/expiresAt 渲染）；AccountView OAuth 段入口；design-map M04.F03 行；AC-5 grep 无手写端点串；xcodebuild BUILD SUCCEEDED；本地 7 门全绿软告警 0",
-    "GA 5ca7ef2：人工 --approve（base sha 25f31beb）翻转——function-tree M04.F03 已上线；README/REQ 状态 + T-1/T-2 + design-map 状态列同步；L5 复验绿"
+    "REQ-2026-004 OAuth 授权码切片 GA 已上线（5ca7ef2，人工验收 AC-1~4 通过；M04.F03 收口）",
+    "T-0 70574d6：tree-change 人工批准（base sha f22087e5）M04.F01 规划→开发中；REQ-2026-005 文档落盘（AC-1~6、澄清 Q1~Q3：分页 0-indexed 传 nil 全量 / secret 必填且详情不返 / 逗号串原样透传）",
+    "T-1 5997a3d：红先行（cannot find AdminClientsViewModel 编译红实证）→ AdminClientsViewModel 五缝（list 不传分页 / create 追加 / update/delete 原位维护行 / 失败红字列表不动可重试）；45 tests 0 failures（一处测试断言笔误已修）",
+    "T-2 c7cc651：APIGlue 六缝走 AdminClientsAPI/ClientsAPI 生成物；ApplicationsView + ClientDetailView（删除二次确认）+ ClientCreateView；AccountView 应用管理段入口；design-map M04.F01 行；AC-6 grep 无手写端点串；xcodebuild BUILD SUCCEEDED；本地 7 门全绿软告警 0"
   ],
-  "next": "等下一个需求：候选 M00.F01~F05（租户管理配置面）、M04.F01 应用维护 / F02 启用停用 / F04 菜单管理；镜像类（从 shared BASE 挑选登记新 F / 随已批 REQ 推进开发中）可走 mirror --apply 免批——前提：人已落盘补丁（.state/tree_change.proposed.py → scripts/tree_change.py，至今未落盘）；GA/废弃仍人工 --approve；生成链已一键化（scripts/gen-shared.sh），新切片直接 red-first",
+  "next": "人工验收 AC-1~5（模拟器：登录 alice/dev123456 → AccountView「应用维护」→ 列表见 4 条种子 → erp 详情看逗号串 → 改名保存 → 新建 client → 删除新建的（二次确认）；删除种子 client 会在 dev 库留痕，验收删除步骤建议用新建的 client）；通过后 human --approve 走 GA：function-tree M04.F01 开发中→已上线 + README/REQ/design-map 状态（GA 非免批类，写 tree-change 提案 → --report 贴人 → --approve）",
   "open_questions": [
     "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，至今未落盘）——REQ-004 T-0 仍走的人工通道",
     "租户名富化（UI 显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
@@ -29,7 +28,10 @@
     "App 层新文件直接引用生成物类型（TenantMemberUserView 类）必须 import SaasSharedGenerated——swift test 只编 CoreKit 不报，xcodebuild App target 才炸（2026-09-30 实证）",
     "git commit -F 复用旧 msg 文件会张冠李戴（36890e7 曾误挂 REQ-001 收口词）——每 commit 新建 msg 文件",
     "OAuthViewModel 测试造「ready 但无 refresh token」场景别拿未登录 store 调 adoptOAuthToken 造前置（撞 fail-fast 抛错）——makeStore 加 withRefresh: false 走 adoptLogin 缺省 refreshToken 参数",
-    "oauth authorize 的 scope 后端必填（生成模型 optional 是契约 requiredMode 滞后）——请求侧恒传 scope 不依赖缺省；token 免 clientSecret（公共 client）"
+    "oauth authorize 的 scope 后端必填（生成模型 optional 是契约 requiredMode 滞后）——请求侧恒传 scope 不依赖缺省；token 免 clientSecret（公共 client）",
+    "admin/clients 分页是 0-indexed：page=1 是第二页（page=1&pageSize=20 返 0 条假空）——App 侧 list 不传分页参（nil 全量），别照 web 仓 1-based 习惯传 page=1",
+    "OAuthClient 的 redirectUris/grantTypes/scopes 是 String 逗号串（DB 形态直出非数组）——UI 原样透传编辑，不发明数组转换层；create 的 clientSecret 必填录入，模型无 secret 字段（详情天然不返明文）",
+    "tree_change.py 在 suite scripts/ 不在项目 scripts/——从 suite 根跑（项目目录跑会 file not found）"
   ],
-  "last_gate_passed_at": "2026-09-30T20:10:00+08:00"
+  "last_gate_passed_at": "2026-09-30T20:40:00+08:00"
 }

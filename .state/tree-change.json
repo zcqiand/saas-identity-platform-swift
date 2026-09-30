@@ -1,19 +1,19 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "19e717f49ba01cf5",
-  "summary": "REQ-2026-002 GA：租户成员与切换切片人工验收通过（AC-1~5 全绿，2026-09-30），M01.F03 开发中→已上线。成员关系列表（meListMyTenants）+ 点选切换（meSwitchTenant 换发 token 对入账）已上线：CoreKit adoptSwitch/refreshTenants（e44afc0）、App 租户段交互（e49ce34）、22 tests 0 failures、全门绿软告警 0、live 探针闭环（switch→新 token /me 反映新租户）。",
+  "mirror": true,
+  "base_sha": "dc61332a1ab95f11",
+  "summary": "REQ-2026-003 成员角色绑定切片（M01.F02 规划→开发中，M01 父行已开发中不动）：成员列表（tenantMembersListTenantUsers）+ 角色全量覆盖分配（tenantMembersAssignTenantMemberRoles，shared tenant-members.tsp:43 全量覆盖语义）+ 角色清单（tenantRolesListSysRoles 供勾选）。租户上下文复用 REQ-002 切换成果（SessionStore.currentTenantId，nil fail-fast）。非范围：成员邀请/状态/删除（M00.F02 维度）、角色 CRUD（M00.F03）、角色↔菜单授权（M00.F04）、分页 UI。dev 种子已探活：alice@001 admin（正用例）、@002 普通 member（403 反用例）。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-002-tenant-membership-switch.md",
-    "docs/design/design-function-map.md"
+    "docs/requirements/REQ-2026-003-member-role-binding.md"
   ],
   "changes": [
     {
-      "id": "M01.F03",
+      "id": "M01.F02",
       "action": "变更",
-      "name": "租户成员",
-      "reason": "REQ-2026-002 GA：人工验收通过（2026-09-30），开发中→已上线"
+      "name": "角色成员",
+      "reason": "REQ-2026-003：给 member 分配角色（member→role binding，shared M01.F02.I01 对应生成物 tenantMembersAssignTenantMemberRoles 全量覆盖）。M01 最后一个规划态 F，本切片后 M01 收口"
     }
   ]
 }

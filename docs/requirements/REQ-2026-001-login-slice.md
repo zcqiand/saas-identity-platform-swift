@@ -5,7 +5,7 @@
 | 提出人 | zcqiand |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 批准 2026-09-30，base sha e9b62955；提案存档 .state/tree-change.json） |
+| 状态 | **已上线**（2026-09-30 人工验收通过：AC-1~6 全绿；T-0 批准 base sha e9b62955，提案存档 .state/tree-change.json） |
 | 关联 ADR | ADR-0019（baseURL/clientId 用户显式配置，缺失 fail-fast 不兜底字面量） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（需求与 API 基线）；兄弟前端仓（react/vue/nextjs）登录实现为交互参照 |
 

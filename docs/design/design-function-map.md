@@ -8,8 +8,8 @@
 
 | 功能子项 ID | 页面/组件 | 接口 | 数据表 | 权限码 | 设计稿 | 状态 |
 |---|---|---|---|---|---|---|
-| M01.F01 | AccountView（whoami 渲染 + 成员关系数） | GET /api/v1/me（MeAPI.meWhoami 生成物） | sys_user / tenant_membership（只读） | M01.F01 | — | 开发中 |
-| M01.F04 | ConfigView（baseURL+clientId）/ LoginView（密码登录）/ AccountView（登出） | POST /api/v1/auth/login、POST /api/v1/auth/logout（AuthAPI.sessionsLogin/sessionsLogout 生成物） | oauth_client / sys_user（后端账，本仓不落表） | M01.F04 | — | 开发中 |
+| M01.F01 | AccountView（whoami 渲染 + 成员关系数） | GET /api/v1/me（MeAPI.meWhoami 生成物） | sys_user / tenant_membership（只读） | M01.F01 | — | 已上线 |
+| M01.F04 | ConfigView（baseURL+clientId）/ LoginView（密码登录）/ AccountView（登出） | POST /api/v1/auth/login、POST /api/v1/auth/logout（AuthAPI.sessionsLogin/sessionsLogout 生成物） | oauth_client / sys_user（后端账，本仓不落表） | M01.F04 | — | 已上线 |
 
 ## 约定
 

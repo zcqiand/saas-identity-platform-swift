@@ -120,6 +120,12 @@ struct AccountView: View {
             if session.store.tenants.isEmpty {
                 Text("无成员关系").foregroundStyle(.secondary)
             }
+            // M01.F02（REQ-2026-003）入口：选定租户上下文后才能管成员角色。
+            if session.store.currentTenantId != nil {
+                NavigationLink("成员角色（列表 + 分配）") {
+                    MembersView(session: session)
+                }
+            }
         } header: {
             Text("租户成员")
         } footer: {

@@ -61,4 +61,29 @@ enum APIGlue {
     static let switchTenant: (String) async throws -> SwitchTenantResponse = { tenantId in
         try await run { MeAPI.meSwitchTenantWithRequestBuilder(tenantId: tenantId) }
     }
+
+    // MARK: - 成员角色绑定（M01.F02，REQ-2026-003）
+
+    /// 租户成员列表（AC-1）：GET /tenants/{tenantId}/members（默认页一次拉取，
+    /// 分页 UI 非范围）。
+    static let listMembers: (String) async throws -> TenantMembersListTenantUsers200Response = { tenantId in
+        try await run { TenantMembersAPI.tenantMembersListTenantUsersWithRequestBuilder(tenantId: tenantId) }
+    }
+
+    /// 租户角色清单（AC-1 勾选数据源）：GET /tenants/{tenantId}/roles。
+    static let listRoles: (String) async throws -> TenantRolesListSysRoles200Response = { tenantId in
+        try await run { TenantRolesAPI.tenantRolesListSysRolesWithRequestBuilder(tenantId: tenantId) }
+    }
+
+    /// 角色全量覆盖分配（AC-2/AC-3）：PUT /tenants/{tenantId}/members/{userId}/roles，
+    /// 提交的 roleIds 集合就是该成员最终角色集（契约语义，不发明增量协议）。
+    static let assignRoles: (String, String, [String]) async throws -> TenantMemberUserView = { tenantId, userId, roleIds in
+        try await run {
+            TenantMembersAPI.tenantMembersAssignTenantMemberRolesWithRequestBuilder(
+                tenantId: tenantId,
+                userId: userId,
+                setTenantMemberRolesRequest: SetTenantMemberRolesRequest(roleIds: roleIds)
+            )
+        }
+    }
 }

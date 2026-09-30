@@ -9,7 +9,7 @@ import SaasSharedGenerated
 // 401 失效与登出共用 logout 语义（AC-4/AC-5）。
 // 与 lab 的形状差异（saas 契约所致）：LoginResponse.user 是 SysUser（非 CurrentUser）；
 // token 字段名 accessToken；登录必须带 clientId（ConfigView 显式配置）；
-// currentTenantId 本期只展示不切换（REQ-2026-001 非范围）。
+// 切换租户换发的是 SwitchTenantResponse 新 token 对（非 LoginResponse，REQ-2026-002）。
 
 /// 会话状态存储：配置页（needsSetup）→ 登录页（needsLogin）→ 账户页（ready）。
 public final class SessionStore {
@@ -38,9 +38,12 @@ public final class SessionStore {
     public private(set) var refreshToken: String?
     public private(set) var user: SysUser?
     public private(set) var tenants: [TenantMembership] = []
-    /// 当前租户上下文（LoginResponse.currentTenantId / 快照恢复）。
-    /// 本期只展示不切换；nil 显示 —，不兜底字面量。
+    /// 当前租户上下文（LoginResponse.currentTenantId / adoptSwitch 更新 / 快照恢复）。
+    /// nil 显示 —，不兜底字面量。
     public private(set) var currentTenantId: UUID?
+    /// 当前 token 过期时刻（SwitchTenantResponse.expiresAt；REQ-2026-002 Q2：
+    /// 仅随快照记录作展示依据，本期不做主动过期刷新）。
+    public private(set) var expiresAt: Date?
 
     public init(defaults: UserDefaults, secrets: TokenStoring) {
         self.defaults = defaults
@@ -56,6 +59,7 @@ public final class SessionStore {
                 user = snapshot.user
                 tenants = snapshot.tenants
                 currentTenantId = snapshot.currentTenantId
+                expiresAt = snapshot.expiresAt
             }
             state = Self.isConfigured(baseURL, clientId) ? .ready : .needsSetup
         } else {
@@ -127,6 +131,61 @@ public final class SessionStore {
         state = .ready
     }
 
+    /// 切换租户入账（REQ-2026-002）：SwitchTenantResponse 换发的是新 token 对
+    /// （saas 契约，非 LoginResponse——lab 同端点不同形，独立实现不复用 adoptLogin）。
+    /// user/tenants 不变；token/refresh 换新落密态缝、currentTenantId 更新、
+    /// expiresAt 随快照记录、Bearer 重注，state 保持 ready。缺 accessToken 或
+    /// 未登录 = fail-fast 一个字节都不动（AC-3 原会话可重试）。
+    public func adoptSwitch(_ response: SwitchTenantResponse) throws {
+        guard state == .ready else {
+            throw SessionStoreError.invalidState("未登录，不能切换租户")
+        }
+        guard response.accessToken.isEmpty == false else {
+            throw SessionStoreError.emptyField("切换响应缺 accessToken")
+        }
+        secrets.save(Self.tokenKey, response.accessToken)
+        token = response.accessToken
+        if response.refreshToken.isEmpty == false {
+            secrets.save(Self.refreshTokenKey, response.refreshToken)
+            refreshToken = response.refreshToken
+        } else {
+            secrets.delete(Self.refreshTokenKey)
+            refreshToken = nil
+        }
+        currentTenantId = response.tenantId
+        expiresAt = response.expiresAt
+        if let user {
+            let snapshot = SessionSnapshot(
+                user: user, tenants: tenants,
+                currentTenantId: currentTenantId, expiresAt: expiresAt
+            )
+            if let data = try? JSONEncoder().encode(snapshot) {
+                defaults.set(data, forKey: Self.sessionKey)
+            }
+        }
+        if let baseURL {
+            // baseURL 已过校验，这里只为重注 basePath + Bearer（失败不掩盖切换成功）。
+            _ = try? APIClient.bootstrap(baseURL: baseURL, token: response.accessToken)
+        }
+    }
+
+    /// 成员关系列表刷新（REQ-2026-002 Q1）：meListMyTenants 真值覆盖快照 tenants
+    ///（进页先用登录快照渲染，拉到真值再覆盖，不一致以后端为准）。currentTenantId
+    /// 不动；未登录拒刷。
+    public func refreshTenants(_ tenants: [TenantMembership]) throws {
+        guard state == .ready, let user else {
+            throw SessionStoreError.invalidState("未登录，不能刷新成员关系")
+        }
+        self.tenants = tenants
+        let snapshot = SessionSnapshot(
+            user: user, tenants: tenants,
+            currentTenantId: currentTenantId, expiresAt: expiresAt
+        )
+        if let data = try? JSONEncoder().encode(snapshot) {
+            defaults.set(data, forKey: Self.sessionKey)
+        }
+    }
+
     /// 登出/401 失效共用（AC-4/AC-5）：清密态 + 快照，留配置直接回登录页。
     public func logout() {
         secrets.delete(Self.tokenKey)
@@ -159,11 +218,14 @@ public struct SessionSnapshot: Codable {
     public var user: SysUser
     public var tenants: [TenantMembership]
     public var currentTenantId: UUID?
+    /// 切换租户换发 token 的过期时刻（REQ-2026-002 Q2；可选，老快照缺字段可解码）。
+    public var expiresAt: Date?
 
-    public init(user: SysUser, tenants: [TenantMembership], currentTenantId: UUID?) {
+    public init(user: SysUser, tenants: [TenantMembership], currentTenantId: UUID?, expiresAt: Date? = nil) {
         self.user = user
         self.tenants = tenants
         self.currentTenantId = currentTenantId
+        self.expiresAt = expiresAt
     }
 }
 
@@ -173,4 +235,5 @@ public struct SessionStoreError: LocalizedError {
     public var errorDescription: String? { message }
     public init(_ message: String) { self.message = message }
     public static func emptyField(_ message: String) -> SessionStoreError { SessionStoreError(message) }
+    public static func invalidState(_ message: String) -> SessionStoreError { SessionStoreError(message) }
 }

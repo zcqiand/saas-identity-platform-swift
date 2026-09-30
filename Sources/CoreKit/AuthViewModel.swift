@@ -10,21 +10,32 @@ import SaasSharedGenerated
 @MainActor
 public final class AuthViewModel: ObservableObject {
 
-    /// 网络缝：签名对齐生成层会话三端点。clientId 由 ViewModel 从 SessionStore
-    /// 取出传入（登录请求体必带，ADR-0019 口径）。
+    /// 网络缝：签名对齐生成层会话端点。clientId 由 ViewModel 从 SessionStore
+    /// 取出传入（登录请求体必带，ADR-0019 口径）。switchTenant/listTenants
+    /// （REQ-2026-002）带抛错缺省——未注入就调用 = fail-fast，不留静默兜底。
     public struct Seams {
         public var login: (_ username: String, _ password: String, _ clientId: String) async throws -> LoginResponse
         public var logout: () async throws -> Void
         public var whoami: () async throws -> CurrentUser
+        public var switchTenant: (_ tenantId: String) async throws -> SwitchTenantResponse
+        public var listTenants: () async throws -> [TenantMembership]
 
         public init(
             login: @escaping (_: String, _: String, _: String) async throws -> LoginResponse,
             logout: @escaping () async throws -> Void,
-            whoami: @escaping () async throws -> CurrentUser
+            whoami: @escaping () async throws -> CurrentUser,
+            switchTenant: @escaping (_: String) async throws -> SwitchTenantResponse = { _ in
+                throw SessionStoreError("switchTenant 缝未注入")
+            },
+            listTenants: @escaping () async throws -> [TenantMembership] = {
+                throw SessionStoreError("listTenants 缝未注入")
+            }
         ) {
             self.login = login
             self.logout = logout
             self.whoami = whoami
+            self.switchTenant = switchTenant
+            self.listTenants = listTenants
         }
     }
 
@@ -76,6 +87,40 @@ public final class AuthViewModel: ObservableObject {
             currentUser = user
             phase = .idle
             return user
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return nil
+        }
+    }
+
+    /// 切换租户（REQ-2026-002 AC-2/AC-3）：换发 token 对 adoptSwitch 入账，
+    /// 成功后 whoami 重拉反映新上下文；失败保原会话红字可重试（adoptSwitch
+    /// fail-fast 在前，失败时 store 未被触碰）。
+    @discardableResult
+    public func switchTenant(to tenantId: String) async -> Bool {
+        phase = .busy
+        do {
+            let response = try await seams.switchTenant(tenantId)
+            try store.adoptSwitch(response)
+            phase = .idle
+            _ = await whoami()
+            return true
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return false
+        }
+    }
+
+    /// 成员关系列表刷新（REQ-2026-002 Q1）：meListMyTenants 真值覆盖
+    /// store.tenants；失败返回 nil（不与空列表混淆），旧列表保留。
+    @discardableResult
+    public func listTenants() async -> [TenantMembership]? {
+        phase = .busy
+        do {
+            let tenants = try await seams.listTenants()
+            try store.refreshTenants(tenants)
+            phase = .idle
+            return tenants
         } catch {
             phase = .failed(Self.message(of: error))
             return nil

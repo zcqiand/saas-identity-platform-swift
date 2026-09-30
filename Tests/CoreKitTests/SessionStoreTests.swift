@@ -175,6 +175,94 @@ final class SessionStoreTests: XCTestCase {
         XCTAssertNil(secrets.read("corekit.token"))
     }
 
+    // MARK: - REQ-2026-002 租户成员与切换（M01.F03）
+
+    func testAdoptSwitchSwapsTokenPairAndCurrentTenantSurvivesRebirth() throws {
+    // fn: M01.F03
+        let (defaults, secrets) = makeDeps()
+        let store = SessionStore(defaults: defaults, secrets: secrets)
+        try configure(store)
+        try store.adoptLogin(makeLoginResponse(accessToken: "tk-1"))
+        let switchedAt = Date(timeIntervalSince1970: 1_700_003_600)
+
+        // SwitchTenantResponse 是新 token 对（非 LoginResponse，saas 契约与 lab 不同形）
+        try store.adoptSwitch(SwitchTenantResponse(
+            accessToken: "tk-sw", refreshToken: "rt-tk-sw",
+            expiresAt: switchedAt, tenantId: tenantB
+        ))
+
+        XCTAssertEqual(store.state, .ready, "切换成功会话保持 ready")
+        XCTAssertEqual(store.token, "tk-sw")
+        XCTAssertEqual(store.refreshToken, "rt-tk-sw")
+        XCTAssertEqual(secrets.read("corekit.token"), "tk-sw", "新 token 对落密态缝")
+        XCTAssertEqual(secrets.read("corekit.refreshToken"), "rt-tk-sw")
+        XCTAssertEqual(store.currentTenantId, tenantB, "currentTenantId 更新为目标租户（AC-2）")
+        XCTAssertEqual(store.expiresAt, switchedAt, "expiresAt 随快照记录（Q2，本期仅展示依据）")
+        XCTAssertNil(defaults.string(forKey: "corekit.token"), "token 不许落 UserDefaults")
+
+        // 重启恢复：快照带回新租户上下文（AC-4）
+        let reborn = SessionStore(defaults: defaults, secrets: secrets)
+        XCTAssertEqual(reborn.state, .ready)
+        XCTAssertEqual(reborn.token, "tk-sw")
+        XCTAssertEqual(reborn.currentTenantId, tenantB)
+        XCTAssertEqual(reborn.expiresAt, switchedAt)
+        XCTAssertEqual(reborn.user?.username, "alice", "user 不因切换而变")
+        XCTAssertEqual(reborn.tenants.count, 2, "tenants 不因切换而变")
+    }
+
+    func testAdoptSwitchMissingAccessTokenFailsFastKeepsOldSession() throws {
+    // fn: M01.F03
+        let (defaults, secrets) = makeDeps()
+        let store = SessionStore(defaults: defaults, secrets: secrets)
+        try configure(store)
+        try store.adoptLogin(makeLoginResponse(accessToken: "tk-1"))
+
+        XCTAssertThrowsError(try store.adoptSwitch(SwitchTenantResponse(
+            accessToken: "", refreshToken: "rt-x",
+            expiresAt: Date(), tenantId: tenantB
+        )), "切换响应缺 accessToken = 不入账（fail-fast，原会话不动）")
+        XCTAssertEqual(store.token, "tk-1", "原 token 不动")
+        XCTAssertEqual(store.currentTenantId, tenantA, "原租户上下文不动")
+        XCTAssertEqual(secrets.read("corekit.token"), "tk-1")
+        XCTAssertEqual(store.state, .ready)
+    }
+
+    func testAdoptSwitchWithoutSessionRejected() throws {
+    // fn: M01.F03
+        let (defaults, secrets) = makeDeps()
+        let store = SessionStore(defaults: defaults, secrets: secrets)
+        try configure(store)
+        XCTAssertEqual(store.state, .needsLogin)
+
+        XCTAssertThrowsError(try store.adoptSwitch(SwitchTenantResponse(
+            accessToken: "tk-sw", refreshToken: "rt-tk-sw",
+            expiresAt: Date(), tenantId: tenantB
+        )), "未登录不许切换（fail-fast）")
+        XCTAssertNil(secrets.read("corekit.token"), "未登录切换不许凭空造会话")
+    }
+
+    func testRefreshTenantsUpdatesListAndSnapshotSurvivesRebirth() throws {
+    // fn: M01.F03
+        let (defaults, secrets) = makeDeps()
+        let store = SessionStore(defaults: defaults, secrets: secrets)
+        try configure(store)
+        try store.adoptLogin(makeLoginResponse(accessToken: "tk-1"))
+
+        let tenantC = UUID(uuidString: "cccccccc-cccc-cccc-cccc-cccccccccccc")!
+        try store.refreshTenants([
+            makeMembership(tenantId: tenantA),
+            makeMembership(tenantId: tenantB),
+            makeMembership(tenantId: tenantC),
+        ])
+
+        XCTAssertEqual(store.tenants.count, 3, "meListMyTenants 真值覆盖（Q1）")
+        XCTAssertEqual(store.currentTenantId, tenantA, "列表刷新不动当前租户")
+        XCTAssertEqual(store.state, .ready)
+
+        let reborn = SessionStore(defaults: defaults, secrets: secrets)
+        XCTAssertEqual(reborn.tenants.count, 3, "刷新后的成员关系落快照（离线可见）")
+    }
+
     func testExpirePathEqualsLogoutSemanticsOnRebirth() throws {
     // fn: M01.F04
         // 401 拦截缝与登出共用本地清空语义：token 没了就回登录页，配置留着。

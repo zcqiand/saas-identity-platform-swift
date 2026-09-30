@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 批准 2026-09-30，base sha 4fecd857；提案存档 .state/tree-change.json） |
+| 状态 | **已上线**（2026-09-30 人工验收通过：AC-1~5 全绿；T-0 批准 base sha 4fecd857，GA 批准 base sha 19e717f4） |
 | 关联 ADR | ADR-0019（baseURL/clientId 显式配置口径沿用）；ADR-0026（marker） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT；REQ-2026-001 已上线基座（SessionStore 三态 / AuthViewModel 缝 / APIGlue） |
 
@@ -57,8 +57,8 @@ admin/tenants 富化是既有人裁缝，Swift 侧如做属后续需求）；M00
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M01.F03 规划→开发中 | 对齐 | Claude | — | 已完成（2026-09-30 人工批准） |
-| T-1 | CoreKit 红先行：adoptSwitch/refreshTenants + VM switchTenant/listTenants + 测试挂 M01.F03 | 开发 | Claude | 0.5d | 待开始 |
-| T-2 | App：AccountView 租户段列表+切换交互 + APIGlue 两缝 + 全门绿 + push + gitlink | 开发 | Claude | 0.5d | 待开始 |
+| T-1 | CoreKit 红先行：adoptSwitch/refreshTenants + VM switchTenant/listTenants + 测试挂 M01.F03 | 开发 | Claude | 0.5d | 已完成（e44afc0，22 tests 0 failures） |
+| T-2 | App：AccountView 租户段列表+切换交互 + APIGlue 两缝 + 全门绿 + push + gitlink | 开发 | Claude | 0.5d | 已完成（e49ce34，AC-1~5 人工验收通过） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

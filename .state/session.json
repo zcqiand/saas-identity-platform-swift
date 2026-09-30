@@ -1,16 +1,17 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-003 成员角色绑定（M01.F02）T-0~T-2 已交付（9d09f08，全门绿 ×2）；待人验收 AC-1~5",
+  "current_task": "REQ-2026-003 成员角色绑定 已上线（fa1f391，2026-09-30 人工验收 AC-1~5 全绿）；M01 全模块收口，全仓等下一个需求",
   "done": [
     "T-0 9507f0f：tree-change 获批（base sha dc61332a，mirror 类）M01.F02 规划→开发中；REQ-2026-003 文档落盘；L5 一度红（REQ 文档写 M01.F02.I01 字面悬空引用——本仓不拆 I 级，改溯源措辞）后绿",
-    "T-1 7b2b4e5：红先行（MembersViewModelTests 5 条编译红实证，home-mac 远门 exit 1）→ MembersViewModel 三缝（listMembers/listRoles/assignRoles 抛错缺省）+ currentTenantId nil fail-fast（Q1）+ assign 全量覆盖原位更新成员行（Q3）；27 tests 0 failures",
+    "T-1 7b2b4e5：红先行（5 条编译红实证，home-mac 远门 exit 1）→ MembersViewModel 三缝（listMembers/listRoles/assignRoles 抛错缺省）+ currentTenantId nil fail-fast（Q1）+ assign 全量覆盖原位更新成员行（Q3）；27 tests 0 failures",
     "T-2 9d09f08：APIGlue 三缝全走生成物（TenantMembersAPI/TenantRolesAPI WithRequestBuilder）；MembersView + RoleAssignView（预勾选当前角色防误清，保存全量覆盖，失败红字留页可重试）；AccountView 租户段 NavigationLink 入口；design-map M01.F02 行；AC-5 grep 无手写端点串",
-    "全门绿 ×2（T-2 后：L0/L0.no_fallback/L0.5/L2/L4.codegen/L4/L5，软告警 0）；已 push 9d09f08 + suite gitlink aa800fd"
+    "全门绿 ×2（T-2 后 + GA 翻转后 L5 复验绿）；人工验收 AC-1~5 通过 2026-09-30",
+    "GA fa1f391：人工 --approve（base sha 742c7bc3）翻转四处台账——function-tree M01.F02 + M01 父行翻已上线（M01 模块收口）；GA 不属 mirror 免批类，走人工通道"
   ],
-  "next": "等人验收 AC-1~5：模拟器装 9d09f08 构建 → alice 登录（当前租户 001）→ 账户页租户段进「成员角色」→ AC-1 列表（alice/bob + admin/member 角色）→ AC-2 勾 bob 改角色保存原位更新 → AC-3 先切租户 002 再进成员页保存 → 403 红字列表不动 → AC-4 断后端报红。验收「通过」后走 GA：四处翻已上线（function-tree M01.F02 / design-map / README / REQ）+ M01 父行翻已上线（F02 是 M01 最后一个 F）",
+  "next": "等下一个需求：候选 M00.F01~F05（租户管理配置面）、M04.F01~F04（应用/OAuth client 配置面，F03 OAuth 授权码流优先）、M01 已全收口；镜像类（从 shared BASE 挑选登记新 F / 随已批 REQ 推进开发中）可走 mirror --apply 免批——前提：人已落盘补丁（.state/tree_change.proposed.py → scripts/tree_change.py，至今未落盘）；GA/废弃仍人工 --approve；生成链已一键化（scripts/gen-shared.sh），新切片直接 red-first",
   "open_questions": [
-    "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，落完跑一次 --report/--status 验证）——REQ-003 T-0 仍走人工 --approve 通道",
+    "mirror 补丁落盘确认（.state/tree_change.proposed.py → scripts/tree_change.py，落完跑一次 --report/--status 验证）——REQ-003 T-0 仍走的人工通道；不落盘则下个切片 T-0 还得人工批",
     "租户名富化（memberships/成员页都显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
     "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",
     "saas-console redirectUris 种子漂移（家族遗留人裁项）"
@@ -25,7 +26,8 @@
     "saas 后端探活别打 /api/v1/health（404）；打 / 或 POST /api/v1/auth/login",
     "Seams 抛错缺省闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）",
     "REQ 文档别写 I 级子项 ID 字面（M01.F02.I01 类）——本仓功能树不拆 I 级，L5 直接悬空引用红；溯源描述用「对应 shared 同编号 F 的子项」措辞",
-    "App 层新文件直接引用生成物类型（TenantMemberUserView 类）必须 import SaasSharedGenerated——swift test 只编 CoreKit 不报，xcodebuild App target 才炸（2026-09-30 实证）"
+    "App 层新文件直接引用生成物类型（TenantMemberUserView 类）必须 import SaasSharedGenerated——swift test 只编 CoreKit 不报，xcodebuild App target 才炸（2026-09-30 实证）",
+    "git commit -F 复用旧 msg 文件会张冠李戴（36890e7 曾误挂 REQ-001 收口词）——每 commit 新建 msg 文件，用完即清或改名"
   ],
-  "last_gate_passed_at": "2026-09-30T17:20:00+08:00"
+  "last_gate_passed_at": "2026-09-30T17:40:00+08:00"
 }

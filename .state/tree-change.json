@@ -1,19 +1,18 @@
 {
   "schema": 1,
   "approved": true,
-  "summary": "REQ-2026-004 OAuth 授权码切片 GA（M04.F03 开发中→已上线）：人工验收 AC-1~4 通过（2026-09-30）。authorize（state 自生成+回传校验 fail-fast，scope 恒传）+ token 双 grant（authorization_code / refresh_token，免 clientSecret）+ SessionStore.adoptOAuthToken 入账（fail-fast 不动原会话）+ OAuthView 三段 UI。远程 swift test 37 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。本切片后 M04 剩 F01/F02/F04。",
+  "summary": "REQ-2026-005 应用维护切片（M04.F01 规划→开发中）：AdminClientsAPI 五缝（list/get/create/update/delete，分页 live 实证 0-indexed 传 nil 全量）+ ClientsAPI 公共元数据 + AdminClientsViewModel（delete 确认流，create/update 原位更新）+ ApplicationsView/ClientDetailView/ClientCreateView。契约形状：redirectUris/grantTypes/scopes 是 String 逗号串（DB 形态直出）；create 的 clientSecret 必填；status 本切片只读（切换是 M04.F02）。非范围：status 切换 UI、翻页、密钥轮换。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-004-oauth-code-slice.md",
-    "docs/design/design-function-map.md"
+    "docs/requirements/REQ-2026-005-app-maintenance-slice.md"
   ],
   "changes": [
     {
-      "id": "M04.F03",
+      "id": "M04.F01",
       "action": "变更",
-      "name": "身份认证",
-      "reason": "REQ-2026-004 GA：OAuth authorize + token 双 grant + refresh 已上线（生成物 OauthAPI.oAuthAuthorize/oAuthToken；对应 shared BASE 同编号 F 的子项）。M04 父行不动（F01/F02/F04 仍规划）"
+      "name": "应用维护",
+      "reason": "REQ-2026-005：OAuth client CRUD + 公共元数据（BASE 已上线，Swift 侧镜像落地；对应 shared BASE 同编号 F 的 I01~I06 子项，admin-clients.tsp + clients.tsp）。本切片后 M04 剩 F02/F04"
     }
   ],
-  "base_sha": "25f31beb6fa86820"
+  "base_sha": "f22087e5f3c24c85"
 }

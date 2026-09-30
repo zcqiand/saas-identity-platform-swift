@@ -169,6 +169,43 @@ public final class SessionStore {
         }
     }
 
+    /// OAuth token 对入账（REQ-2026-004）：authorization_code 换发 / refresh_token
+    /// 轮换共用。token 对换新落密态缝、currentTenantId 对齐响应 tenantId、
+    /// expiresAt = now + expiresIn、Bearer 重注，state 保持 ready。user/tenants 不变。
+    /// 缺 accessToken 或未登录 = fail-fast 一个字节都不动（AC-4 原会话可重试）。
+    public func adoptOAuthToken(_ response: TokenResponse) throws {
+        guard state == .ready else {
+            throw SessionStoreError.invalidState("未登录，不能入账 OAuth token")
+        }
+        guard response.accessToken.isEmpty == false else {
+            throw SessionStoreError.emptyField("token 响应缺 accessToken")
+        }
+        secrets.save(Self.tokenKey, response.accessToken)
+        token = response.accessToken
+        if response.refreshToken.isEmpty == false {
+            secrets.save(Self.refreshTokenKey, response.refreshToken)
+            refreshToken = response.refreshToken
+        } else {
+            secrets.delete(Self.refreshTokenKey)
+            refreshToken = nil
+        }
+        currentTenantId = response.tenantId
+        expiresAt = Date().addingTimeInterval(Double(response.expiresIn))
+        if let user {
+            let snapshot = SessionSnapshot(
+                user: user, tenants: tenants,
+                currentTenantId: currentTenantId, expiresAt: expiresAt
+            )
+            if let data = try? JSONEncoder().encode(snapshot) {
+                defaults.set(data, forKey: Self.sessionKey)
+            }
+        }
+        if let baseURL {
+            // baseURL 已过校验，这里只为重注 basePath + Bearer（失败不掩盖入账成功）。
+            _ = try? APIClient.bootstrap(baseURL: baseURL, token: response.accessToken)
+        }
+    }
+
     /// 成员关系列表刷新（REQ-2026-002 Q1）：meListMyTenants 真值覆盖快照 tenants
     ///（进页先用登录快照渲染，拉到真值再覆盖，不一致以后端为准）。currentTenantId
     /// 不动；未登录拒刷。

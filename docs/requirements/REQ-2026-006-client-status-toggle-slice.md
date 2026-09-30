@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 mirror 免批 --apply；GA 待人工验收后凭 REQ 验收记录免批翻转） |
+| 状态 | **已上线**（2026-09-30 人工验收 AC-1~5 通过；T-0 免批 base sha 42c457eb，GA 免批令牌以本行验收记录为准） |
 | 关联 ADR | ADR-0019（显式配置口径沿用） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M04.F02 BASE 已上线：admin-clients.tsp I06 setClientStatus）；前置 REQ-005 已上线基座（AdminClientsViewModel 五缝 + ApplicationsView） |
 
@@ -62,7 +62,7 @@ REQ-005 切片里 status 是只读尾巴（「status 切换是 M04.F02 范围，
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F02 规划→开发中（mirror 免批 --apply） | 对齐 | Claude | — | 已完成（2026-09-30） |
 | T-1 | CoreKit 红先行：AdminClientsViewModel 第六缝 setStatus + 测试挂 M04.F02 | 开发 | Claude | 0.25d | 已完成（5beb8d7，48 tests 0 failures 连跑两轮；顺手修存量 flaky 21c0534） |
-| T-2 | App：APIGlue status 缝 + ClientDetailView Toggle（停用确认）+ 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.25d | 已完成（2026-09-30，xcodebuild BUILD SUCCEEDED + 本地 7 门全绿，AC-5 grep 干净） |
+| T-2 | App：APIGlue status 缝 + ClientDetailView Toggle（停用确认）+ 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.25d | 已完成（bc1d632，xcodebuild BUILD SUCCEEDED + 本地 7 门全绿，AC-5 grep 干净；人工验收 AC-1~5 通过 2026-09-30） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

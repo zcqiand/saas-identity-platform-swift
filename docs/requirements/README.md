@@ -11,7 +11,7 @@
 | REQ-2026-003 | 成员角色绑定切片（成员列表 + 角色全量覆盖分配） | P1 | 已上线（2026-09-30 人工验收通过：AC-1~5 全绿；T-0 批准 base sha dc61332a） | 1 F |
 | REQ-2026-004 | OAuth 授权码切片（authorize + token 双 grant + refresh） | P1 | 已上线（2026-09-30 人工验收通过：AC-1~4 全绿；T-0 批准 base sha 721f4a17） | 1 F |
 | REQ-2026-005 | 应用维护切片（OAuth client CRUD + 公共元数据） | P1 | 已上线（2026-09-30 人工验收通过：AC-1~5 全绿；T-0 批准 base sha f22087e5） | 1 F |
-| REQ-2026-006 | 应用启用/停用切片（client status 切换） | P1 | 开发中（T-0 mirror 免批 base sha 42c457eb） | 1 F |
+| REQ-2026-006 | 应用启用/停用切片（client status 切换） | P1 | 已上线（2026-09-30 人工验收通过：AC-1~5 全绿；T-0 免批 base sha 42c457eb，GA 免批凭 REQ 验收记录） | 1 F |
 ## 方向定死
 
 - **需求文档**记录「这次动了哪些功能」（流水）

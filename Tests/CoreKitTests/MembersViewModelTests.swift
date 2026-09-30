@@ -125,9 +125,9 @@ final class MembersViewModelTests: XCTestCase {
         )
         let ok = await vm.load()
         XCTAssertTrue(ok)
-        XCTAssertEqual(receivedBySeam, [
+        XCTAssertEqual(receivedBySeam.sorted(), [
             "members:\(tenantA.uuidString)", "roles:\(tenantA.uuidString)",
-        ], "两条缝都收到 store.currentTenantId（AC-1）")
+        ].sorted(), "两条缝都收到 store.currentTenantId（AC-1；load 是 async let 并发，到达顺序不定，比集合不比顺序——2026-09-30 远门双轮红实证的存量 flaky）")
         XCTAssertEqual(vm.members.count, 2)
         XCTAssertEqual(vm.members.first?.username, "alice")
         XCTAssertEqual(vm.roles.count, 2)

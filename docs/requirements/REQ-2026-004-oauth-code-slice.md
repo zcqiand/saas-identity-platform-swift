@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 批准 2026-09-30，base sha 721f4a17；提案存档 .state/tree-change.json） |
+| 状态 | **已上线**（2026-09-30 人工验收 AC-1~4 通过；T-0 批准 base sha 721f4a17，GA 批准 base sha 25f31beb） |
 | 关联 ADR | ADR-0019（显式配置口径沿用：clientId 来自 SessionStore 配置） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M04.F03 已上线：oauth.tsp:10 authorize + oauth.tsp:15 token 双 grant）；REQ-001/002/003 已上线基座；前置依赖：shared 种子修复 873c9d3（saas-console 三件套）+ saas_dev 重灌已落地 |
 
@@ -65,8 +65,8 @@ redirectUri/scope 的用户可编辑 UI（固定默认值，后续需求再放�
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F03 规划→开发中 | 对齐 | Claude | — | 已完成（2026-09-30 人工批准） |
-| T-1 | CoreKit 红先行：OAuthViewModel 三缝 + SessionStore.adoptOAuthToken + 测试挂 M04.F03 | 开发 | Claude | 0.5d | 待开始 |
-| T-2 | App：OAuthView + AccountView 入口 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 待开始 |
+| T-1 | CoreKit 红先行：OAuthViewModel 三缝 + SessionStore.adoptOAuthToken + 测试挂 M04.F03 | 开发 | Claude | 0.5d | 已完成（ee5f6dc，37 tests 0 failures） |
+| T-2 | App：OAuthView + AccountView 入口 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（0ba1818，人工验收 AC-1~4 通过） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

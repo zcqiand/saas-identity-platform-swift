@@ -1,18 +1,19 @@
 {
   "schema": 1,
   "approved": true,
-  "summary": "REQ-2026-004 OAuth 授权码切片（M04.F03 规划→开发中）：OauthAPI.oAuthAuthorize（scope 必填，state 回传校验）+ oAuthToken 双 grant（authorization_code / refresh_token，live 探针实证免 clientSecret）+ SessionStore.adoptOAuthToken 入账（token 对换新 + tenantId/expiresAt，adoptSwitch fail-fast 同款）+ OAuthView（签发授权码 → 换 token → 刷新）。前置已落地：shared 种子 873c9d3 补 saas-console 三件套（saasidentity://oauth/callback + openid/profile + 双 grant）+ saas_dev 重灌，live 四步链路全绿。非范围：ASWebAuthenticationSession（JSON API 不需要）、client_credentials、token 撤销、多 client UI。",
+  "summary": "REQ-2026-004 OAuth 授权码切片 GA（M04.F03 开发中→已上线）：人工验收 AC-1~4 通过（2026-09-30）。authorize（state 自生成+回传校验 fail-fast，scope 恒传）+ token 双 grant（authorization_code / refresh_token，免 clientSecret）+ SessionStore.adoptOAuthToken 入账（fail-fast 不动原会话）+ OAuthView 三段 UI。远程 swift test 37 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。本切片后 M04 剩 F01/F02/F04。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-004-oauth-code-slice.md"
+    "docs/requirements/REQ-2026-004-oauth-code-slice.md",
+    "docs/design/design-function-map.md"
   ],
   "changes": [
     {
       "id": "M04.F03",
       "action": "变更",
       "name": "身份认证",
-      "reason": "REQ-2026-004：OAuth authorize + token 双 grant + refresh（BASE 已上线，Swift 侧镜像落地；shared M04.F03.I01/I02 对应生成物 oAuthAuthorize/oAuthToken）。本切片后 M04 剩 F01/F02/F04"
+      "reason": "REQ-2026-004 GA：OAuth authorize + token 双 grant + refresh 已上线（生成物 OauthAPI.oAuthAuthorize/oAuthToken；对应 shared BASE 同编号 F 的子项）。M04 父行不动（F01/F02/F04 仍规划）"
     }
   ],
-  "base_sha": "721f4a177cde233e"
+  "base_sha": "25f31beb6fa86820"
 }

@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-09-30 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 mirror 免批 --apply；GA 待人工验收后凭 REQ 验收记录免批翻转） |
+| 状态 | **已上线**（2026-10-01 人工验收 AC-1~6 通过；T-0 免批 base sha f536d038，GA 免批令牌以本行验收记录为准） |
 | 关联 ADR | ADR-0019（显式配置口径沿用） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M00.F01 BASE 已上线：admin-tenants.tsp I01~I05）；前置 REQ-001~006 已上线基座 |
 
@@ -70,7 +70,7 @@ M01.F03 的遗留：AccountView 租户段显示 tenantId UUID → 富化成真�
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M00.F01 规划→开发中（mirror 免批 --apply） | 对齐 | Claude | — | 已完成（2026-09-30） |
 | T-1 | CoreKit 红先行：AdminTenantsViewModel 四缝 + 测试挂 M00.F01 | 开发 | Claude | 0.25d | 已完成（bbcb284，红先行编译红实证，55 tests 0 failures） |
-| T-2 | App：APIGlue 四缝 + TenantsAdminView/TenantEditView/TenantCreateView + AccountView 入口与富化 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（2026-09-30，xcodebuild BUILD SUCCEEDED + 本地 7 门全绿，AC-6 grep 干净；APIGlue 补 Foundation import，listTenants 撞名改 listAllTenants） |
+| T-2 | App：APIGlue 四缝 + TenantsAdminView/TenantEditView/TenantCreateView + AccountView 入口与富化 + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（a7239f7，xcodebuild BUILD SUCCEEDED + 本地 7 门全绿，AC-6 grep 干净；人工验收 AC-1~6 通过 2026-10-01） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

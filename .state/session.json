@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-006 应用启用/停用切片 GA 已上线（fc782b8，2026-09-30 人工验收 AC-1~5 通过）；M01 全收口 + M04 已上线 F01/F02/F03，剩 F04",
+  "current_task": "REQ-2026-007 租户维护切片 GA 已上线（9b55c5f，2026-10-01 人工验收 AC-1~6 通过）；13 F 已上线 10，剩 M04.F04 + M00.F02~F05",
   "done": [
-    "REQ-2026-005 应用维护切片 GA 已上线（1763ad2，人工验收 AC-1~5 通过；M04.F01 收口）",
-    "REQ-2026-006 T-0 bca2f18：mirror 免批（42c457eb）M04.F02 规划→开发中；live 探针钉死契约（PATCH 寻址 clientId 字符串非 UUID、status 只认 0/1 其余 400、返完整 OAuthClient 原位替换行）；REQ-006 落盘",
-    "T-1 5beb8d7：红先行（extra argument 'setClientStatus' 编译红）→ 第六缝 setStatus + 3 测试挂 M04.F02；48 tests 0 failures 连跑两轮；顺手修存量 flaky 21c0534（MembersViewModel 两缝断言改比集合，async let 并发顺序不定，双轮红实证）",
-    "T-2 bc1d632：APIGlue setClientStatus 生成物 builder；ClientDetailView 启用状态 Toggle（启用直通/停用二次确认，vm.clients 唯一真相渲染取活行）；7 门全绿；gitlink 710b60d",
-    "GA fc782b8：免批通道 --apply（令牌 67f55e84，凭 REQ-006 T-2 行验收记录）→ M04.F02 已上线；L5 复验绿"
+    "REQ-2026-006 应用启用/停用切片 GA 已上线（fc782b8，2026-09-30 人工验收 AC-1~5 通过；M04.F02 收口）",
+    "REQ-2026-007 T-0 eb31429：mirror 免批（f536d038）M00.F01 规划→开发中；live 探针钉死契约（寻址 UUID id 与 admin/clients 的 clientId 字符串口径相反、TenantStatus 字符串枚举 active/suspended 与 OAuthClient 的 Int 两套口径、tenantKey 重复 409、DELETE 204 空 body、分页 0-indexed 传 nil 全量）；REQ-007 落盘",
+    "T-1 bbcb284：红先行 → AdminTenantsViewModel 四缝 + 7 测试挂 M00.F01；55 tests 0 failures",
+    "T-2 a7239f7：APIGlue 四缝走生成物（listTenants 撞 M01.F03 名改 listAllTenants，Foundation import 补课）+ TenantsAdminView/TenantEditView/TenantCreateView + AccountView 平台管理段入口与租户名富化（403 降级 UUID，清掉在册遗留）；7 门全绿；gitlink b90b081",
+    "GA 9b55c5f：免批通道 --apply（令牌 e3afa323，凭 REQ-007 T-2 行验收记录 2026-10-01）→ M00.F01 已上线；L5 复验绿"
   ],
-  "next": "等下一个需求：候选 M04.F04 菜单管理、M00.F01~F05；T-0 与 GA 走 --apply 免批，仍需：REQ 提案 + 人工验收「通过」；另待人裁：bob 对 admin 接口也 200（鉴权面归后端/契约测试范围）",
+  "next": "等下一个需求：候选 M04.F04 菜单管理（在册坑：/me/menus 根 parentId=null、名称字段 title 非 name）、M00.F02 租户成员、M00.F03 租户角色、M00.F04 角色权限、M00.F05 租户应用；T-0 与 GA 走 --apply 免批，仍需：REQ 提案 + 人工验收「通过」；另待人裁：bob 对 admin 接口也 200",
   "open_questions": [
     "租户名富化（UI 显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
     "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",

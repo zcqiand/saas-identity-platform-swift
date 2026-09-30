@@ -86,4 +86,50 @@ enum APIGlue {
             )
         }
     }
+
+    // MARK: - OAuth 授权码流（M04.F03，REQ-2026-004）
+
+    /// 签发授权码（AC-1）：POST /oauth/authorize。state 由调用方（OAuthViewModel）
+    /// 自生成并要求回传一致（CSRF）；scope 恒传（后端必填，live 实证）。
+    static let oauthAuthorize: (String, String, String, String) async throws -> OAuthAuthorize200Response = { clientId, redirectUri, scope, state in
+        try await run {
+            OauthAPI.oAuthAuthorizeWithRequestBuilder(
+                authorizeCodeRequest: AuthorizeCodeRequest(
+                    clientId: clientId,
+                    redirectUri: redirectUri,
+                    responseType: .code,
+                    scope: scope,
+                    state: state
+                )
+            )
+        }
+    }
+
+    /// 换 token（AC-2，authorization_code grant）：POST /oauth/token。
+    /// 免 clientSecret（saas-console 公共 client，live 实证）。
+    static let oauthExchangeCode: (String, String, String) async throws -> TokenResponse = { code, clientId, redirectUri in
+        try await run {
+            OauthAPI.oAuthTokenWithRequestBuilder(
+                tokenRequest: TokenRequest(
+                    grantType: .authorizationCode,
+                    code: code,
+                    clientId: clientId,
+                    redirectUri: redirectUri
+                )
+            )
+        }
+    }
+
+    /// 刷新（AC-3，refresh_token grant）：POST /oauth/token，轮换全新 token 对。
+    static let oauthRefresh: (String, String) async throws -> TokenResponse = { refreshToken, clientId in
+        try await run {
+            OauthAPI.oAuthTokenWithRequestBuilder(
+                tokenRequest: TokenRequest(
+                    grantType: .refreshToken,
+                    refreshToken: refreshToken,
+                    clientId: clientId
+                )
+            )
+        }
+    }
 }

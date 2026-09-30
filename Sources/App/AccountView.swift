@@ -126,6 +126,10 @@ struct AccountView: View {
                     MembersView(session: session)
                 }
             }
+            // M04.F03（REQ-2026-004）入口：OAuth 授权码流（authorize → token → refresh）。
+            NavigationLink("OAuth 授权码（签发 / 换 token / 刷新）") {
+                OAuthView(session: session)
+            }
         } header: {
             Text("租户成员")
         } footer: {

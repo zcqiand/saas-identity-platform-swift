@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-10-01 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 免批 base sha eaef3e4fd29839dc） |
+| 状态 | **已上线**（2026-10-01 人工验收 AC-1~6 通过；T-0 免批 base sha eaef3e4fd29839dc，GA 免批凭本 REQ 验收记录。「当前用户菜单」角待 PLAN-2026-004 shared 契约修正后补齐） |
 | 关联 ADR | ADR-0029（「本仓需要 ≠ shared」停下问人——本切片即其裁决产物） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M04.F04 BASE：client-menus.tsp 全套 + me-menus）；前置 REQ-001~007 已上线基座 |
 
@@ -82,7 +82,7 @@ create→move→update→reorder→delete 全链 + 清理回访 27 条种子原�
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F04 规划→开发中（mirror 免批 --apply，令牌 eaef3e4fd29839dc） | 对齐 | Claude | — | 已完成（2026-10-01） |
 | T-1 | CoreKit 红先行：MenusViewModel 六缝 + buildTree + FamilyDateFormatter + 测试挂 M04.F04 | 开发 | Claude | 0.5d | 已完成（红实证：首轮远门红 menus setter 不可达 → fixture 改制后绿；70 tests 0 failures，本地 7 门全绿） |
-| T-2 | App：APIGlue 六缝 + MenusAdminView（client Picker + 树 + 新建/编辑/移动/排序/删除）+ AccountView 入口 + bootstrap 装 formatter + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（远门 BUILD SUCCEEDED + 本地 7 门全绿；首轮红 OutlineGroup 需要 Identifiable/可选 children——MenuNode 补 id/childNodes 后绿） |
+| T-2 | App：APIGlue 六缝 + MenusAdminView（client Picker + 树 + 新建/编辑/移动/排序/删除）+ AccountView 入口 + bootstrap 装 formatter + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 已完成（f020f05，远门 BUILD SUCCEEDED + 本地 7 门全绿；首轮红 OutlineGroup 需要 Identifiable/可选 children——MenuNode 补 id/childNodes 后绿；人工验收 AC-1~6 通过 2026-10-01） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

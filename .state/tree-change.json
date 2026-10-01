@@ -2,7 +2,7 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-008 菜单管理瘦身切片 T-0（M04.F04 规划→开发中）：菜单 CRUD + 前端组树（零值 UUID=根）。/me/menus 根 parentId=null 撞生成物非可选 UUID 解码必炸——人裁（2026-10-01）先瘦身后修契约：AC 排除当前用户菜单，shared requiredMode 修正另立提案走人工批。另：wire createdAt 空格+08 非生成 formatter 可解，CoreKit 装 CodableHelper.dateFormatter 公开钩子多格式兜底。",
+  "summary": "REQ-2026-008 菜单管理瘦身切片 GA（M04.F04 开发中→已上线）：人工验收 AC-1~6 通过（2026-10-01）。六缝 VM + 组树 + FamilyDateFormatter + MenusAdminView 全链已上线。M04 四 F 全部已上线 → 模块行 M04 翻已上线（M01 先例）。13 F 已上线 11。",
   "sync_files": [
     "docs/requirements/README.md",
     "docs/requirements/REQ-2026-008-menu-admin-slice.md",
@@ -13,8 +13,8 @@
       "id": "M04.F04",
       "action": "变更",
       "name": "菜单管理",
-      "reason": "REQ-2026-008 T-0：规划→开发中。范围 = 菜单 CRUD + 结构（组树/移动/排序）；「当前用户菜单」待 shared EffectiveMenuNode.parentId requiredMode 修正（人工批）后补齐"
+      "reason": "REQ-2026-008 GA：菜单 CRUD + 组树 + 移动/排序 + FamilyDateFormatter 已上线（人工验收 AC-1~6 通过 2026-10-01，见 REQ-2026-008 T-2 行）。「当前用户菜单」角待 PLAN-2026-004 shared 契约修正后补齐。M04 模块行随四 F 全上线翻已上线"
     }
   ],
-  "base_sha": "eaef3e4fd29839dc"
+  "base_sha": "f970edb9c468c782"
 }

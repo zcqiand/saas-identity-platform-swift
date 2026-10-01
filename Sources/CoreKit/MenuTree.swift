@@ -11,9 +11,17 @@ import SaasSharedGenerated
 //   瞬时出现）。
 
 /// 树节点：menu + 有序 children。
-public struct MenuNode: Equatable {
+public struct MenuNode: Equatable, Identifiable {
     public let menu: SysMenu
     public let children: [MenuNode]
+
+    /// SwiftUI OutlineGroup 需要 Identifiable。
+    public var id: UUID { menu.id }
+
+    /// OutlineGroup 的 children keyPath 要求可选（nil = 叶子）。
+    public var childNodes: [MenuNode]? {
+        children.isEmpty ? nil : children
+    }
 
     public init(menu: SysMenu, children: [MenuNode]) {
         self.menu = menu

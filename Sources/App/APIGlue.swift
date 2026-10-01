@@ -201,6 +201,58 @@ enum APIGlue {
         _ = try await run { AdminTenantsAPI.adminTenantsDeleteTenantWithRequestBuilder(id: id.uuidString) }
     }
 
+    // MARK: - 菜单管理（M04.F04，REQ-2026-008）
+
+    /// 菜单平铺清单（AC-1）：GET /clients/{clientId}/menus。clientId 字符串寻址
+    /// （同 admin/clients 口径）；平铺列表根 parentId=零值 UUID，树由 CoreKit
+    /// buildMenuTree 组（/me/menus 的 null 口径不在本切片）。
+    static let listMenus: (String) async throws -> [SysMenu] = { clientId in
+        try await run { ClientMenusAPI.clientMenusListSysMenusWithRequestBuilder(clientId: clientId) }
+    }
+
+    /// 新建菜单（AC-2）：POST /clients/{clientId}/menus（parentId 不传 = 根）。
+    static let createMenu: (String, CreateSysMenuRequest) async throws -> SysMenu = { clientId, request in
+        try await run {
+            ClientMenusAPI.clientMenusCreateSysMenuWithRequestBuilder(clientId: clientId, createSysMenuRequest: request)
+        }
+    }
+
+    /// 更新菜单（AC-3）：PATCH /clients/{clientId}/menus/{menuId}（partial 提交改动字段）。
+    /// menuId 生成物路径参是 String（uuidString 换算在 VM 侧）。
+    static let updateMenu: (String, String, UpdateSysMenuRequest) async throws -> SysMenu = { clientId, menuId, request in
+        try await run {
+            ClientMenusAPI.clientMenusUpdateSysMenuWithRequestBuilder(clientId: clientId, menuId: menuId, updateSysMenuRequest: request)
+        }
+    }
+
+    /// 移动父节点：PATCH …/{menuId}/parent，parentId String?（nil = 移回根）。
+    static let moveMenu: (String, String, String?) async throws -> SysMenu = { clientId, menuId, parentId in
+        try await run {
+            ClientMenusAPI.clientMenusMoveSysMenuWithRequestBuilder(
+                clientId: clientId,
+                menuId: menuId,
+                clientMenusMoveSysMenuRequest: ClientMenusMoveSysMenuRequest(parentId: parentId)
+            )
+        }
+    }
+
+    /// 兄弟重排序（AC-3）：PUT …/{menuId}/reorder，整段 orderedMenuIds 提交；
+    /// 服务端返 200 空数组、未知 id 静默忽略（Q4），顺序真相在提交序列。
+    static let reorderMenus: (String, String, [String]) async throws -> [SysMenu] = { clientId, menuId, orderedMenuIds in
+        try await run {
+            ClientMenusAPI.clientMenusReorderSysMenusWithRequestBuilder(
+                clientId: clientId,
+                menuId: menuId,
+                reorderSysMenuRequest: ReorderSysMenuRequest(orderedMenuIds: orderedMenuIds)
+            )
+        }
+    }
+
+    /// 删除菜单（AC-2，危险操作）：DELETE …/{menuId}，204 空 body；App 层确认后才调。
+    static let deleteMenu: (String, String) async throws -> Void = { clientId, menuId in
+        _ = try await run { ClientMenusAPI.clientMenusDeleteSysMenuWithRequestBuilder(clientId: clientId, menuId: menuId) }
+    }
+
     /// 公共 client 元数据（I06）：GET /clients/{clientId}，匿名可读三字段。
     static let publicClient: (String) async throws -> OAuthClientPublicInfo = { clientId in
         try await run { ClientsAPI.clientsGetClientWithRequestBuilder(clientId: clientId) }

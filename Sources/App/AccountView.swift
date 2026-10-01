@@ -60,6 +60,10 @@ struct AccountView: View {
                     NavigationLink("租户管理（平台 admin）") {
                         TenantsAdminView()
                     }
+                    // M04.F04（REQ-2026-008）入口：菜单 CRUD + 组树（client 维度）。
+                    NavigationLink("菜单管理（client 维度树）") {
+                        MenusAdminView()
+                    }
                 } header: {
                     Text("平台管理")
                 }

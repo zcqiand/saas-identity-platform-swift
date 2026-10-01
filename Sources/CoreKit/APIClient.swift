@@ -27,6 +27,11 @@ public enum APIClient {
 
         OpenAPIClientAPI.basePath = normalized
         OpenAPIClientAPI.customHeaders["Authorization"] = "Bearer \(trimmedToken)"
+
+        // REQ-2026-008: install the family date formatter through the
+        // generated public hook (wire shapes documented in
+        // FamilyDateFormatter.swift; idempotent, request bodies stay ISO).
+        CodableHelper.dateFormatter = FamilyDateFormatter()
     }
 }
 

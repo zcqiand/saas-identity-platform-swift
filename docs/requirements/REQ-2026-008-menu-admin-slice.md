@@ -81,7 +81,7 @@ create→move→update→reorder→delete 全链 + 清理回访 27 条种子原�
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M04.F04 规划→开发中（mirror 免批 --apply，令牌 eaef3e4fd29839dc） | 对齐 | Claude | — | 已完成（2026-10-01） |
-| T-1 | CoreKit 红先行：MenusViewModel 六缝 + buildTree + FamilyDateFormatter + 测试挂 M04.F04 | 开发 | Claude | 0.5d | 待开发 |
+| T-1 | CoreKit 红先行：MenusViewModel 六缝 + buildTree + FamilyDateFormatter + 测试挂 M04.F04 | 开发 | Claude | 0.5d | 已完成（红实证：首轮远门红 menus setter 不可达 → fixture 改制后绿；70 tests 0 failures，本地 7 门全绿） |
 | T-2 | App：APIGlue 六缝 + MenusAdminView（client Picker + 树 + 新建/编辑/移动/排序/删除）+ AccountView 入口 + bootstrap 装 formatter + 全门绿 + push + gitlink + 模拟器验收准备 | 开发 | Claude | 0.5d | 待开发 |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）

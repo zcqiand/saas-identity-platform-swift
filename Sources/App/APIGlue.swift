@@ -88,6 +88,55 @@ enum APIGlue {
         }
     }
 
+    // MARK: - 成员生命周期（M00.F02，REQ-2026-009）
+
+    /// 成员详情（I03）：GET /tenants/{tenantId}/members/{userId}。
+    /// userId = sys_user.id 字符串（生成物路径参口径）。
+    static let getMember: (String, String) async throws -> TenantMemberUserView = { tenantId, userId in
+        try await run { TenantMembersAPI.tenantMembersGetTenantUserWithRequestBuilder(tenantId: tenantId, userId: userId) }
+    }
+
+    /// 新建成员（I02）：POST /tenants/{tenantId}/members。email 契约 optional
+    /// 但后端必填（live 400 实证，REQ-009 Q1）——必填校验归 UI 层。
+    static let createMember: (String, CreateSysUserRequest) async throws -> TenantMemberUserView = { tenantId, request in
+        try await run {
+            TenantMembersAPI.tenantMembersCreateTenantUserWithRequestBuilder(tenantId: tenantId, createSysUserRequest: request)
+        }
+    }
+
+    /// 编辑成员（I04）：PATCH …/members/{userId} partial，只提交改动字段。
+    static let updateMember: (String, String, UpdateSysUserRequest) async throws -> TenantMemberUserView = { tenantId, userId, request in
+        try await run {
+            TenantMembersAPI.tenantMembersUpdateTenantUserWithRequestBuilder(tenantId: tenantId, userId: userId, updateSysUserRequest: request)
+        }
+    }
+
+    /// 状态切换（I08）：PATCH …/members/{userId}/status（active/suspended）。
+    /// 注意 PUT roles 响应的 status 不可信（REQ-009 Q2），status 端点响应可信。
+    static let changeStatus: (String, String, TenantMemberStatus) async throws -> TenantMemberUserView = { tenantId, userId, status in
+        try await run {
+            TenantMembersAPI.tenantMembersChangeTenantUserStatusWithRequestBuilder(
+                tenantId: tenantId,
+                userId: userId,
+                tenantMembersChangeTenantUserStatusRequest: TenantMembersChangeTenantUserStatusRequest(status: status)
+            )
+        }
+    }
+
+    /// 移除成员（I05，危险操作）：DELETE …/members/{userId}，204 空 body；
+    /// 只摘 tenant_membership，全局 sys_user 保留（契约注释口径）。
+    static let deleteMember: (String, String) async throws -> Void = { tenantId, userId in
+        _ = try await run { TenantMembersAPI.tenantMembersDeleteTenantUserWithRequestBuilder(tenantId: tenantId, userId: userId) }
+    }
+
+    /// 邀请成员（I06）：POST …/members/invite，响应嵌套 TenantMemberView
+    /// （邀请例外保持嵌套——live 契约裁决 1），扁平行映射在 CoreKit flatRow。
+    static let inviteMember: (String, TenantMembersInviteTenantUserRequest) async throws -> TenantMemberView = { tenantId, request in
+        try await run {
+            TenantMembersAPI.tenantMembersInviteTenantUserWithRequestBuilder(tenantId: tenantId, tenantMembersInviteTenantUserRequest: request)
+        }
+    }
+
     // MARK: - OAuth 授权码流（M04.F03，REQ-2026-004）
 
     /// 签发授权码（AC-1）：POST /oauth/authorize。state 由调用方（OAuthViewModel）

@@ -122,4 +122,61 @@ final class FamilyDateFormatterTests: XCTestCase {
             XCTFail("Tenant decode with space+08 createdAt must succeed (AC-5), threw: \(error)")
         }
     }
+
+    // MARK: - REQ-2026-009 T-1: fractional-second digit counts vary on the wire.
+
+    func testParsesTwoDigitFraction() {
+    // fn: M00.F02
+        // Live probe: member detail emits "2026-10-01 21:40:21.19+08" (2 digits,
+        // trailing zero trimmed by the backend). "SSS" is strict 3 digits so the
+        // fast chain fails -> the normalization slow path must pad to .190.
+        let formatter = FamilyDateFormatter()
+        let parsed = formatter.date(from: "2026-10-01 21:40:21.19+08")
+        XCTAssertNotNil(parsed, "2-digit fraction must parse via the slow path (AC-1)")
+        let c = utcComponents(parsed!)
+        XCTAssertEqual(c.year, 2026)
+        XCTAssertEqual(c.day, 1)
+        XCTAssertEqual(c.hour, 13, "21:40+08 == 13:40Z")
+        XCTAssertEqual(c.minute, 40)
+    }
+
+    func testParsesSixDigitFraction() {
+    // fn: M00.F02
+        // Live probe: invitations emit microseconds "2026-10-01 21:41:12.521012+08"
+        // (PG timestamp precision). 6 digits must truncate to .521 on the slow path.
+        let formatter = FamilyDateFormatter()
+        let parsed = formatter.date(from: "2026-10-01 21:41:12.521012+08")
+        XCTAssertNotNil(parsed, "6-digit fraction must parse via the slow path (AC-1)")
+        let c = utcComponents(parsed!)
+        XCTAssertEqual(c.year, 2026)
+        XCTAssertEqual(c.day, 1)
+        XCTAssertEqual(c.hour, 13)
+        XCTAssertEqual(c.minute, 41)
+        XCTAssertEqual(c.second, 12)
+    }
+
+    func testDecodeMemberViewWithSixDigitFractionSucceeds() {
+    // fn: M00.F02
+        // End-to-end: the generated decoder must decode a TenantMemberUserView
+        // whose timestamps use the 2-digit fraction member-detail wire shape.
+        let json = """
+        {
+          "id": "00000000-0000-0000-0000-b00000000002",
+          "tenantId": "00000000-0000-0000-0000-000000000001",
+          "username": "bob",
+          "status": "suspended",
+          "roleIds": [],
+          "createdAt": "2026-10-01 21:40:21.19+08",
+          "updatedAt": "2026-10-01 21:40:25.858+08"
+        }
+        """
+        let result = CodableHelper.decode(TenantMemberUserView.self, from: Data(json.utf8))
+        switch result {
+        case .success(let row):
+            XCTAssertEqual(row.username, "bob")
+            XCTAssertEqual(row.status, .suspended)
+        case .failure(let error):
+            XCTFail("member decode with mixed fraction digits must succeed, threw: \(error)")
+        }
+    }
 }

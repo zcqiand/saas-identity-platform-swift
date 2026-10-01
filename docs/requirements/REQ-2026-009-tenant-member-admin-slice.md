@@ -67,7 +67,7 @@ M00 第二个 F：**租户成员**（BASE 已上线，Swift 侧本切片前 规�
 | 任务 ID | 任务描述 | 类型 | 负责人 | 预估 | 状态 |
 |---|---|---|---|---|---|
 | T-0 | tree-change 提案：M00.F02 规划→开发中（mirror 免批 --apply，令牌 4fba5ddabe8b1f76） | 对齐 | Claude | — | 已完成（2026-10-01） |
-| T-1 | CoreKit 红先行：MembersViewModel 六缝扩展 + assignRoles 回读修复 + FamilyDateFormatter 分数位归一化 + 测试挂 M00.F02，本地 7 门绿 | 开发 | Claude | 0.5d | 待办 |
+| T-1 | CoreKit 红先行：MembersViewModel 六缝扩展 + assignRoles 回读修复 + FamilyDateFormatter 分数位归一化 + 测试挂 M00.F02，本地 7 门绿 | 开发 | Claude | 0.5d | 已完成（远程 80 tests 绿） |
 | T-2 | App：APIGlue 六缝 + MembersView 增强（详情/编辑/状态/删除 + 新建/邀请 sheet + contextMenu）+ 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 待办 |
 | T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 待办 |
 

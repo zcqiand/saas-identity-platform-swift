@@ -16,6 +16,7 @@
 | M04.F01 | ApplicationsView（client 列表 + 新建 sheet）/ ClientDetailView（详情只读 + 编辑 + 删除二次确认）/ ClientCreateView（注册，secret 必填）/ AccountView 应用管理段入口 | GET/POST /api/v1/admin/clients、GET/PUT/DELETE /api/v1/admin/clients/{clientId}、GET /api/v1/clients/{clientId}（AdminClientsAPI/ClientsAPI 生成物；分页 0-indexed 传 nil 全量） | oauth_client（后端账，本仓不落表；删除吊销 token 由后端落账） | M04.F01 | — | 已上线 |
 | M04.F02 | ClientDetailView 启用状态段（Toggle 停用二次确认、启用直通）/ ApplicationsView 状态徽标随切换刷新 | PATCH /api/v1/admin/clients/{clientId}/status（AdminClientsAPI.adminClientsSetClientStatus 生成物；路径寻址 clientId 字符串非 UUID） | oauth_client（后端账，本仓不落表；停用即 authorize/token 立即拒绝由后端落账） | M04.F02 | — | 已上线 |
 | M00.F01 | TenantsAdminView（租户列表 + 新建 sheet）/ TenantEditView（改名 + status Picker + 删除二次确认）/ AccountView 租户段富化（admin/tenants id→name 映射，403 降级 UUID） | GET/POST /api/v1/admin/tenants、PATCH/DELETE /api/v1/admin/tenants/{id}（AdminTenantsAPI 生成物；分页 0-indexed 传 nil 全量；路径寻址 UUID id 非 key） | sys_tenant（后端账，本仓不落表；删除级联语义由后端落账） | M00.F01 | — | 已上线 |
+| M04.F04 | MenusAdminView（client Picker + OutlineGroup 菜单树）/ 新建菜单 sheet（title/type/父 Picker）/ 编辑页（改名 + status + 移动父节点 + 删除二次确认）/ 兄弟上移下移（reorder 整段提交）/ AccountView 平台管理段入口 | GET/POST /api/v1/clients/{clientId}/menus、GET/PATCH/DELETE …/menus/{menuId}、PATCH …/{menuId}/parent、PUT …/{menuId}/reorder（ClientMenusAPI 生成物；clientId 字符串寻址 + menuId String 路径参；平铺列表根 parentId=零值 UUID 前端组树；/me/menus 不在本切片——契约 requiredMode 修正另行） | sys_menu（后端账，本仓不落表） | M04.F04 | — | 开发中 |
 
 ## 约定
 

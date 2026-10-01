@@ -2,19 +2,19 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-007 租户维护切片 GA（M00.F01 开发中→已上线）：人工验收 AC-1~6 通过（2026-10-01）。AdminTenantsViewModel 四缝（寻址 UUID id、TenantStatus 字符串枚举、tenantKey 409）+ TenantsAdminView 三视图 + AccountView 租户名富化（403 降级 UUID，清掉在册遗留）。远程 swift test 55 tests 0 failures + xcodebuild BUILD SUCCEEDED + 本地 7 门全绿。M00 剩 F02~F05。",
+  "summary": "REQ-2026-008 菜单管理瘦身切片 T-0（M04.F04 规划→开发中）：菜单 CRUD + 前端组树（零值 UUID=根）。/me/menus 根 parentId=null 撞生成物非可选 UUID 解码必炸——人裁（2026-10-01）先瘦身后修契约：AC 排除当前用户菜单，shared requiredMode 修正另立提案走人工批。另：wire createdAt 空格+08 非生成 formatter 可解，CoreKit 装 CodableHelper.dateFormatter 公开钩子多格式兜底。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-007-tenant-admin-slice.md",
+    "docs/requirements/REQ-2026-008-menu-admin-slice.md",
     "docs/design/design-function-map.md"
   ],
   "changes": [
     {
-      "id": "M00.F01",
+      "id": "M04.F04",
       "action": "变更",
-      "name": "租户维护",
-      "reason": "REQ-2026-007 GA：平台 admin 租户 CRUD + 租户名富化已上线（人工验收 AC-1~6 通过 2026-10-01，见 REQ-2026-007 T-2 行）。M00 父行不动（F02~F05 仍规划）"
+      "name": "菜单管理",
+      "reason": "REQ-2026-008 T-0：规划→开发中。范围 = 菜单 CRUD + 结构（组树/移动/排序）；「当前用户菜单」待 shared EffectiveMenuNode.parentId requiredMode 修正（人工批）后补齐"
     }
   ],
-  "base_sha": "e3afa323ad5e3f95"
+  "base_sha": "eaef3e4fd29839dc"
 }

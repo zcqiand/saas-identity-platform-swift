@@ -51,7 +51,7 @@
 | M04.F01 | 应用维护 | 应用 CRUD + 公共 client 元数据 | 已上线 |
 | M04.F02 | 应用启用/停用 | `status` 切换；禁用后 OAuth/token 端点立即拒绝 | 已上线 |
 | M04.F03 | 身份认证 | OAuth authorize + token + refresh | 已上线 |
-| M04.F04 | 菜单管理 | 菜单 CRUD + 结构 + 当前用户菜单 | 规划 |
+| M04.F04 | 菜单管理 | 菜单 CRUD + 结构 + 当前用户菜单（REQ-2026-008 瘦身切片：CRUD+组树先行；「当前用户菜单」待 shared requiredMode 修正后补齐） | 开发中 |
 
 ---
 

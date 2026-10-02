@@ -172,11 +172,68 @@ final class FamilyDateFormatterTests: XCTestCase {
         """
         let result = CodableHelper.decode(TenantMemberUserView.self, from: Data(json.utf8))
         switch result {
-        case .success(let row):
-            XCTAssertEqual(row.username, "bob")
-            XCTAssertEqual(row.status, .suspended)
+        case .success(let member):
+            XCTAssertEqual(member.username, "bob")
+            XCTAssertEqual(member.status, .suspended)
         case .failure(let error):
-            XCTFail("member decode with mixed fraction digits must succeed, threw: \(error)")
+            XCTFail("TenantMemberUserView decode with 6-digit fraction must succeed, threw: \(error)")
+        }
+    }
+
+    // MARK: - REQ-2026-012 T-1: T-separated zero-fraction shape (tenant applications).
+
+    func testParsesISOZeroFraction() {
+    // fn: M00.F05
+        // Live probe 2026-10-02 @5105: seeded tenant_application rows emit
+        // "2026-01-15T08:00:00Z" (T-separated, no fraction). isoFallback's .SSS
+        // can't bite it and the slow path returns nil (nothing to normalize),
+        // so the chain needs the generated formatter's withoutSeconds fallback.
+        let formatter = FamilyDateFormatter()
+        let parsed = formatter.date(from: "2026-01-15T08:00:00Z")
+        XCTAssertNotNil(parsed, "T-separated zero-fraction ISO must parse (M00.F05 AC-1)")
+        let c = utcComponents(parsed!)
+        XCTAssertEqual(c.year, 2026)
+        XCTAssertEqual(c.month, 1)
+        XCTAssertEqual(c.day, 15)
+        XCTAssertEqual(c.hour, 8)
+    }
+
+    func testParsesSevenDigitFractionWithColonOffset() {
+    // fn: M00.F05
+        // Live probe: fresh subscribe emits "2026-10-02T23:34:52.7575796+08:00"
+        // (7-digit fraction + colon offset). Slow path truncates to .757 and the
+        // ISO fallback's ZZZZZ accepts the colon offset.
+        let formatter = FamilyDateFormatter()
+        let parsed = formatter.date(from: "2026-10-02T23:34:52.7575796+08:00")
+        XCTAssertNotNil(parsed, "7-digit fraction +08:00 must parse via the slow path")
+        let c = utcComponents(parsed!)
+        XCTAssertEqual(c.day, 2)
+        XCTAssertEqual(c.hour, 15, "23:34+08 == 15:34Z")
+        XCTAssertEqual(c.minute, 34)
+        XCTAssertEqual(c.second, 52)
+    }
+
+    func testDecodeTenantApplicationWithZeroFractionCreatedAtSucceeds() {
+    // fn: M00.F05
+        // End-to-end: generated decoder must decode the seeded-row wire shape —
+        // createdAt is a REQUIRED Date in the generated model, null would throw.
+        let json = """
+        {
+          "id": "00000000-0000-0000-0000-d00000000001",
+          "tenantId": "00000000-0000-0000-0000-000000000001",
+          "clientId": "lab-management",
+          "status": 1,
+          "expireTime": "2027-12-31T23:59:59Z",
+          "createdAt": "2026-01-15T08:00:00Z"
+        }
+        """
+        let result = CodableHelper.decode(TenantApplication.self, from: Data(json.utf8))
+        switch result {
+        case .success(let row):
+            XCTAssertEqual(row.clientId, "lab-management")
+            XCTAssertEqual(row.status, 1)
+        case .failure(let error):
+            XCTFail("TenantApplication decode with zero-fraction createdAt must succeed, threw: \(error)")
         }
     }
 }

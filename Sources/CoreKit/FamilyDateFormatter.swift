@@ -43,10 +43,23 @@ public final class FamilyDateFormatter: DateFormatter {
         return f
     }()
 
+    /// REQ-2026-012：T 分隔零分数位形态（tenant_applications 种子行实测
+    /// `2026-01-15T08:00:00Z`）——isoFallback 的 .SSS 咬不住，慢路径又因
+    /// 无分数可归一返回 nil。生成物 OpenISO8601DateFormatter 有 withoutSeconds
+    /// 兜底，但本 formatter 整体替换了它，链内必须自带同款。
+    private static let isoNoFraction: DateFormatter = {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.timeZone = TimeZone(secondsFromGMT: 0)
+        f.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return f
+    }()
+
     public override func date(from string: String) -> Date? {
         if let d = FamilyDateFormatter.spaceWithMillis.date(from: string) { return d }
         if let d = FamilyDateFormatter.spacePlain.date(from: string) { return d }
         if let d = FamilyDateFormatter.isoFallback.date(from: string) { return d }
+        if let d = FamilyDateFormatter.isoNoFraction.date(from: string) { return d }
         // Slow path (REQ-2026-009): fraction digit counts vary on the wire
         // (0/2/3/6 digits observed live). "SSS" is strict 3 digits, so pad or
         // truncate the fraction to exactly 3 and retry the matching format.

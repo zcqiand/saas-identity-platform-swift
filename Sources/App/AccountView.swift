@@ -149,6 +149,10 @@ struct AccountView: View {
                 NavigationLink("成员角色（列表 + 分配）") {
                     MembersView(session: session)
                 }
+                // M00.F03（REQ-2026-010）入口：租户角色 CRUD（同需租户上下文）。
+                NavigationLink("角色管理（tenant × client CRUD）") {
+                    RolesAdminView(session: session)
+                }
             }
             // M04.F03（REQ-2026-004）入口：OAuth 授权码流（authorize → token → refresh）。
             NavigationLink("OAuth 授权码（签发 / 换 token / 刷新）") {

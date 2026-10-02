@@ -137,6 +137,35 @@ enum APIGlue {
         }
     }
 
+    // MARK: - 角色生命周期（M00.F03，REQ-2026-010）
+
+    /// 角色详情（I03）：GET /tenants/{tenantId}/roles/{roleId}。
+    static let getRole: (String, String) async throws -> SysRole = { tenantId, roleId in
+        try await run { TenantRolesAPI.tenantRolesGetSysRoleWithRequestBuilder(tenantId: tenantId, roleId: roleId) }
+    }
+
+    /// 新建角色（I02）：POST /tenants/{tenantId}/roles。重名 roleCode 后端
+    /// 500 空 body（live 实证，REQ-010 Q1）——App 不前置校验，红字如实呈现。
+    static let createRole: (String, CreateSysRoleRequest) async throws -> SysRole = { tenantId, request in
+        try await run {
+            TenantRolesAPI.tenantRolesCreateSysRoleWithRequestBuilder(tenantId: tenantId, createSysRoleRequest: request)
+        }
+    }
+
+    /// 编辑角色（I04）：PATCH …/roles/{roleId} partial（roleName/description/status；
+    /// roleCode 契约不可改）。响应可信（REQ-010 探针 readback 实证）。
+    static let updateRole: (String, String, UpdateSysRoleRequest) async throws -> SysRole = { tenantId, roleId, request in
+        try await run {
+            TenantRolesAPI.tenantRolesUpdateSysRoleWithRequestBuilder(tenantId: tenantId, roleId: roleId, updateSysRoleRequest: request)
+        }
+    }
+
+    /// 移除角色（I05，危险操作）：DELETE …/roles/{roleId}，204 空 body；
+    /// App 层确认后才调。
+    static let deleteRole: (String, String) async throws -> Void = { tenantId, roleId in
+        _ = try await run { TenantRolesAPI.tenantRolesDeleteSysRoleWithRequestBuilder(tenantId: tenantId, roleId: roleId) }
+    }
+
     // MARK: - OAuth 授权码流（M04.F03，REQ-2026-004）
 
     /// 签发授权码（AC-1）：POST /oauth/authorize。state 由调用方（OAuthViewModel）

@@ -81,7 +81,7 @@ M00 第三个 F：**租户角色**（BASE 已上线，Swift 侧本切片前 规�
 |---|---|---|---|---|---|
 | T-0 | 树变更 M00.F03 规划→开发中（mirror 免批）+ REQ 落盘 + README/design-map 登记 | 对齐 | Claude | — | 已完成 |
 | T-1 | CoreKit 红先行：RolesViewModel 五缝 + 测试挂 M00.F03，远程 test 绿 | 开发 | Claude | 0.5d | 已完成（远程 87 tests 绿） |
-| T-2 | App：APIGlue 四缝 + RolesAdminView/RoleDetailAdminView/RoleCreateSheet + AccountView 入口 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 待办 |
+| T-2 | App：APIGlue 四缝 + RolesAdminView/RoleDetailAdminView/RoleCreateSheet + AccountView 入口 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 已完成（远门 BUILD SUCCEEDED 一次过 + 本地 7 门全绿） |
 | T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 待办 |
 
 ## 4. 功能影响

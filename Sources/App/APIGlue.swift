@@ -166,6 +166,32 @@ enum APIGlue {
         _ = try await run { TenantRolesAPI.tenantRolesDeleteSysRoleWithRequestBuilder(tenantId: tenantId, roleId: roleId) }
     }
 
+    // MARK: - 角色菜单授权（M00.F04，REQ-2026-011）
+
+    /// 角色授权（I02）：GET …/roles/{roleId}/menus → RoleMenuGrant 聚合。
+    /// clientId 查询参不传（REQ-011 Q3：角色已带 client 时无观察差异）。
+    static let listGrants: (String, String) async throws -> RoleMenuGrant = { tenantId, roleId in
+        try await run {
+            TenantRoleMenusAPI.tenantRoleMenusListSysRoleMenusWithRequestBuilder(tenantId: tenantId, roleId: roleId)
+        }
+    }
+
+    /// 保存授权（I03）：PUT …/roles/{roleId}/menus 幂等全量替换；响应即更新后
+    /// 聚合（readback 顺序不保证，VM 端 Set 语义）。
+    static let setGrants: (String, String, SetSysRoleMenusRequest) async throws -> RoleMenuGrant = { tenantId, roleId, request in
+        try await run {
+            TenantRoleMenusAPI.tenantRoleMenusSetSysRoleMenusWithRequestBuilder(tenantId: tenantId, roleId: roleId, setSysRoleMenusRequest: request)
+        }
+    }
+
+    /// 清空授权（I04，危险操作）：DELETE …/roles/{roleId}/menus，204 空 body；
+    /// App 层二次确认后才调。
+    static let clearGrants: (String, String) async throws -> Void = { tenantId, roleId in
+        _ = try await run {
+            TenantRoleMenusAPI.tenantRoleMenusClearSysRoleMenusWithRequestBuilder(tenantId: tenantId, roleId: roleId)
+        }
+    }
+
     // MARK: - OAuth 授权码流（M04.F03，REQ-2026-004）
 
     /// 签发授权码（AC-1）：POST /oauth/authorize。state 由调用方（OAuthViewModel）

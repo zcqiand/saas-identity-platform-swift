@@ -81,9 +81,9 @@ I02~I04 菜单授权，矩阵记档跳过。授权聚合形状 `RoleMenuGrant`
 
 | 阶段 | 内容 | 类型 | 执行者 | 估时 | 状态 |
 |---|---|---|---|---|---|
-| T-0 | 树变更 M00.F04 规划→开发中（mirror 免批）+ REQ 落盘 + README/design-map 登记 | 对齐 | Claude | — | 进行中 |
-| T-1 | CoreKit 红先行：RolesViewModel 授权三缝 + 测试挂 M00.F04，远程 test 绿 | 开发 | Claude | 0.5d | 规划 |
-| T-2 | App：APIGlue 三缝 + RoleDetailAdminView 菜单授权段 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 规划 |
+| T-0 | 树变更 M00.F04 规划→开发中（mirror 免批）+ REQ 落盘 + README/design-map 登记 | 对齐 | Claude | — | 已完成（L5 绿，commit 8c896dc） |
+| T-1 | CoreKit 红先行：RolesViewModel 授权三缝 + 测试挂 M00.F04，远程 test 绿 | 开发 | Claude | 0.5d | 已完成（红 52 error → 绿 91 tests，commit a8c6dba） |
+| T-2 | App：APIGlue 三缝 + RoleDetailAdminView 菜单授权段 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 已完成（7 门全绿，L2 App 编译含授权段一次过） |
 | T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 规划 |
 
 ## 4. 功能影响

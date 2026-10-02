@@ -25,7 +25,10 @@ struct RolesAdminView: View {
                 createRole: APIGlue.createRole,
                 getRole: APIGlue.getRole,
                 updateRole: APIGlue.updateRole,
-                deleteRole: APIGlue.deleteRole
+                deleteRole: APIGlue.deleteRole,
+                listGrants: APIGlue.listGrants,
+                setGrants: APIGlue.setGrants,
+                clearGrants: APIGlue.clearGrants
             )
         ))
         _clientsVM = StateObject(wrappedValue: AdminClientsViewModel(seams: .init(
@@ -166,6 +169,8 @@ struct RoleDetailAdminView: View {
                 } footer: {
                     Text("roleCode 不可改（契约口径）；留空的字段不提交（保持原值）")
                 }
+                // M00.F04（REQ-2026-011）：菜单授权段（多选 + 保存/清空）。
+                RoleMenuGrantsSection(vm: vm, role: row)
                 Section("危险区") {
                     Button("删除角色", role: .destructive) {
                         confirmRemove = true
@@ -208,6 +213,122 @@ struct RoleDetailAdminView: View {
             description = role.description ?? ""
             enabled = role.status == 1
         }
+    }
+}
+
+// MARK: - 菜单授权段（M00.F04，REQ-2026-011 T-2）
+
+/// 角色详情「菜单授权」段：该 client 菜单多选勾选 + 保存授权（PUT 全量替换）
+/// + 清空（DELETE 二次确认）。菜单清单复用 REQ-008 APIGlue.listMenus 缝
+/// （role.clientId 定源，Q4；SysMenu.id UUID → menuIds String 走 uuidString），
+/// id 全来自清单返回值——AC-4：UI 不可能产生未知 id（后端 400 FK 路径不可达）。
+/// 勾选态本地 Set（menuIds 后端顺序不保证，探针实证）；授权网络态在
+/// RolesViewModel.grants（Q1），失败红字经 vm.phase 由父页呈现。
+struct RoleMenuGrantsSection: View {
+    @ObservedObject var vm: RolesViewModel
+    let role: SysRole
+
+    @State private var menus: [SysMenu] = []
+    @State private var menusError: String?
+    @State private var selected: Set<String> = []
+    @State private var seeded = false
+    @State private var confirmClear = false
+
+    var body: some View {
+        Section {
+            if let menusError {
+                Text(menusError)
+                    .foregroundStyle(.red)
+                    .font(.footnote)
+            }
+            if menus.isEmpty && menusError == nil {
+                Text(vm.phase == .busy ? "加载中…" : "该 client 无菜单可授")
+                    .foregroundStyle(.secondary)
+            }
+            ForEach(menus, id: \.id) { menu in
+                Toggle(isOn: binding(for: menu.id.uuidString)) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(menu.title)
+                        Text(menu.path ?? menu.id.uuidString)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .disabled(vm.phase == .busy)
+            }
+            Button("保存授权") {
+                Task {
+                    // 提交按菜单清单序稳定排列（PUT 全量替换：未勾选=移除）。
+                    let ordered = menus.map(\.id.uuidString).filter { selected.contains($0) }
+                    if await vm.saveGrants(roleID: role.id, menuIds: ordered) {
+                        // 勾选态以响应为准（顺序不保证照存不重排）。
+                        selected = Set(vm.grants?.menuIds ?? [])
+                        seeded = true
+                    }
+                }
+            }
+            .disabled(vm.phase == .busy || menus.isEmpty)
+            Button("清空授权", role: .destructive) {
+                confirmClear = true
+            }
+            .disabled(vm.phase == .busy || (vm.grants?.menuIds.isEmpty ?? true))
+            .confirmationDialog(
+                "清空角色「\(role.roleCode)」的全部菜单授权？",
+                isPresented: $confirmClear,
+                titleVisibility: .visible
+            ) {
+                Button("清空", role: .destructive) {
+                    Task {
+                        if await vm.clearGrants(roleID: role.id) {
+                            selected = []
+                        }
+                    }
+                }
+            } message: {
+                Text("清空后该角色失去所有菜单访问，可重新勾选保存恢复")
+            }
+        } header: {
+            Text("菜单授权")
+        } footer: {
+            Text("勾选 = 授予该菜单；保存为全量替换（未勾选的会被移除）")
+        }
+        .task {
+            // 菜单清单：进段拉一次（client 定源自 role.clientId，失败红字
+            // 不静默——try? 会把炸面藏成降级）。
+            if menus.isEmpty && menusError == nil {
+                do {
+                    menus = try await APIGlue.listMenus(role.clientId)
+                } catch {
+                    if case ErrorResponse.error(let code, _, _, _) = error {
+                        menusError = "菜单清单加载失败（HTTP \(code)）"
+                    } else {
+                        menusError = "菜单清单加载失败：\(String(describing: error))"
+                    }
+                }
+            }
+            // 授权态播种：首次成功后不再重播（保存/清空各自回写 selected，
+            // 防止重复 GET 盖掉未保存的本地勾选）。
+            if !seeded {
+                if await vm.loadGrants(roleID: role.id) {
+                    selected = Set(vm.grants?.menuIds ?? [])
+                    seeded = true
+                }
+            }
+        }
+    }
+
+    /// Set 语义勾选绑定（menuIds 顺序不保证，全程 Set 比较）。
+    private func binding(for id: String) -> Binding<Bool> {
+        Binding(
+            get: { selected.contains(id) },
+            set: {
+                if $0 {
+                    selected.insert(id)
+                } else {
+                    selected.remove(id)
+                }
+            }
+        )
     }
 }
 

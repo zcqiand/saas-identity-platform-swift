@@ -192,6 +192,39 @@ enum APIGlue {
         }
     }
 
+    // MARK: - 租户应用订阅（M00.F05，REQ-2026-012）
+
+    /// 列表（I01）：GET …/applications，分页参不传全量（0-indexed 同族口径）。
+    static let listTenantApplications: (String) async throws -> TenantApplicationsListTenantApplications200Response = { tenantId in
+        try await run {
+            TenantApplicationsAPI.tenantApplicationsListTenantApplicationsWithRequestBuilder(tenantId: tenantId)
+        }
+    }
+
+    /// 订阅（I02）：POST …/applications；expireTime 可空原样上送（后端曾丢弃，
+    /// springboot 侧已修——REQ-012 探针实证）。
+    static let subscribeTenantApplication: (String, SubscribeTenantApplicationRequest) async throws -> TenantApplication = { tenantId, request in
+        try await run {
+            TenantApplicationsAPI.tenantApplicationsSubscribeTenantApplicationWithRequestBuilder(tenantId: tenantId, subscribeTenantApplicationRequest: request)
+        }
+    }
+
+    /// 更新订阅（I03）：PATCH …/applications/{clientId}——寻址 clientId 字符串
+    /// 列非 UUID id；expireTime partial-update 语义（不传不改，CT I76 实证）。
+    static let updateTenantApplication: (String, String, UpdateTenantApplicationRequest) async throws -> TenantApplication = { tenantId, clientId, request in
+        try await run {
+            TenantApplicationsAPI.tenantApplicationsUpdateTenantApplicationWithRequestBuilder(tenantId: tenantId, clientId: clientId, updateTenantApplicationRequest: request)
+        }
+    }
+
+    /// 移除订阅（I04，危险操作）：DELETE …/applications/{clientId}，204 空
+    /// body；App 层二次确认后才调。
+    static let removeTenantApplication: (String, String) async throws -> Void = { tenantId, clientId in
+        _ = try await run {
+            TenantApplicationsAPI.tenantApplicationsRemoveTenantApplicationWithRequestBuilder(tenantId: tenantId, clientId: clientId)
+        }
+    }
+
     // MARK: - OAuth 授权码流（M04.F03，REQ-2026-004）
 
     /// 签发授权码（AC-1）：POST /oauth/authorize。state 由调用方（OAuthViewModel）

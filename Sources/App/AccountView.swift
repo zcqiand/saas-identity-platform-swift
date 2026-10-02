@@ -153,6 +153,10 @@ struct AccountView: View {
                 NavigationLink("角色管理（tenant × client CRUD）") {
                     RolesAdminView(session: session)
                 }
+                // M00.F05（REQ-2026-012）入口：租户应用订阅管理（同需租户上下文）。
+                NavigationLink("租户应用（订阅管理）") {
+                    TenantApplicationsAdminView(session: session)
+                }
             }
             // M04.F03（REQ-2026-004）入口：OAuth 授权码流（authorize → token → refresh）。
             NavigationLink("OAuth 授权码（签发 / 换 token / 刷新）") {

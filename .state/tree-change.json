@@ -2,19 +2,20 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-010 租户角色切片 GA：M00.F03 开发中→已上线（mirror 免批）。人工验收 AC-1~6 通过（2026-10-02）。RolesViewModel 五缝 + RolesAdminView/详情/新建 sheet 全链已上线。15 F 已上线 13，剩 M00.F04~F05。",
+  "summary": "REQ-2026-011 角色菜单授权切片 T-0：M00.F04 规划→开发中（mirror 免批）。scope=菜单授权 I02~I04（I01 矩阵 shared 无端点，ADR-0025 记档跳过）。RolesViewModel 扩授权三缝 + RoleDetailAdminView 菜单授权段。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-010-tenant-role-admin-slice.md",
+    "docs/requirements/REQ-2026-011-role-menu-grant-slice.md",
     "docs/design/design-function-map.md"
   ],
   "changes": [
     {
-      "id": "M00.F03",
+      "id": "M00.F04",
       "action": "变更",
-      "name": "租户角色",
-      "reason": "REQ-2026-010 GA：角色 CRUD 五缝 + RolesAdminView 管理页已上线（人工验收 AC-1~6 通过 2026-10-02，见 REQ-2026-010 T-2 行）"
+      "name": "角色权限",
+      "description": "角色菜单授权（I02~I04 grants；role↔permission 矩阵 shared 无 TSP 端点，ADR-0025 记档不实现）",
+      "reason": "REQ-2026-011 T-0：规划→开发中；scope=菜单授权 I02~I04（I01 permission 矩阵 shared 无 TSP 端点，ADR-0025 判废弃不实现）"
     }
   ],
-  "base_sha": "a03f48da6378fde8"
+  "base_sha": "5ef62352ca55e949"
 }

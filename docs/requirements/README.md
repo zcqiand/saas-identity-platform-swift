@@ -16,6 +16,7 @@
 | REQ-2026-008 | 菜单管理切片（菜单 CRUD + 组树，瘦身版；/me/menus 待 PLAN-2026-004 契约修正后补角） | P1 | 已上线（2026-10-01 人工验收通过：AC-1~6 全绿；T-0 免批 base sha eaef3e4f，GA 免批凭 REQ 验收记录） | 1 F |
 | REQ-2026-009 | 租户成员管理切片（成员生命周期 create/detail/update/status/delete/invite） | P1 | 已上线（2026-10-02 GA mirror 免批 fbf5f9c6；人工验收通过） | 1 F |
 | REQ-2026-010 | 租户角色切片（role CRUD：create/detail/update/delete） | P1 | 已上线（2026-10-02 GA mirror 免批；人工验收通过） | 1 F |
+| REQ-2026-011 | 角色菜单授权切片（role↔menu grants：list/set/clear） | P1 | 开发中（2026-10-02 T-0 免批；探针实证 @5105 springboot saas_dev；I01 矩阵 ADR-0025 记档跳过） | 1 F |
 ## 方向定死
 
 - **需求文档**记录「这次动了哪些功能」（流水）

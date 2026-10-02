@@ -25,7 +25,7 @@
 | M00.F02 | 租户成员 | tenant-scoped 成员 CRUD + 邀请/接受/状态 | 已上线 |
 | M00.F03 | 租户角色 | tenant × client 作用域角色 CRUD | 已上线 |
 | M00.F04 | 角色权限 | 角色菜单授权（I02~I04 grants；role↔permission 矩阵 shared 无 TSP 端点，ADR-0025 记档不实现） | 已上线 |
-| M00.F05 | 租户应用 | `tenant_application` 订阅管理 | 规划 |
+| M00.F05 | 租户应用 | `tenant_application` 订阅管理（I01 list / I02 subscribe / I03 update / I04 remove，clientId 寻址） | 开发中 |
 
 ---
 

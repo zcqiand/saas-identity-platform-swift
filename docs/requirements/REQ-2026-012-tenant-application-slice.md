@@ -1,6 +1,6 @@
 # REQ-2026-012：M00.F05 租户应用订阅切片（swift 仓）
 
-- 状态：开发中
+- 状态：已上线
 - 功能：M00.F05（`tenant_application` 订阅管理，I01~I04）
 - 契约依据：`saas-identity-platform-shared/tsp/routes/tenant-applications.tsp`（SSOT，零修改）
 - 日期：2026-10-02
@@ -66,3 +66,13 @@ Swift 侧消费租户应用订阅的 4 个端点，API 面全部来自 shared �
 | M00.F05 租户应用 | 变更（规划→实现） | I01~I04 全量 |
 
 15 F 上线 14 → 本片完成后 15/15 收口。
+
+## 6. 验收记录
+
+- **人工验收通过（2026-10-03）**：AC-1~3 模拟器手测（AccountView→租户应用：
+  列表渲染含到期时间、订阅 sheet 提交后行追加且 expireTime 落库、详情启停/
+  改期/移除二次确认全链）；AC-4~6 门禁兜底（T-1 远门红先行→绿 100 tests
+  0 failures；T-2 build+test 双绿 + suite 门禁全绿；CT live 2-way
+  springboot+aspnetcore 6/6）。
+- 提交链：T-0 4950d60 / T-1 fa5605f / T-2 bef8e8d；后端修复 springboot
+  01704a2 + CT 强化 f6e4198；suite gitlink 1f32b1f。

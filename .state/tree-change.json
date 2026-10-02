@@ -2,18 +2,19 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-012 租户应用订阅切片开工：M00.F05 规划→开发中（mirror 免批）。契约 SSOT=shared tenant-applications.tsp，shared 零改动；后端两 wart（toDto createdAt 漏 set / subscribe 丢 expireTime）已修，CT live 2-way 绿。",
+  "summary": "REQ-2026-012 租户应用订阅切片 GA：M00.F05 开发中→已上线（mirror 免批）。人工验收通过（2026-10-03：AC-1~3 模拟器手测 + AC-4~6 门禁兜底）。四缝 VM + 管理视图全链已上线。15 F 全上线收口。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-012-tenant-application-slice.md"
+    "docs/requirements/REQ-2026-012-tenant-application-slice.md",
+    "docs/design/design-function-map.md"
   ],
   "changes": [
     {
       "id": "M00.F05",
       "action": "变更",
       "name": "租户应用",
-      "reason": "REQ-2026-012 T-0：契约 4 端点（I01~I04）已由 shared 生成物落地中，CoreKit VM + App 管理视图开发中"
+      "reason": "REQ-2026-012 GA：租户应用订阅四缝 + TenantApplicationsAdminView 已上线（人工验收通过 2026-10-03，见 REQ-2026-012 验收记录节）"
     }
   ],
-  "base_sha": "ca23c2b2bccb6110"
+  "base_sha": "8200815ae5797ef2"
 }

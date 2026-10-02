@@ -17,7 +17,7 @@
 | REQ-2026-009 | 租户成员管理切片（成员生命周期 create/detail/update/status/delete/invite） | P1 | 已上线（2026-10-02 GA mirror 免批 fbf5f9c6；人工验收通过） | 1 F |
 | REQ-2026-010 | 租户角色切片（role CRUD：create/detail/update/delete） | P1 | 已上线（2026-10-02 GA mirror 免批；人工验收通过） | 1 F |
 | REQ-2026-011 | 角色菜单授权切片（role↔menu grants：list/set/clear） | P1 | 已上线（2026-10-02 人工验收通过：AC-1~3 手测 + AC-4~6 门禁兜底；GA mirror 免批） | 1 F |
-| REQ-2026-012 | 租户应用订阅切片（subscribe/update/remove/list，clientId 寻址） | P1 | 开发中（2026-10-02；后端 createdAt/expireTime 两 wart 已修，CT live 2-way 绿） | 1 F |
+| REQ-2026-012 | 租户应用订阅切片（subscribe/update/remove/list，clientId 寻址） | P1 | 已上线（2026-10-03 人工验收通过：AC-1~3 手测 + AC-4~6 门禁兜底；GA mirror 免批 8200815a） | 1 F |
 ## 方向定死
 
 - **需求文档**记录「这次动了哪些功能」（流水）

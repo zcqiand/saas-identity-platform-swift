@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-10-01 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 mirror 免批，base sha 4fba5ddabe8b1f76，2026-10-01） |
+| 状态 | **已上线**（GA mirror 免批，人工验收 AC-1~6 通过 2026-10-02） |
 | 关联 ADR | ADR-0029（API 面只认生成物，硬规则 §4） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M00.F02 BASE：tenant-members.tsp I01~I06/I08）；前置 REQ-001~008 已上线基座 |
 
@@ -69,7 +69,7 @@ M00 第二个 F：**租户成员**（BASE 已上线，Swift 侧本切片前 规�
 | T-0 | tree-change 提案：M00.F02 规划→开发中（mirror 免批 --apply，令牌 4fba5ddabe8b1f76） | 对齐 | Claude | — | 已完成（2026-10-01） |
 | T-1 | CoreKit 红先行：MembersViewModel 六缝扩展 + assignRoles 回读修复 + FamilyDateFormatter 分数位归一化 + 测试挂 M00.F02，本地 7 门绿 | 开发 | Claude | 0.5d | 已完成（远程 80 tests 绿） |
 | T-2 | App：APIGlue 六缝 + MembersView 增强（详情/编辑/状态/删除 + 新建/邀请 sheet + contextMenu）+ 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 已完成（远门 BUILD SUCCEEDED + 本地 7 门全绿） |
-| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 待办 |
+| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 已完成（人工验收 AC-1~6 通过 2026-10-02，模拟器全链演练） |
 
 ## 4. 功能影响（需求与功能对齐的唯一位置）
 

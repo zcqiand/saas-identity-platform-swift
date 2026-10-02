@@ -233,4 +233,117 @@ final class RolesViewModelTests: XCTestCase {
             XCTFail("无租户上下文应报红字")
         }
     }
+    private func makeGrant(roleId: UUID, menuIds: [String]) -> RoleMenuGrant {
+        RoleMenuGrant(
+            roleId: roleId, tenantId: tenantID, menuIds: menuIds,
+            updatedAt: Date(timeIntervalSince1970: 1_700_000_000)
+        )
+    }
+
+    private let menuA = "00000000-0000-0000-0000-910000000001"
+    private let menuB = "00000000-0000-0000-0000-910000000002"
+    private let menuC = "00000000-0000-0000-0000-910000000003"
+
+    func testLoadGrantsPopulatesGrantAggregates() async throws {
+    // fn: M00.F04
+        let store = try makeStore(configured: true, loggedIn: true)
+        var requested: (tenantId: String, roleId: String)?
+        let vm = RolesViewModel(
+            store: store,
+            seams: .init(
+                listRoles: { _ in self.roleList },
+                listGrants: { tenantId, roleId in
+                    requested = (tenantId, roleId)
+                    return self.makeGrant(roleId: self.probeRoleID,
+                                          menuIds: [self.menuA, self.menuB])
+                }
+            )
+        )
+        let ok = await vm.loadGrants(roleID: probeRoleID)
+        XCTAssertTrue(ok)
+        XCTAssertEqual(requested?.tenantId, tenantID.uuidString)
+        XCTAssertEqual(requested?.roleId, probeRoleID.uuidString)
+        XCTAssertEqual(vm.grants?.roleId, probeRoleID)
+        XCTAssertEqual(vm.grants?.tenantId, tenantID)
+        XCTAssertEqual(Set(vm.grants?.menuIds ?? []), [menuA, menuB])
+    }
+
+    func testSaveGrantsSendsFullReplacementAndKeepsResponse() async throws {
+    // fn: M00.F04
+        let store = try makeStore(configured: true, loggedIn: true)
+        var requested: (roleId: String, menuIds: [String])?
+        let vm = RolesViewModel(
+            store: store,
+            seams: .init(
+                listRoles: { _ in self.roleList },
+                listGrants: { _, _ in self.makeGrant(roleId: self.probeRoleID, menuIds: [self.menuA]) },
+                setGrants: { tenantId, roleId, request in
+                    requested = (roleId, request.menuIds)
+                    // 后端 readback 集合相等但顺序不保证（REQ-011 探针实证）——
+                    // fake 故意返回乱序，VM 端必须照存响应、不做重排假设。
+                    return self.makeGrant(roleId: self.probeRoleID,
+                                          menuIds: [self.menuC, self.menuB])
+                }
+            )
+        )
+        _ = await vm.loadGrants(roleID: probeRoleID)
+        let ok = await vm.saveGrants(roleID: probeRoleID, menuIds: [menuB, menuC])
+        XCTAssertTrue(ok)
+        XCTAssertEqual(requested?.roleId, probeRoleID.uuidString)
+        XCTAssertEqual(requested?.menuIds, [menuB, menuC], "PUT 全量替换：提交集合原样上送")
+        XCTAssertEqual(Set(vm.grants?.menuIds ?? []), [menuB, menuC], "授权态以响应为准")
+    }
+
+    func testClearGrantsEmptiesGrantInPlace() async throws {
+    // fn: M00.F04
+        let store = try makeStore(configured: true, loggedIn: true)
+        var cleared: (tenantId: String, roleId: String)?
+        let vm = RolesViewModel(
+            store: store,
+            seams: .init(
+                listRoles: { _ in self.roleList },
+                listGrants: { _, _ in
+                    self.makeGrant(roleId: self.probeRoleID,
+                                   menuIds: [self.menuA, self.menuB, self.menuC])
+                },
+                clearGrants: { tenantId, roleId in
+                    cleared = (tenantId, roleId)
+                    // DELETE returns 204 empty -> the seam returns Void.
+                }
+            )
+        )
+        _ = await vm.loadGrants(roleID: probeRoleID)
+        XCTAssertEqual(vm.grants?.menuIds.count, 3)
+        let ok = await vm.clearGrants(roleID: probeRoleID)
+        XCTAssertTrue(ok)
+        XCTAssertEqual(cleared?.tenantId, tenantID.uuidString)
+        XCTAssertEqual(cleared?.roleId, probeRoleID.uuidString)
+        XCTAssertEqual(vm.grants?.menuIds, [], "204 后本地授权态清空（AC-3）")
+        XCTAssertEqual(vm.grants?.roleId, probeRoleID)
+    }
+
+    func testGrantOpsWithoutTenantFailFast() async throws {
+    // fn: M00.F04
+        let store = try makeStore(configured: true, loggedIn: false)
+        var seamCalled = false
+        let vm = RolesViewModel(
+            store: store,
+            seams: .init(
+                listRoles: { _ in seamCalled = true; return self.roleList },
+                listGrants: { _, _ in seamCalled = true; return self.makeGrant(roleId: self.probeRoleID, menuIds: []) },
+                setGrants: { _, _, _ in seamCalled = true; return self.makeGrant(roleId: self.probeRoleID, menuIds: []) },
+                clearGrants: { _, _ in seamCalled = true }
+            )
+        )
+        let loaded = await vm.loadGrants(roleID: probeRoleID)
+        XCTAssertFalse(loaded)
+        let saved = await vm.saveGrants(roleID: probeRoleID, menuIds: [menuA])
+        XCTAssertFalse(saved)
+        let cleared = await vm.clearGrants(roleID: probeRoleID)
+        XCTAssertFalse(cleared)
+        XCTAssertFalse(seamCalled, "无租户上下文必须 fail-fast，一个缝都不许发")
+        if case .failed = vm.phase {} else {
+            XCTFail("无租户上下文应报红字")
+        }
+    }
 }

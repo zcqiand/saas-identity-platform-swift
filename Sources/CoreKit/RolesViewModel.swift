@@ -7,6 +7,9 @@ import SaasSharedGenerated
 // 入口）供（T-2），单测注入 fake 不发真网络。租户上下文复用 SessionStore
 // .currentTenantId（nil fail-fast 不发请求）。不并入 MembersViewModel——
 // 成员页的角色清单是勾选数据源语义，本 VM 是 CRUD 语义（REQ-010 Q2）。
+// REQ-2026-011 T-1：扩角色菜单授权三缝（M00.F04，生成物
+// TenantRoleMenusAPI list/set/clear）；授权是角色详情页内语义，与 CRUD 同属
+// 「角色管理」feature 面，授权态挂在本 VM（REQ-011 Q1），不另起新 VM。
 
 @MainActor
 public final class RolesViewModel: ObservableObject {
@@ -19,6 +22,9 @@ public final class RolesViewModel: ObservableObject {
         public var getRole: (_ tenantId: String, _ roleId: String) async throws -> SysRole
         public var updateRole: (_ tenantId: String, _ roleId: String, _ request: UpdateSysRoleRequest) async throws -> SysRole
         public var deleteRole: (_ tenantId: String, _ roleId: String) async throws -> Void
+        public var listGrants: (_ tenantId: String, _ roleId: String) async throws -> RoleMenuGrant
+        public var setGrants: (_ tenantId: String, _ roleId: String, _ request: SetSysRoleMenusRequest) async throws -> RoleMenuGrant
+        public var clearGrants: (_ tenantId: String, _ roleId: String) async throws -> Void
 
         public init(
             listRoles: @escaping (_: String) async throws -> TenantRolesListSysRoles200Response = { _ in
@@ -35,6 +41,15 @@ public final class RolesViewModel: ObservableObject {
             },
             deleteRole: @escaping (_: String, _: String) async throws -> Void = { _, _ in
                 throw SessionStoreError("deleteRole 缝未注入")
+            },
+            listGrants: @escaping (_: String, _: String) async throws -> RoleMenuGrant = { _, _ in
+                throw SessionStoreError("listGrants 缝未注入")
+            },
+            setGrants: @escaping (_: String, _: String, _: SetSysRoleMenusRequest) async throws -> RoleMenuGrant = { _, _, _ in
+                throw SessionStoreError("setGrants 缝未注入")
+            },
+            clearGrants: @escaping (_: String, _: String) async throws -> Void = { _, _ in
+                throw SessionStoreError("clearGrants 缝未注入")
             }
         ) {
             self.listRoles = listRoles
@@ -42,6 +57,9 @@ public final class RolesViewModel: ObservableObject {
             self.getRole = getRole
             self.updateRole = updateRole
             self.deleteRole = deleteRole
+            self.listGrants = listGrants
+            self.setGrants = setGrants
+            self.clearGrants = clearGrants
         }
     }
 
@@ -54,6 +72,9 @@ public final class RolesViewModel: ObservableObject {
     @Published public private(set) var phase: Phase = .idle
     /// 当前租户角色清单（AC-1 渲染；失败保持旧值不兜底空数组假象）。
     @Published public private(set) var roles: [SysRole] = []
+    /// 已选角色的菜单授权（M00.F04 详情页段；menuIds 后端顺序不保证——
+    /// 消费端一律 Set 语义，REQ-011 探针实证）。
+    @Published public private(set) var grants: RoleMenuGrant?
 
     private let store: SessionStore
     private let seams: Seams
@@ -165,6 +186,61 @@ public final class RolesViewModel: ObservableObject {
         do {
             let authoritative = try await seams.getRole(tenantId, roleID.uuidString)
             replaceRow(authoritative)
+            phase = .idle
+            return true
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return false
+        }
+    }
+
+    // MARK: - M00.F04 role menu grants (REQ-2026-011)
+
+    /// 读角色授权（I02）：GET …/roles/{roleId}/menus → RoleMenuGrant 聚合。
+    /// 进详情页授权段时调用；menuIds 顺序不保证（消费端 Set 语义）。
+    @discardableResult
+    public func loadGrants(roleID: UUID) async -> Bool {
+        guard let tenantId = currentTenantIdOrPerform("无法加载菜单授权") else { return false }
+        phase = .busy
+        do {
+            grants = try await seams.listGrants(tenantId, roleID.uuidString)
+            phase = .idle
+            return true
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return false
+        }
+    }
+
+    /// 保存授权（I03）：PUT 幂等全量替换，授权态以响应为准（响应顺序不保证
+    /// 照存不重排——REQ-011 探针实证 readback 顺序漂移）。
+    @discardableResult
+    public func saveGrants(roleID: UUID, menuIds: [String]) async -> Bool {
+        guard let tenantId = currentTenantIdOrPerform("无法保存菜单授权") else { return false }
+        phase = .busy
+        do {
+            let request = SetSysRoleMenusRequest(menuIds: menuIds)
+            grants = try await seams.setGrants(tenantId, roleID.uuidString, request)
+            phase = .idle
+            return true
+        } catch {
+            phase = .failed(Self.message(of: error))
+            return false
+        }
+    }
+
+    /// 清空授权（I04，危险操作）：DELETE 204 空 body——本地聚合落地为空
+    /// （同后端 GET 语义 menuIds=[]；updatedAt 本地时钟仅作占位，无消费方）。
+    @discardableResult
+    public func clearGrants(roleID: UUID) async -> Bool {
+        guard let tenantId = currentTenantIdOrPerform("无法清空菜单授权") else { return false }
+        phase = .busy
+        do {
+            try await seams.clearGrants(tenantId, roleID.uuidString)
+            if let tenantUUID = store.currentTenantId {
+                grants = RoleMenuGrant(roleId: roleID, tenantId: tenantUUID,
+                                       menuIds: [], updatedAt: Date())
+            }
             phase = .idle
             return true
         } catch {

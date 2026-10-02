@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-10-02 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 免批 mirror） |
+| 状态 | **已上线**（GA mirror 免批，人工验收通过 2026-10-02） |
 | 关联 ADR | ADR-0029（API 面只认生成物，硬规则 §4）；ADR-0025（无 TSP 端点=已废弃） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M00.F04 BASE：tenant-role-menus.tsp I02~I04）；前置 REQ-001~010 已上线基座 |
 
@@ -84,7 +84,15 @@ I02~I04 菜单授权，矩阵记档跳过。授权聚合形状 `RoleMenuGrant`
 | T-0 | 树变更 M00.F04 规划→开发中（mirror 免批）+ REQ 落盘 + README/design-map 登记 | 对齐 | Claude | — | 已完成（L5 绿，commit 8c896dc） |
 | T-1 | CoreKit 红先行：RolesViewModel 授权三缝 + 测试挂 M00.F04，远程 test 绿 | 开发 | Claude | 0.5d | 已完成（红 52 error → 绿 91 tests，commit a8c6dba） |
 | T-2 | App：APIGlue 三缝 + RoleDetailAdminView 菜单授权段 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 已完成（7 门全绿，L2 App 编译含授权段一次过） |
-| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 规划 |
+| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 已完成（人工验收通过 2026-10-02：AC-1~3 模拟器手测全绿，AC-4~6 由 91 tests + L0 门禁兜底） |
+
+## 3.1 验收记录
+
+- **2026-10-02 人工验收通过**（模拟器全链演练 @5105 saas-springboot）：
+  AC-1 菜单授权段渲染 client 菜单清单、admin 预设授权全勾；AC-2 勾选保存
+  PUT 200、再进页勾选态保持（readback 顺序漂移不炸）；AC-3 清空二次确认
+  后全不勾、再进页仍全不勾；验收临时角色探毕即删。AC-4/AC-5/AC-6 由
+  91 tests + L0/L5 门禁机器兜底（7 门全绿）。验收人：zcqiand（「通过」）。
 
 ## 4. 功能影响
 

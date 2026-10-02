@@ -2,7 +2,7 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-011 角色菜单授权切片 T-0：M00.F04 规划→开发中（mirror 免批）。scope=菜单授权 I02~I04（I01 矩阵 shared 无端点，ADR-0025 记档跳过）。RolesViewModel 扩授权三缝 + RoleDetailAdminView 菜单授权段。",
+  "summary": "REQ-2026-011 角色菜单授权切片 GA：M00.F04 开发中→已上线（mirror 免批）。人工验收通过（2026-10-02，AC-1~3 手测 + AC-4~6 门禁兜底）。RolesViewModel 授权三缝 + 菜单授权段全链已上线。15 F 已上线 14，只剩 M00.F05。",
   "sync_files": [
     "docs/requirements/README.md",
     "docs/requirements/REQ-2026-011-role-menu-grant-slice.md",
@@ -13,9 +13,8 @@
       "id": "M00.F04",
       "action": "变更",
       "name": "角色权限",
-      "description": "角色菜单授权（I02~I04 grants；role↔permission 矩阵 shared 无 TSP 端点，ADR-0025 记档不实现）",
-      "reason": "REQ-2026-011 T-0：规划→开发中；scope=菜单授权 I02~I04（I01 permission 矩阵 shared 无 TSP 端点，ADR-0025 判废弃不实现）"
+      "reason": "REQ-2026-011 GA：角色菜单授权三缝 + RoleDetailAdminView 菜单授权段已上线（人工验收通过 2026-10-02，见 REQ-2026-011 验收记录节）"
     }
   ],
-  "base_sha": "5ef62352ca55e949"
+  "base_sha": "05d33eed4e060f0d"
 }

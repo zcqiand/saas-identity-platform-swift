@@ -2,19 +2,19 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-009 租户成员管理切片 GA：M00.F02 开发中→已上线（mirror 免批）。人工验收 AC-1~6 通过（2026-10-02）。九缝 VM + assignRoles 回读修复 + FamilyDateFormatter 分数位归一化 + MembersView 详情/编辑/状态/删除 + 新建/邀请 sheet 全链已上线。14 F 已上线 12，剩 M00.F03~F05。",
+  "summary": "REQ-2026-010 租户角色切片 T-0：M00.F03 规划→开发中（mirror 免批）。live 探针已钉死契约（role CRUD 五生成物缝全在；重名 roleCode 后端 500 空 body 记档不修）；REQ-2026-010 落盘同批。",
   "sync_files": [
     "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-009-tenant-member-admin-slice.md",
+    "docs/requirements/REQ-2026-010-tenant-role-admin-slice.md",
     "docs/design/design-function-map.md"
   ],
   "changes": [
     {
-      "id": "M00.F02",
+      "id": "M00.F03",
       "action": "变更",
-      "name": "租户成员",
-      "reason": "REQ-2026-009 GA：成员生命周期六缝 + assignRoles 回读修复 + 分数位归一化 + MembersView 管理页已上线（人工验收 AC-1~6 通过 2026-10-02，见 REQ-2026-009 T-2 行）"
+      "name": "租户角色",
+      "reason": "REQ-2026-010 T-0：租户角色 CRUD（create/detail/update/delete；list 已随 M01.F02 上线）+ RolesAdminView 管理页进入开发。规划→开发中 mirror 免批"
     }
   ],
-  "base_sha": "fbf5f9c6e8175525"
+  "base_sha": "4a14f338c02ce6d4"
 }

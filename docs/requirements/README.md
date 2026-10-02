@@ -15,6 +15,7 @@
 | REQ-2026-007 | 租户维护切片（平台 admin 租户 CRUD + 租户名富化） | P1 | 已上线（2026-10-01 人工验收通过：AC-1~6 全绿；T-0 免批 base sha f536d038，GA 免批凭 REQ 验收记录） | 1 F |
 | REQ-2026-008 | 菜单管理切片（菜单 CRUD + 组树，瘦身版；/me/menus 待 PLAN-2026-004 契约修正后补角） | P1 | 已上线（2026-10-01 人工验收通过：AC-1~6 全绿；T-0 免批 base sha eaef3e4f，GA 免批凭 REQ 验收记录） | 1 F |
 | REQ-2026-009 | 租户成员管理切片（成员生命周期 create/detail/update/status/delete/invite） | P1 | 已上线（2026-10-02 GA mirror 免批 fbf5f9c6；人工验收通过） | 1 F |
+| REQ-2026-010 | 租户角色切片（role CRUD：create/detail/update/delete） | P1 | 开发中（2026-10-02 T-0 mirror 免批） | 1 F |
 ## 方向定死
 
 - **需求文档**记录「这次动了哪些功能」（流水）

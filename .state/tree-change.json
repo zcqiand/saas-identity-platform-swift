@@ -2,7 +2,7 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-010 租户角色切片 T-0：M00.F03 规划→开发中（mirror 免批）。live 探针已钉死契约（role CRUD 五生成物缝全在；重名 roleCode 后端 500 空 body 记档不修）；REQ-2026-010 落盘同批。",
+  "summary": "REQ-2026-010 租户角色切片 GA：M00.F03 开发中→已上线（mirror 免批）。人工验收 AC-1~6 通过（2026-10-02）。RolesViewModel 五缝 + RolesAdminView/详情/新建 sheet 全链已上线。15 F 已上线 13，剩 M00.F04~F05。",
   "sync_files": [
     "docs/requirements/README.md",
     "docs/requirements/REQ-2026-010-tenant-role-admin-slice.md",
@@ -13,8 +13,8 @@
       "id": "M00.F03",
       "action": "变更",
       "name": "租户角色",
-      "reason": "REQ-2026-010 T-0：租户角色 CRUD（create/detail/update/delete；list 已随 M01.F02 上线）+ RolesAdminView 管理页进入开发。规划→开发中 mirror 免批"
+      "reason": "REQ-2026-010 GA：角色 CRUD 五缝 + RolesAdminView 管理页已上线（人工验收 AC-1~6 通过 2026-10-02，见 REQ-2026-010 T-2 行）"
     }
   ],
-  "base_sha": "4a14f338c02ce6d4"
+  "base_sha": "a03f48da6378fde8"
 }

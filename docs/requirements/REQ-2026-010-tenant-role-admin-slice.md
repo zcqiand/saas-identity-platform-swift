@@ -5,7 +5,7 @@
 | 提出人 | zcqiand（standing 指令「saas 侧的 Swift 版需求参考 shared 就行，并且要确保 api 是生成的」） |
 | 提出日期 | 2026-10-02 |
 | 优先级 | P1 |
-| 状态 | **开发中**（T-0 mirror 免批，2026-10-02） |
+| 状态 | **已上线**（GA mirror 免批，人工验收 AC-1~6 通过 2026-10-02） |
 | 关联 ADR | ADR-0029（API 面只认生成物，硬规则 §4） |
 | 上游 | saas-identity-platform-shared TypeSpec SSOT（M00.F03 BASE：tenant-roles.tsp I01~I05）；前置 REQ-001~009 已上线基座 |
 
@@ -82,7 +82,7 @@ M00 第三个 F：**租户角色**（BASE 已上线，Swift 侧本切片前 规�
 | T-0 | 树变更 M00.F03 规划→开发中（mirror 免批）+ REQ 落盘 + README/design-map 登记 | 对齐 | Claude | — | 已完成 |
 | T-1 | CoreKit 红先行：RolesViewModel 五缝 + 测试挂 M00.F03，远程 test 绿 | 开发 | Claude | 0.5d | 已完成（远程 87 tests 绿） |
 | T-2 | App：APIGlue 四缝 + RolesAdminView/RoleDetailAdminView/RoleCreateSheet + AccountView 入口 + 全门绿 + push + gitlink + 验收准备 | 开发 | Claude | 0.5d | 已完成（远门 BUILD SUCCEEDED 一次过 + 本地 7 门全绿） |
-| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 待办 |
+| T-3 | GA：凭人工验收通过记录 --apply 免批 翻已上线 + gitlink | 对齐 | Claude | — | 已完成（人工验收 AC-1~6 通过 2026-10-02） |
 
 ## 4. 功能影响
 

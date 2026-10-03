@@ -6,6 +6,8 @@ import SwiftUI
 // （生成物唯一入口），状态机在 CoreKit.AuthViewModel；成功经 session.refresh()
 // 进账户页。
 
+// @entry M01.F04.I03 — 登录页本体（树交付列仅前端，用户从这里进入系统）
+
 struct LoginView: View {
     let session: AppSession
 

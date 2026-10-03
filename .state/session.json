@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "首冻结交付：门禁重跑全绿后打 tag v0.1.0-20261003 + export_handoff（书稿事实底）",
+  "current_task": "功能树 I 级全量镜像登记（shared BASE 51 条）→ 重冻结 v0.1.1-20261003 + 重导 handoff（治 function_tree=0）",
   "done": [
     "2026-10-03 家族批：REQ-2026-012 澄清记录 dup 400 裸 SQL 泄漏 wart 翻已修——springboot f496ebb / fastapi d37f598 / rails b6d3288 各自 dup 预检 → 400 clean message；fastapi d37f598 + rails b6d3288 同批 expireTime 落库追平 01704a2；CT ee0468f 同批断言（回读 + dup clean）",
     "GA：人工验收通过（2026-10-03 AC-1~3 手测 + AC-4~6 门禁兜底）→ mirror 免批 → M00.F05 开发中→已上线；REQ 验收记录 + 台账 + 设计映射同步翻转；门禁全绿后 push + gitlink 40c2195",
@@ -10,9 +10,11 @@
     "T-1 fa5605f：TenantApplicationsViewModel 四缝（list/subscribe/update/remove，clientId 字符串寻址）红先行（红 36 error → 绿 100 tests 0 failures）；FamilyDateFormatter 补 isoNoFraction（T 分隔零分数形态 2026-01-15T08:00:00Z 此前全链咬不住）+ 3 测试",
     "T-2 bef8e8d：APIGlue 四缝（TenantApplicationsAPI 生成物）+ TenantApplicationsAdminView（列表/订阅 sheet/详情启停改期移除）+ AccountView 入口；远门 build+test 双绿 + suite 门禁全绿",
     "家族 gen-shared marker 追平 shared 57fd8c3（5 仓重跑 gen-shared，tsp 零 diff 纯 marker）——治 CT L2 §3 全家红；suite gitlink 1f32b1f 推进 7 仓",
-    "2026-10-03 冻结：门禁重跑 EXIT=0 全绿（L2 build 36.9s + L4 test 13.7s 远程；代码零改动，纯验收），打首 tag v0.1.0-20261003 并导出 handoff.json"
+    "2026-10-03 冻结：门禁重跑 EXIT=0 全绿（L2 build 36.9s + L4 test 13.7s 远程；代码零改动，纯验收），打首 tag v0.1.0-20261003 并导出 handoff.json",
+    "2026-10-03 树补账：handoff function_tree=0 根因=本树 F 级止步（I 级欠账）——走 tree-change mirror 通道（--apply 自查自批，51 新增 ⊆ shared BASE，废弃行入废弃段）一次写树；v0.1.0 tag 作废不删（只进不退），以 v0.1.1-20261003 重冻结",
+    "2026-10-03 L5 补锚：镜像后 3 个已上线面向用户子项缺 UI 入口——LoginView/AccountView 挂 // @entry M01.F04.I03 / M01.F01.I01 / M01.F03.I01；suite 侧 _alignment.py 入口扫描 + export_handoff.py CODE_SUFFIXES 补 .swift（swift 栈接入缺口，同 .rb 先例）；门禁重跑 EXIT=0 全绿"
   ],
-  "next": "tag 已冻结、handoff 已导出。后续新需求走正常 REQ 流；PLAN-2026-004（shared parentId nullable）落地后回来补 /me/menus 角（REQ-008 遗留）",
+  "next": "v0.1.1-20261003 已冻结、handoff 已重导。后续新需求走正常 REQ 流；PLAN-2026-004（shared parentId nullable）落地后回来补 /me/menus 角（REQ-008 遗留）",
   "open_questions": [
     "PLAN-2026-004（shared EffectiveMenuNode.parentId nullable）仍待人裁",
     "dup 订阅分叉待人裁：nextjs 409 CONFLICT vs 其余后端 400（CT 断言按仓分叉放行，家族对齐方向未定）"
@@ -22,5 +24,5 @@
     "CT live 声明的 target 必须可达（5107 down 全 run 报废）；本机常态只起 springboot+一个兄弟",
     "aspnetcore gen-shared 前必须停 5104（dotnet run 锁 bin）；本会话已停，5105 springboot 仍活着供验收手测"
   ],
-  "last_gate_passed_at": "2026-10-03T23:11:50+0800 (L0-L5 全绿：home-mac 远程 L2 build + L4 test)"
+  "last_gate_passed_at": "2026-10-04T00:15:43+0800 (L0-L5 全绿：树 I 级镜像 + @entry 补锚后重跑；home-mac 远程 L2 build 84.0s + L4 test 45.0s)"
 }

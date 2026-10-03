@@ -2,19 +2,315 @@
   "schema": 1,
   "approved": true,
   "mirror": true,
-  "summary": "REQ-2026-012 租户应用订阅切片 GA：M00.F05 开发中→已上线（mirror 免批）。人工验收通过（2026-10-03：AC-1~3 模拟器手测 + AC-4~6 门禁兜底）。四缝 VM + 管理视图全链已上线。15 F 全上线收口。",
-  "sync_files": [
-    "docs/requirements/README.md",
-    "docs/requirements/REQ-2026-012-tenant-application-slice.md",
-    "docs/design/design-function-map.md"
-  ],
+  "base_sha": "b8ff9f8374f377a5",
+  "summary": "I 级子项全量镜像登记：按 shared BASE 逐条补 51 条（49 活跃 + 2 废弃段），兑现本树「第一个需求落地时再拆」的既定政策（REQ-001~012 切片均已验收，拆分欠账一次补齐）",
   "changes": [
     {
-      "id": "M00.F05",
-      "action": "变更",
-      "name": "租户应用",
-      "reason": "REQ-2026-012 GA：租户应用订阅四缝 + TenantApplicationsAdminView 已上线（人工验收通过 2026-10-03，见 REQ-2026-012 验收记录节）"
+      "id": "M00.F01.I01",
+      "action": "新增",
+      "name": "租户列表",
+      "reason": "REQ-2026-007 tenant-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F01.I02",
+      "action": "新增",
+      "name": "创建租户",
+      "reason": "REQ-2026-007 tenant-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F01.I03",
+      "action": "新增",
+      "name": "租户详情",
+      "reason": "REQ-2026-007 tenant-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F01.I04",
+      "action": "新增",
+      "name": "更新租户",
+      "reason": "REQ-2026-007 tenant-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F01.I05",
+      "action": "新增",
+      "name": "删除租户",
+      "reason": "REQ-2026-007 tenant-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I01",
+      "action": "新增",
+      "name": "成员列表",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I02",
+      "action": "新增",
+      "name": "创建成员",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I03",
+      "action": "新增",
+      "name": "成员详情",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I04",
+      "action": "新增",
+      "name": "更新成员",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I05",
+      "action": "新增",
+      "name": "删除成员",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F02.I06",
+      "action": "新增",
+      "name": "邀请成员",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE；邀请 sheet AC-5 实证）"
+    },
+    {
+      "id": "M00.F02.I07",
+      "action": "新增",
+      "name": "接受邀请",
+      "reason": "REQ-2026-009 非范围声明「邀请接受流属被邀侧口径」；shared BASE 亦为规划，镜像登记标规划"
+    },
+    {
+      "id": "M00.F02.I08",
+      "action": "新增",
+      "name": "状态切换",
+      "reason": "REQ-2026-009 tenant-member-admin 切片（镜像 shared BASE；status Picker 实证）"
+    },
+    {
+      "id": "M00.F03.I01",
+      "action": "新增",
+      "name": "角色列表",
+      "reason": "REQ-2026-010 tenant-role-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F03.I02",
+      "action": "新增",
+      "name": "创建角色",
+      "reason": "REQ-2026-010 tenant-role-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F03.I03",
+      "action": "新增",
+      "name": "角色详情",
+      "reason": "REQ-2026-010 tenant-role-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F03.I04",
+      "action": "新增",
+      "name": "更新角色",
+      "reason": "REQ-2026-010 tenant-role-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F03.I05",
+      "action": "新增",
+      "name": "删除角色",
+      "reason": "REQ-2026-010 tenant-role-admin 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F04.I02",
+      "action": "新增",
+      "name": "角色已授权菜单查询",
+      "reason": "REQ-2026-011 role-menu-grant 切片（镜像 shared BASE；I02~I04 grants）"
+    },
+    {
+      "id": "M00.F04.I03",
+      "action": "新增",
+      "name": "整批设置角色菜单",
+      "reason": "REQ-2026-011 role-menu-grant 切片（镜像 shared BASE；I02~I04 grants）"
+    },
+    {
+      "id": "M00.F04.I04",
+      "action": "新增",
+      "name": "清空角色菜单",
+      "reason": "REQ-2026-011 role-menu-grant 切片（镜像 shared BASE；I02~I04 grants）"
+    },
+    {
+      "id": "M00.F04.I01",
+      "action": "新增",
+      "name": "权限矩阵绑定（已废弃）",
+      "reason": "REQ-2026-011 切片范围即 I02~I04；矩阵行 shared 已废弃（v0.3.0 全家族废 role_permissions），登记入废弃段 + ADR-0025 记档不实现"
+    },
+    {
+      "id": "M00.F05.I01",
+      "action": "新增",
+      "name": "列出租户应用",
+      "reason": "REQ-2026-012 tenant-application 切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F05.I02",
+      "action": "新增",
+      "name": "订阅应用",
+      "reason": "REQ-2026-012 tenant-application 切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F05.I03",
+      "action": "新增",
+      "name": "更新应用订阅",
+      "reason": "REQ-2026-012 tenant-application 切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M00.F05.I04",
+      "action": "新增",
+      "name": "移除应用订阅",
+      "reason": "REQ-2026-012 tenant-application 切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M01.F01.I01",
+      "action": "新增",
+      "name": "当前用户 whoami",
+      "reason": "REQ-2026-001 登录直进切片（镜像 shared BASE；AC-3 whoami 渲染实证）"
+    },
+    {
+      "id": "M01.F02.I01",
+      "action": "新增",
+      "name": "分配角色",
+      "reason": "REQ-2026-003 member-role-binding 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M01.F03.I01",
+      "action": "新增",
+      "name": "列出我的租户成员关系",
+      "reason": "REQ-2026-002 tenant-membership-switch 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M01.F03.I02",
+      "action": "新增",
+      "name": "切换当前租户",
+      "reason": "REQ-2026-002 tenant-membership-switch 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M01.F04.I01",
+      "action": "新增",
+      "name": "密码登录",
+      "reason": "REQ-2026-001 登录直进切片（镜像 shared BASE；LoginView + /auth/login 实证）"
+    },
+    {
+      "id": "M01.F04.I03",
+      "action": "新增",
+      "name": "密码登录 UI",
+      "reason": "REQ-2026-001 登录直进切片（镜像 shared BASE；LoginPage 实存）"
+    },
+    {
+      "id": "M01.F04.I06",
+      "action": "新增",
+      "name": "登出（本地清理 + 全局 SSO）",
+      "reason": "REQ-2026-001 登录直进切片（镜像 shared BASE；logout 清理实证）"
+    },
+    {
+      "id": "M01.F04.I07",
+      "action": "新增",
+      "name": "登出（全局 SSO，已废弃）",
+      "reason": "REQ-2026-001 切片按合并后 I06 口径实现；shared 已废弃 I07（合并到 I06），镜像登记入废弃段"
+    },
+    {
+      "id": "M04.F01.I01",
+      "action": "新增",
+      "name": "OAuth 应用列表",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE；AdminClientsViewModel trace 实证）"
+    },
+    {
+      "id": "M04.F01.I02",
+      "action": "新增",
+      "name": "创建 OAuth 应用",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F01.I03",
+      "action": "新增",
+      "name": "OAuth 应用详情",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F01.I04",
+      "action": "新增",
+      "name": "更新 OAuth 应用",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F01.I05",
+      "action": "新增",
+      "name": "删除 OAuth 应用",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F01.I06",
+      "action": "新增",
+      "name": "公共 client 元数据",
+      "reason": "REQ-2026-005 app-maintenance 切片（镜像 shared BASE；登录页应用选择）"
+    },
+    {
+      "id": "M04.F02.I01",
+      "action": "新增",
+      "name": "启用/停用应用",
+      "reason": "REQ-2026-006 client-status-toggle 切片（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F03.I01",
+      "action": "新增",
+      "name": "授权码签发",
+      "reason": "REQ-2026-004 oauth-code 切片（镜像 shared BASE canonical 行；react 同号行已废不抄）"
+    },
+    {
+      "id": "M04.F03.I02",
+      "action": "新增",
+      "name": "OIDC token 端点（双 grant）",
+      "reason": "REQ-2026-004 oauth-code 切片（镜像 shared BASE canonical 行，I02 含合并后的 refresh grant）"
+    },
+    {
+      "id": "M04.F04.I01",
+      "action": "新增",
+      "name": "菜单列表",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I02",
+      "action": "新增",
+      "name": "创建菜单",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I03",
+      "action": "新增",
+      "name": "菜单详情",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I04",
+      "action": "新增",
+      "name": "更新菜单",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I05",
+      "action": "新增",
+      "name": "删除菜单",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I06",
+      "action": "新增",
+      "name": "同级排序",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I07",
+      "action": "新增",
+      "name": "切换父级",
+      "reason": "REQ-2026-008 menu-admin 瘦身切片 GA（镜像 shared BASE）"
+    },
+    {
+      "id": "M04.F04.I08",
+      "action": "新增",
+      "name": "当前用户有效菜单",
+      "reason": "REQ-2026-008 瘦身切片非范围声明「当前用户菜单待 PLAN-2026-004 后补角」；镜像登记标规划"
     }
   ],
-  "base_sha": "8200815ae5797ef2"
+  "sync_files": []
 }

@@ -9,6 +9,9 @@ import SwiftUI
 // 先用登录快照渲染（离线可见），进页 meListMyTenants 拉真值覆盖；点选发
 // switch（换发 token 对入账），成功 whoami 重拉，失败红字保会话可重试（AC-3）。
 
+// @entry M01.F01.I01 — 当前用户 whoami 渲染入口（「当前用户」Section）
+// @entry M01.F03.I01 — 租户段成员关系列表（meListMyTenants 拉真值）入口
+
 struct AccountView: View {
     let session: AppSession
 

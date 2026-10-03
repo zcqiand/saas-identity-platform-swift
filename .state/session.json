@@ -13,7 +13,6 @@
   "next": "swift 仓无在途切片。后续新需求走正常 REQ 流；PLAN-2026-004（shared parentId nullable）落地后回来补 /me/menus 角（REQ-008 遗留）",
   "open_questions": [
     "PLAN-2026-004（shared EffectiveMenuNode.parentId nullable）仍待人裁",
-    "M00.F05 createdAt/expireTime 兄弟抽查：三真后端全清（springboot/aspnetcore/nextjs 各 6/6 绿）；fastapi/rails 未抽属 live-cap 升档人裁（台账 5.106）",
     "重复订阅同一 clientId → 400 裸 SQL 泄漏 wart 已记录 REQ-2026-012 澄清记录，未修"
   ],
   "dont": [

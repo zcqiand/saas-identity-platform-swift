@@ -48,6 +48,7 @@ public final class AdminTenantsViewModel: ObservableObject {
         self.seams = seams
     }
 
+    // @impl M00.F01.I01 — 租户列表
     /// 拉取租户全量清单（不传分页，Q1：分页 0-indexed 传 nil 全量）。
     @discardableResult
     public func load() async -> Bool {
@@ -63,6 +64,7 @@ public final class AdminTenantsViewModel: ObservableObject {
         }
     }
 
+    // @impl M00.F01.I02 — 创建租户（成功就地追加行，不重拉）
     /// 新建租户（tenantKey 重复 409，Q3）。成功追加行（不重拉）。
     @discardableResult
     public func create(_ request: CreateTenantRequest) async -> Bool {

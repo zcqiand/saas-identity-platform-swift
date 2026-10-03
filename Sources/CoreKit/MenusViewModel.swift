@@ -66,6 +66,7 @@ public final class MenusViewModel: ObservableObject {
         buildMenuTree(from: menus)
     }
 
+    // @impl M04.F04.I01 — 菜单列表（扁平清单，ch37 只读消费）
     /// Fetch the flat menu list for one client.
     @discardableResult
     public func load(clientId: String) async -> Bool {

@@ -57,6 +57,7 @@ public final class AuthViewModel: ObservableObject {
         self.seams = seams
     }
 
+    // @impl M01.F04.I01 — 密码登录（会话建立）
     /// 密码登录（AC-2）：成功 adopt 进 store（state→ready），失败保持现状报 failed。
     /// clientId 未配置 = fail-fast 不发请求（ADR-0019）。
     @discardableResult
@@ -93,6 +94,7 @@ public final class AuthViewModel: ObservableObject {
         }
     }
 
+    // @impl M01.F03.I02 — 切换当前租户
     /// 切换租户（REQ-2026-002 AC-2/AC-3）：换发 token 对 adoptSwitch 入账，
     /// 成功后 whoami 重拉反映新上下文；失败保原会话红字可重试（adoptSwitch
     /// fail-fast 在前，失败时 store 未被触碰）。

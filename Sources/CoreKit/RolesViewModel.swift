@@ -84,6 +84,7 @@ public final class RolesViewModel: ObservableObject {
         self.seams = seams
     }
 
+    // @impl M00.F03.I01 — 角色列表
     /// 进页加载（AC-1）：拉角色全量（list 不传分页参，0-indexed 同族口径）。
     @discardableResult
     public func load() async -> Bool {
@@ -104,6 +105,7 @@ public final class RolesViewModel: ObservableObject {
 
     // MARK: - M00.F03 role lifecycle (REQ-2026-010)
 
+    // @impl M00.F03.I02 — 创建角色（成功追加行）
     /// 新建角色（I02）：clientId/roleCode/roleName 必填（契约=后端口径一致，
     /// live 实证缺 clientId 400）。重名 roleCode 后端 500 空 body（REQ-010 Q1）——
     /// 红字如实呈现，不做前置重名校验。成功追加行（AC-2）。
@@ -196,6 +198,7 @@ public final class RolesViewModel: ObservableObject {
 
     // MARK: - M00.F04 role menu grants (REQ-2026-011)
 
+    // @impl M00.F04.I02 — 角色已授权菜单查询（授权聚合）
     /// 读角色授权（I02）：GET …/roles/{roleId}/menus → RoleMenuGrant 聚合。
     /// 进详情页授权段时调用；menuIds 顺序不保证（消费端 Set 语义）。
     @discardableResult
@@ -212,6 +215,7 @@ public final class RolesViewModel: ObservableObject {
         }
     }
 
+    // @impl M00.F04.I03 — 整批设置角色菜单（PUT 幂等全量替换）
     /// 保存授权（I03）：PUT 幂等全量替换，授权态以响应为准（响应顺序不保证
     /// 照存不重排——REQ-011 探针实证 readback 顺序漂移）。
     @discardableResult

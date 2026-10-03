@@ -87,6 +87,7 @@ public final class MembersViewModel: ObservableObject {
         self.seams = seams
     }
 
+    // @impl M00.F02.I01 — 成员列表（并发拉成员+角色）
     /// 进页加载（AC-1/AC-4）：并发拉成员 + 角色。currentTenantId nil =
     /// fail-fast 报「未选择租户」不发请求（Q1）；任一失败整批报红可重试。
     @discardableResult
@@ -142,6 +143,7 @@ public final class MembersViewModel: ObservableObject {
 
     // MARK: - M00.F02 member lifecycle (REQ-2026-009)
 
+    // @impl M00.F02.I02 — 创建成员（成功追加行）
     /// 新建成员（I02）。email 在契约上是 optional 但后端必填（live 400 实证，
     /// REQ-009 Q1）——必填校验归 App/UI 层，VM 按生成物形状透传。
     /// 成功追加行（AC-2）；失败红字列表不动可重试。
@@ -180,6 +182,7 @@ public final class MembersViewModel: ObservableObject {
         }
     }
 
+    // @impl M00.F02.I08 — 成员状态切换（原位替换行）
     /// 状态切换（I08，suspended/active）：成功以响应原位替换行（AC-3）。
     @discardableResult
     public func changeStatus(memberID: UUID, to status: TenantMemberStatus) async -> Bool {

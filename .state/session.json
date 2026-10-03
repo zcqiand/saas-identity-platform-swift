@@ -1,8 +1,9 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-012 GA 完成（e69c771，免批 8200815a）：M00.F05 已上线，swift 仓 15 F 全上线收口；功能树清零待办",
+  "current_task": "REQ-2026-012 GA 完成 + 2026-10-03 dup 泄漏家族批收口（swift 侧 wart 记录翻已修）；swift 仓无在途切片",
   "done": [
+    "2026-10-03 家族批：REQ-2026-012 澄清记录 dup 400 裸 SQL 泄漏 wart 翻已修——springboot f496ebb / fastapi d37f598 / rails b6d3288 各自 dup 预检 → 400 clean message；fastapi d37f598 + rails b6d3288 同批 expireTime 落库追平 01704a2；CT ee0468f 同批断言（回读 + dup clean）",
     "GA：人工验收通过（2026-10-03 AC-1~3 手测 + AC-4~6 门禁兜底）→ mirror 免批 → M00.F05 开发中→已上线；REQ 验收记录 + 台账 + 设计映射同步翻转；门禁全绿后 push + gitlink 40c2195",
     "T-0 4950d60：M00.F05 规划→开发中（mirror 免批 ca23c2b2）；REQ-2026-012 落盘 + 台账 + design-function-map 行；契约 SSOT=shared tenant-applications.tsp 4 端点，shared 零改动",
     "后端两 wart 探针实证并修（springboot 01704a2）：toDto 漏 setCreatedAt → wire createdAt 恒 null（契约 REQUIRED，swift 生成物非可选 Date 整个 list 炸）；subscribe 从未读 expireTime → 到期日静默丢弃。CT I74/I75 同批强化 not.toBeNull()（f6e4198），live 2-way（springboot+aspnetcore）6/6 绿；aspnetcore 抽查无同款病",
@@ -13,7 +14,7 @@
   "next": "swift 仓无在途切片。后续新需求走正常 REQ 流；PLAN-2026-004（shared parentId nullable）落地后回来补 /me/menus 角（REQ-008 遗留）",
   "open_questions": [
     "PLAN-2026-004（shared EffectiveMenuNode.parentId nullable）仍待人裁",
-    "重复订阅同一 clientId → 400 裸 SQL 泄漏 wart 已记录 REQ-2026-012 澄清记录，未修"
+    "dup 订阅分叉待人裁：nextjs 409 CONFLICT vs 其余后端 400（CT 断言按仓分叉放行，家族对齐方向未定）"
   ],
   "dont": [
     "长 CJK 文件别整篇 Write——散点损坏两连（VM 源码两轮），成功路径=小块 Write + heredoc 追加 + 每步 grep 校验",

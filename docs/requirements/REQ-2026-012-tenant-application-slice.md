@@ -35,7 +35,9 @@ Swift 侧消费租户应用订阅的 4 个端点，API 面全部来自 shared �
   - 种子行 `2026-01-15T08:00:00Z`（T 分隔零分数）
   - 新订阅 `2026-10-02T23:34:52.7575796+08:00`（7 位分数 + 冒号偏移）
   - patch 回读 `2026-10-02T15:34:52.75758Z`（5 位尾零截断 UTC）
-- 探针 wart（记录不修）：重复订阅同一 clientId → 400 带裸 SQL dup-key 泄漏。
+- 探针 wart（已修，2026-10-03 家族批）：重复订阅 → 各后端 dup 预检 clean 400（springboot 原裸
+  SQL 泄漏；fastapi/rails subscribe expireTime 陈旧镜像同批追平 springboot 01704a2）。CT I75
+  同批强化 expireTime 回读 + dup 去泄漏断言；nextjs 409 与其余 400 的分叉登记待人裁。
 
 ## 3. 验收标准
 

@@ -1,37 +1,24 @@
 {
   "schema": 1,
   "project": "saas-identity-platform-swift",
-  "current_task": "REQ-2026-007 租户维护切片 GA 已上线（9b55c5f，2026-10-01 人工验收 AC-1~6 通过）；13 F 已上线 10，剩 M04.F04 + M00.F02~F05",
+  "current_task": "REQ-2026-012 GA 完成（e69c771，免批 8200815a）：M00.F05 已上线，swift 仓 15 F 全上线收口；功能树清零待办",
   "done": [
-    "REQ-2026-006 应用启用/停用切片 GA 已上线（fc782b8，2026-09-30 人工验收 AC-1~5 通过；M04.F02 收口）",
-    "REQ-2026-007 T-0 eb31429：mirror 免批（f536d038）M00.F01 规划→开发中；live 探针钉死契约（寻址 UUID id 与 admin/clients 的 clientId 字符串口径相反、TenantStatus 字符串枚举 active/suspended 与 OAuthClient 的 Int 两套口径、tenantKey 重复 409、DELETE 204 空 body、分页 0-indexed 传 nil 全量）；REQ-007 落盘",
-    "T-1 bbcb284：红先行 → AdminTenantsViewModel 四缝 + 7 测试挂 M00.F01；55 tests 0 failures",
-    "T-2 a7239f7：APIGlue 四缝走生成物（listTenants 撞 M01.F03 名改 listAllTenants，Foundation import 补课）+ TenantsAdminView/TenantEditView/TenantCreateView + AccountView 平台管理段入口与租户名富化（403 降级 UUID，清掉在册遗留）；7 门全绿；gitlink b90b081",
-    "GA 9b55c5f：免批通道 --apply（令牌 e3afa323，凭 REQ-007 T-2 行验收记录 2026-10-01）→ M00.F01 已上线；L5 复验绿"
+    "GA：人工验收通过（2026-10-03 AC-1~3 手测 + AC-4~6 门禁兜底）→ mirror 免批 → M00.F05 开发中→已上线；REQ 验收记录 + 台账 + 设计映射同步翻转；门禁全绿后 push + gitlink 40c2195",
+    "T-0 4950d60：M00.F05 规划→开发中（mirror 免批 ca23c2b2）；REQ-2026-012 落盘 + 台账 + design-function-map 行；契约 SSOT=shared tenant-applications.tsp 4 端点，shared 零改动",
+    "后端两 wart 探针实证并修（springboot 01704a2）：toDto 漏 setCreatedAt → wire createdAt 恒 null（契约 REQUIRED，swift 生成物非可选 Date 整个 list 炸）；subscribe 从未读 expireTime → 到期日静默丢弃。CT I74/I75 同批强化 not.toBeNull()（f6e4198），live 2-way（springboot+aspnetcore）6/6 绿；aspnetcore 抽查无同款病",
+    "T-1 fa5605f：TenantApplicationsViewModel 四缝（list/subscribe/update/remove，clientId 字符串寻址）红先行（红 36 error → 绿 100 tests 0 failures）；FamilyDateFormatter 补 isoNoFraction（T 分隔零分数形态 2026-01-15T08:00:00Z 此前全链咬不住）+ 3 测试",
+    "T-2 bef8e8d：APIGlue 四缝（TenantApplicationsAPI 生成物）+ TenantApplicationsAdminView（列表/订阅 sheet/详情启停改期移除）+ AccountView 入口；远门 build+test 双绿 + suite 门禁全绿",
+    "家族 gen-shared marker 追平 shared 57fd8c3（5 仓重跑 gen-shared，tsp 零 diff 纯 marker）——治 CT L2 §3 全家红；suite gitlink 1f32b1f 推进 7 仓"
   ],
-  "next": "等下一个需求：候选 M04.F04 菜单管理（在册坑：/me/menus 根 parentId=null、名称字段 title 非 name）、M00.F02 租户成员、M00.F03 租户角色、M00.F04 角色权限、M00.F05 租户应用；T-0 与 GA 走 --apply 免批，仍需：REQ 提案 + 人工验收「通过」；另待人裁：bob 对 admin 接口也 200",
+  "next": "swift 仓无在途切片。后续新需求走正常 REQ 流；PLAN-2026-004（shared parentId nullable）落地后回来补 /me/menus 角（REQ-008 遗留）",
   "open_questions": [
-    "租户名富化（UI 显示 tenantId UUID；拉 admin/tenants 富化留后续 REQ）",
-    "simulator xcodebuild test 段（lab swift 同款机器态问题）是否排查恢复",
-    "shared .harness/family-env.json 有一行非本会话的 rails 改动，未提交（非本人工作树，不动待人裁）"
+    "PLAN-2026-004（shared EffectiveMenuNode.parentId nullable）仍待人裁",
+    "M00.F05 createdAt/expireTime 兄弟抽查：三真后端全清（springboot/aspnetcore/nextjs 各 6/6 绿）；fastapi/rails 未抽属 live-cap 升档人裁（台账 5.106）",
+    "重复订阅同一 clientId → 400 裸 SQL 泄漏 wart 已记录 REQ-2026-012 澄清记录，未修"
   ],
   "dont": [
-    "不要改 .harness/stack.json 让门变松",
-    "不要给 skip 的测试挂功能 ID",
-    "gate.py 必须绝对路径从任意 cwd 跑（scripts/ 相对路径连红 4 次的在册教训）；remote_gate.py 在项目仓 scripts/ 下不是 suite scripts/",
-    "home-mac 同一构建目录禁并发：gate.py 与 remote_gate.py 同时跑会撞 build.db 锁（database is locked）——串行跑",
-    "本机 push 别带 GIT_CONFIG_GLOBAL=/dev/null envfix（那是构建机 SPM 专用，本机会屏蔽凭据 helper → could not read Username）",
-    "saas 契约形状与 lab 不同：LoginResponse.user 是 SysUser、token 字段 accessToken、登录必带 clientId、meSwitchTenant 的 tenantId 是 String 非 UUID、SwitchTenantResponse 四字段全非可选（accessToken 空串才是 fail-fast 面）——别照抄 lab",
-    "saas 后端探活别打 /api/v1/health（404）；打 / 或 POST /api/v1/auth/login",
-    "Seams 抛错缺省闭包体必须写 _ in（{ throw ... } 缺参名 = 'cannot be implicitly ignored' 编译红，2026-09-30 踩过）",
-    "REQ 文档别写 I 级子项 ID 字面（M01.F02.I01 类）——本仓功能树不拆 I 级，L5 直接悬空引用红；溯源描述用「对应 shared 同编号 F 的子项」措辞",
-    "App 层新文件直接引用生成物类型（TenantMemberUserView 类）必须 import SaasSharedGenerated——swift test 只编 CoreKit 不报，xcodebuild App target 才炸（2026-09-30 实证）",
-    "git commit -F 复用旧 msg 文件会张冠李戴（36890e7 曾误挂 REQ-001 收口词）——每 commit 新建 msg 文件",
-    "OAuthViewModel 测试造「ready 但无 refresh token」场景别拿未登录 store 调 adoptOAuthToken 造前置（撞 fail-fast 抛错）——makeStore 加 withRefresh: false 走 adoptLogin 缺省 refreshToken 参数",
-    "oauth authorize 的 scope 后端必填（生成模型 optional 是契约 requiredMode 滞后）——请求侧恒传 scope 不依赖缺省；token 免 clientSecret（公共 client）",
-    "admin/clients 分页是 0-indexed：page=1 是第二页（page=1&pageSize=20 返 0 条假空）——App 侧 list 不传分页参（nil 全量），别照 web 仓 1-based 习惯传 page=1",
-    "OAuthClient 的 redirectUris/grantTypes/scopes 是 String 逗号串（DB 形态直出非数组）——UI 原样透传编辑，不发明数组转换层；create 的 clientSecret 必填录入，模型无 secret 字段（详情天然不返明文）",
-    "tree_change.py 在 suite scripts/ 不在项目 scripts/——从 suite 根跑（项目目录跑会 file not found）"
-  ],
-  "last_gate_passed_at": "2026-09-30T20:40:00+08:00"
+    "长 CJK 文件别整篇 Write——散点损坏两连（VM 源码两轮），成功路径=小块 Write + heredoc 追加 + 每步 grep 校验",
+    "CT live 声明的 target 必须可达（5107 down 全 run 报废）；本机常态只起 springboot+一个兄弟",
+    "aspnetcore gen-shared 前必须停 5104（dotnet run 锁 bin）；本会话已停，5105 springboot 仍活着供验收手测"
+  ]
 }

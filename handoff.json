@@ -1,0 +1,580 @@
+{
+  "_schema": "code-suite-handoff v1",
+  "_note": "写书的事实底，非逐字引用源。book 引用该 tag 的终态文件(带 source=)；此清单供作者对账建造顺序。",
+  "project": "saas-identity-platform-swift",
+  "tag": "v0.1.2-20261004",
+  "stack": "swift",
+  "gate_proof": {
+    "tag": "v0.1.2-20261004",
+    "checked_at": "2026-10-03T18:52:06+00:00",
+    "verified": true,
+    "all_green": true,
+    "method": "gate.py --all",
+    "gate_command": "D:\\qiand-life\\1-projects\\xr-code-suite\\scripts\\gate.py -p saas-identity-platform-swift"
+  },
+  "function_tree": [
+    {
+      "fn_id": "M00.F01.I01",
+      "name": "租户列表",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F01.I02",
+      "name": "创建租户",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F01.I03",
+      "name": "租户详情",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F01.I04",
+      "name": "更新租户",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F01.I05",
+      "name": "删除租户",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I01",
+      "name": "成员列表",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I02",
+      "name": "创建成员",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I03",
+      "name": "成员详情",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I04",
+      "name": "更新成员",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I05",
+      "name": "删除成员",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I06",
+      "name": "邀请成员",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F02.I07",
+      "name": "接受邀请",
+      "type": "接口",
+      "status": "规划"
+    },
+    {
+      "fn_id": "M00.F02.I08",
+      "name": "状态切换",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F03.I01",
+      "name": "角色列表",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F03.I02",
+      "name": "创建角色",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F03.I03",
+      "name": "角色详情",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F03.I04",
+      "name": "更新角色",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F03.I05",
+      "name": "删除角色",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F04.I01",
+      "name": "~~权限矩阵绑定~~",
+      "type": null,
+      "status": "已废弃"
+    },
+    {
+      "fn_id": "M00.F04.I02",
+      "name": "角色已授权菜单查询",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F04.I03",
+      "name": "整批设置角色菜单",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F04.I04",
+      "name": "清空角色菜单",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F05.I01",
+      "name": "列出租户应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F05.I02",
+      "name": "订阅应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F05.I03",
+      "name": "更新应用订阅",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M00.F05.I04",
+      "name": "移除应用订阅",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F01.I01",
+      "name": "当前用户 whoami",
+      "type": "查询",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F02.I01",
+      "name": "分配角色",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F03.I01",
+      "name": "列出我的租户成员关系",
+      "type": "查询",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F03.I02",
+      "name": "切换当前租户",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F04.I01",
+      "name": "密码登录",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F04.I03",
+      "name": "密码登录 UI",
+      "type": "页面",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F04.I06",
+      "name": "登出（本地清理 + 全局 SSO）",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M01.F04.I07",
+      "name": "~~登出（全局 SSO）~~",
+      "type": null,
+      "status": "已废弃"
+    },
+    {
+      "fn_id": "M04.F01.I01",
+      "name": "OAuth 应用列表",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F01.I02",
+      "name": "创建 OAuth 应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F01.I03",
+      "name": "OAuth 应用详情",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F01.I04",
+      "name": "更新 OAuth 应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F01.I05",
+      "name": "删除 OAuth 应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F01.I06",
+      "name": "公共 client 元数据",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F02.I01",
+      "name": "启用/停用应用",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F03.I01",
+      "name": "授权码签发",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F03.I02",
+      "name": "OIDC token 端点（双 grant）",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I01",
+      "name": "菜单列表",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I02",
+      "name": "创建菜单",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I03",
+      "name": "菜单详情",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I04",
+      "name": "更新菜单",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I05",
+      "name": "删除菜单",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I06",
+      "name": "同级排序",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I07",
+      "name": "切换父级",
+      "type": "接口",
+      "status": "已上线"
+    },
+    {
+      "fn_id": "M04.F04.I08",
+      "name": "当前用户有效菜单",
+      "type": "查询",
+      "status": "规划"
+    }
+  ],
+  "trace": [
+    {
+      "fn_id": "M00.F01",
+      "tests": [
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testLoadPopulatesTenantsWithoutPaging",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testLoadFailureKeepsEmptyAndRetryable",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testCreateAppendsRowInPlaceWithoutReload",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testCreateConflictKeepsListAndRetryable",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testUpdateStatusUsesStringEnum",
+        "Tests/CoreKitTests/AdminTenantsViewModelTests.swift::AdminTenantsViewModelTests.testDeleteRemovesRowInPlace"
+      ]
+    },
+    {
+      "fn_id": "M00.F02",
+      "tests": [
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesTwoDigitFraction",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesSixDigitFraction",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testDecodeMemberViewWithSixDigitFractionSucceeds",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testCreateAppendsRowToList",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testChangeStatusReplacesRowBothWays",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testRemoveDeletesRowWithoutResponseBody",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testInviteMapsNestedViewToFlatRow",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testRefreshReplacesRowWithAuthoritativeState",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testLifecycleOpsWithoutTenantFailFast"
+      ]
+    },
+    {
+      "fn_id": "M00.F03",
+      "tests": [
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testLoadPopulatesRoles",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testCreateAppendsRowToList",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testSetStatusReplacesRowBothWays",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testRemoveDeletesRowWithoutResponseBody",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testRefreshReplacesRowWithAuthoritativeState",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testLifecycleOpsWithoutTenantFailFast"
+      ]
+    },
+    {
+      "fn_id": "M00.F04",
+      "tests": [
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testLoadGrantsPopulatesGrantAggregates",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testSaveGrantsSendsFullReplacementAndKeepsResponse",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testClearGrantsEmptiesGrantInPlace",
+        "Tests/CoreKitTests/RolesViewModelTests.swift::RolesViewModelTests.testGrantOpsWithoutTenantFailFast"
+      ]
+    },
+    {
+      "fn_id": "M00.F05",
+      "tests": [
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesISOZeroFraction",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesSevenDigitFractionWithColonOffset",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testDecodeTenantApplicationWithZeroFractionCreatedAtSucceeds",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testLoadPopulatesApplications",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testSubscribeAppendsRowAndCarriesExpireTime",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testSubscribeWithoutExpireTimeSendsNil",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testRemoveDeletesRowByClientId",
+        "Tests/CoreKitTests/TenantApplicationsViewModelTests.swift::TenantApplicationsViewModelTests.testLifecycleOpsWithoutTenantFailFast"
+      ]
+    },
+    {
+      "fn_id": "M01.F01",
+      "tests": [
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testWhoamiPublishesCurrentUser",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testWhoami401SurfacesFailureForIntercept",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptLoginSnapshotRoundTripSurvivesRebirth"
+      ]
+    },
+    {
+      "fn_id": "M01.F02",
+      "tests": [
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testLoadWithoutCurrentTenantFailsFastAndNeverCallsSeams",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testLoadSuccessPopulatesMembersAndRoles",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testAssignSuccessReplacesRowWithAuthoritativeReadBack",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testAssign403FailureKeepsListAndReportsRetryable",
+        "Tests/CoreKitTests/MembersViewModelTests.swift::MembersViewModelTests.testLoadNetworkFailureKeepsStateAndReports"
+      ]
+    },
+    {
+      "fn_id": "M01.F03",
+      "tests": [
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testSwitchTenantSuccessAdoptsAndRepullsWhoami",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testSwitchTenantFailureKeepsSessionAndReports",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testListTenantsRefreshesStoreAndFailureKeepsOldList",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptSwitchSwapsTokenPairAndCurrentTenantSurvivesRebirth",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptSwitchMissingAccessTokenFailsFastKeepsOldSession",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptSwitchWithoutSessionRejected",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testRefreshTenantsUpdatesListAndSnapshotSurvivesRebirth"
+      ]
+    },
+    {
+      "fn_id": "M01.F04",
+      "tests": [
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testLoginWithoutConfigFailsFastAndNeverCallsSeam",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testLoginSuccessAdoptsIntoStore",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testLoginFailureReportsAndKeepsStoreUntouched",
+        "Tests/CoreKitTests/AuthViewModelTests.swift::AuthViewModelTests.testLogoutClearsStoreEvenWhenServerCallFails",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testSaveConfigValidatesFailFastThenNeedsLogin",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptLoginPersistsSecretsAndReadiesAcrossRebirth",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testAdoptLoginMissingAccessTokenFailsFast",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testLogoutClearsSecretsKeepsConfigAndSurvivesRebirth",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testClearWipesEverythingBackToNeedsSetup",
+        "Tests/CoreKitTests/SessionStoreTests.swift::SessionStoreTests.testExpirePathEqualsLogoutSemanticsOnRebirth"
+      ]
+    },
+    {
+      "fn_id": "M04.F01",
+      "tests": [
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testLoadPopulatesClientsWithoutPaging",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testLoadFailureKeepsEmptyAndRetryable",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testCreateAppendsRowInPlaceWithoutReload",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testCreateFailureKeepsListAndRetryable",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testUpdateFailureKeepsRowAndReports",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testDeleteRemovesRowInPlace",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testDeleteFailureKeepsRowAndRetryable"
+      ]
+    },
+    {
+      "fn_id": "M04.F02",
+      "tests": [
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testSetStatusDisableReplacesRowInPlaceWithoutReload",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testSetStatusEnablePassesOneAndReplacesRow",
+        "Tests/CoreKitTests/AdminClientsViewModelTests.swift::AdminClientsViewModelTests.testSetStatusFailureKeepsRowAndRetryable"
+      ]
+    },
+    {
+      "fn_id": "M04.F03",
+      "tests": [
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testAdoptOAuthTokenSwapsPairAlignsTenantAndExpiresAt",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testAdoptOAuthTokenRejectsWhenNotReady",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testAdoptOAuthTokenRejectsEmptyAccessTokenAndKeepsOldPair",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testAuthorizeSuccessRecordsCodeAndEchoedState",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testAuthorizeStateMismatchFailsFastAndDropsCode",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testExchangeSuccessAdoptsTokenPair",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testExchangeFailureKeepsSessionIntactAndRetryable",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testExchangeWithoutCodeFailsFastNeverCallsSeam",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testRefreshRotatesTokenPair",
+        "Tests/CoreKitTests/OAuthViewModelTests.swift::OAuthViewModelTests.testRefreshWithoutRefreshTokenFailsFastNeverCallsSeam"
+      ]
+    },
+    {
+      "fn_id": "M04.F04",
+      "tests": [
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesSpaceSeparatedMillisWithBareOffset",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesSpaceSeparatedPlainWithBareOffset",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testParsesGeneratedISOFallback",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testEncodeStaysISO",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testSysMenuDecodeWithSpaceDateSucceeds",
+        "Tests/CoreKitTests/FamilyDateFormatterTests.swift::FamilyDateFormatterTests.testTenantDecodeWithSpaceDateSucceeds",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testLoadPopulatesMenusAndBuildsTree",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testLoadFailureKeepsEmptyAndRetryable",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testCreateAppendsRowAndTreesUnderParent",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testUpdateReplacesRowInPlace",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testMoveReplacesRowParentId",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testMoveToRootSendsNilAndUnnests",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testReorderReassignsSiblingSortOrderLocally",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testDeleteRemovesRow",
+        "Tests/CoreKitTests/MenusViewModelTests.swift::MenusViewModelTests.testOpWithoutClientFailsFast"
+      ]
+    }
+  ],
+  "source_index": [
+    {
+      "fn_id": "M00.F01.I01",
+      "source_paths": [
+        "Sources\\CoreKit\\AdminTenantsViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F01.I02",
+      "source_paths": [
+        "Sources\\CoreKit\\AdminTenantsViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F02.I01",
+      "source_paths": [
+        "Sources\\CoreKit\\MembersViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F02.I02",
+      "source_paths": [
+        "Sources\\CoreKit\\MembersViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F02.I08",
+      "source_paths": [
+        "Sources\\CoreKit\\MembersViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F03.I01",
+      "source_paths": [
+        "Sources\\CoreKit\\RolesViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F03.I02",
+      "source_paths": [
+        "Sources\\CoreKit\\RolesViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F04.I02",
+      "source_paths": [
+        "Sources\\CoreKit\\RolesViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M00.F04.I03",
+      "source_paths": [
+        "Sources\\CoreKit\\RolesViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M01.F01.I01",
+      "source_paths": [
+        "Sources\\App\\AccountView.swift"
+      ]
+    },
+    {
+      "fn_id": "M01.F03.I01",
+      "source_paths": [
+        "Sources\\App\\AccountView.swift"
+      ]
+    },
+    {
+      "fn_id": "M01.F03.I02",
+      "source_paths": [
+        "Sources\\CoreKit\\AuthViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M01.F04.I01",
+      "source_paths": [
+        "Sources\\CoreKit\\AuthViewModel.swift"
+      ]
+    },
+    {
+      "fn_id": "M01.F04.I03",
+      "source_paths": [
+        "Sources\\App\\LoginView.swift"
+      ]
+    },
+    {
+      "fn_id": "M04.F04.I01",
+      "source_paths": [
+        "Sources\\CoreKit\\MenusViewModel.swift"
+      ]
+    }
+  ]
+}

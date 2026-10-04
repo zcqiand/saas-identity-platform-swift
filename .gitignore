@@ -13,3 +13,12 @@
 xcuserdata/
 DerivedData/
 Package.resolved
+.state/msg-*.txt
+.state/remote-*.log
+
+# 2026-10-04 补齐：env 泄漏纪律三件套 + .state 全部运行态日志 + tree-change 提案工具副本
+.env
+.env.local
+.env.*.local
+.state/*.log
+.state/tree_change.proposed.py

@@ -459,7 +459,7 @@
         "output\\saas-identity-platform-contract-test\\tests\\path.test.ts:1117 (path)"
       ],
       "entry": [
-        "Sources\\App\\AccountView.swift"
+        "Sources/App/AccountView.swift"
       ]
     },
     "M01.F02.I01": {
@@ -484,7 +484,7 @@
         "output\\saas-identity-platform-contract-test\\tests\\me-tenants.test.ts:579 (path)"
       ],
       "entry": [
-        "Sources\\App\\AccountView.swift"
+        "Sources/App/AccountView.swift"
       ]
     },
     "M01.F03.I02": {
@@ -523,7 +523,7 @@
       "designs": [],
       "tests": [],
       "entry": [
-        "Sources\\App\\LoginView.swift"
+        "Sources/App/LoginView.swift"
       ]
     },
     "M01.F04.I06": {

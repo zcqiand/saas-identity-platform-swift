@@ -35,6 +35,9 @@ STAGING_ROOT = "swift-builds"  # 构建机上的 staging 根目录：~/swift-bui
 EXCLUDE_PREFIXES = ("./.git", "./.build")
 XCODEPROJ = "SaaSIdentityPlatform.xcodeproj"
 APP_SCHEME = "SaaSIdentity"  # App target（REQ-2026-001 Q2 命名）
+# 模拟器安装冒烟设备（L4 附加段，2026-10-12 人裁回填，lab swift 同款）。
+# xcodebuild test runner 有机器态 3 连红前科，冒烟只做 build→install→launch，不碰 test runner。
+SMOKE_DEVICE = "iPhone 16"
 
 
 def _sync(root: Path, staging: str) -> None:
@@ -45,9 +48,7 @@ def _sync(root: Path, staging: str) -> None:
             tar.add(
                 root,
                 arcname=".",
-                filter=lambda ti: None
-                if ti.name.startswith(EXCLUDE_PREFIXES)
-                else ti,
+                filter=lambda ti: None if ti.name.startswith(EXCLUDE_PREFIXES) else ti,
             )
         subprocess.run(
             ["ssh", "-o", "BatchMode=yes", HOST, f"mkdir -p ~/{staging}"],
@@ -99,6 +100,27 @@ def main() -> int:
         #     -scheme CoreKit -destination 'platform=iOS Simulator,name=iPhone 16' \
         #     CODE_SIGNING_ALLOWED=NO test
         steps = [(f"cd ~/{staging} && {envfix} swift test", "swift test")]
+        # 安装冒烟段（2026-10-12 人裁回填，lab swift 同款）：残废产物（缺 Info.plist /
+        # 绝对 install name / 错 runpath / 二层框架没嵌，XcodeGen 坑 5-8）在 swift build
+        # 甚至 generic xcodebuild 里全绿，只有装进模拟器启动才炸——此处收口。
+        # 只验可装可启，不跑 test runner；红在本段多为构建机模拟器态问题，
+        # 按 exit 2 语义停下问人，勿盲改代码。
+        steps.append(
+            (
+                f"cd ~/{staging} && ~/tools/xcodegen generate && "
+                f"{envfix} xcodebuild -project {XCODEPROJ} -scheme {APP_SCHEME} "
+                f"-destination 'platform=iOS Simulator,name={SMOKE_DEVICE}' "
+                f"CODE_SIGNING_ALLOWED=NO -derivedDataPath .dd-sim build && "
+                f"SIM_APP=$(ls .dd-sim/Build/Products/Debug-iphonesimulator/*.app | head -1) && "
+                f'BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" '
+                f'"$SIM_APP/Info.plist") && '
+                f"xcrun simctl bootstatus -b {SMOKE_DEVICE} && "
+                f'xcrun simctl install {SMOKE_DEVICE} "$SIM_APP" && '
+                f'xcrun simctl launch {SMOKE_DEVICE} "$BUNDLE_ID" && '
+                f'xcrun simctl terminate {SMOKE_DEVICE} "$BUNDLE_ID"',
+                "模拟器安装冒烟（build→install→launch，XcodeGen 坑 5-8 收口）",
+            )
+        )
     for cmd, label in steps:
         result = subprocess.run(["ssh", "-o", "BatchMode=yes", HOST, cmd])
         if result.returncode != 0:

@@ -14,7 +14,7 @@ public struct EffectiveMenuNode: Codable, JSONEncodable, Hashable {
 
     public var id: UUID
     public var clientId: String
-    public var parentId: UUID
+    public var parentId: UUID?
     public var title: String
     public var type: SysMenuType
     public var path: String?
@@ -24,7 +24,7 @@ public struct EffectiveMenuNode: Codable, JSONEncodable, Hashable {
     public var sortOrder: Int
     public var children: [EffectiveMenuNode]
 
-    public init(id: UUID, clientId: String, parentId: UUID, title: String, type: SysMenuType, path: String? = nil, component: String? = nil, perms: String? = nil, icon: String? = nil, sortOrder: Int, children: [EffectiveMenuNode]) {
+    public init(id: UUID, clientId: String, parentId: UUID?, title: String, type: SysMenuType, path: String? = nil, component: String? = nil, perms: String? = nil, icon: String? = nil, sortOrder: Int, children: [EffectiveMenuNode]) {
         self.id = id
         self.clientId = clientId
         self.parentId = parentId

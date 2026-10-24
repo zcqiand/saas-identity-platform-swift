@@ -35,6 +35,22 @@ git push && ssh home-mac "git -C <仓路径> pull && swift build && swift test"
 - 范围：M00/M01/M04 三模块 13 F；M/F 编号沿用 react 仓功能树（同 shared BASE 双账本），便于跨仓对照。
 - UI/交互参照：`../saas-identity-platform-react`（参照实现，非基线）。
 
+## 配套书籍及章节映射
+
+> 同一案例仓后续接入其他书籍时，在此节下新增书籍小节。
+
+### 书一《Swift从入门到项目实践》（第二部分）
+
+- 书稿定位：xr-know-013，第 34、35、36、37 章正文代码块挂本仓 `source=` 锚点
+- 配套版本：`v0.1.2-20261004`（registry 冻结 tag，代码以此为准）
+
+| 章 | 章题 | 对应源文件 |
+| :--- | :--- | :--- |
+| 34 | 登录、会话与并发安全：密码登录、whoami 与重启恢复 | `Sources/App/LoginView.swift` + `Sources/CoreKit/AuthViewModel.swift` + `Sources/App/AccountView.swift` |
+| 35 | 多页面架构与导航体系：TabView、NavigationStack 与租户切换 | `Sources/App/AccountView.swift` + `Sources/CoreKit/AuthViewModel.swift` |
+| 36 | 组织管理实战：租户与成员模块的 CRUD | `Sources/CoreKit/AdminTenantsViewModel.swift` + `Sources/CoreKit/MembersViewModel.swift` |
+| 37 | 角色与授权矩阵：复杂表单与批量授权 | `Sources/CoreKit/RolesViewModel.swift` + `Sources/CoreKit/MenusViewModel.swift` |
+
 ## 快速链接
 
 - [CLAUDE.md](CLAUDE.md) — 开发约定与编码规范

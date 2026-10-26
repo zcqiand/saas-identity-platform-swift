@@ -6,17 +6,17 @@
   "passed": true,
   "partial": true,
   "ran": [
-    "L0"
+    "L4"
   ],
-  "checked_at": "2026-10-26T18:06:18+0800",
+  "checked_at": "2026-10-27T00:15:50+0800",
   "gates": [
     {
-      "level": "L0",
-      "name": "结构完整性",
+      "level": "L4",
+      "name": "测试（home-mac 远程）",
       "passed": true,
       "returncode": 0,
-      "duration_s": 0.125,
-      "output": ""
+      "duration_s": 599.688,
+      "output": "Test Suite 'All tests' started at 2026-10-27 00:07:41.300.\nTest Suite 'SaaSIdentityPlatformPackageTests.xctest' started at 2026-10-27 00:07:41.310.\nTest Suite 'AdminClientsViewModelTests' started at 2026-10-27 00:07:41.311.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testCreateAppendsRowInPlaceWithoutReload]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testCreateAppendsRowInPlaceWithoutReload]' passed (0.016 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testCreateFailureKeepsListAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testCreateFailureKeepsListAndRetryable]' passed (0.009 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testDeleteFailureKeepsRowAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testDeleteFailureKeepsRowAndRetryable]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testDeleteRemovesRowInPlace]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testDeleteRemovesRowInPlace]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testLoadFailureKeepsEmptyAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testLoadFailureKeepsEmptyAndRetryable]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testLoadPopulatesClientsWithoutPaging]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testLoadPopulatesClientsWithoutPaging]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusDisableReplacesRowInPlaceWithoutReload]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusDisableReplacesRowInPlaceWithoutReload]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusEnablePassesOneAndReplacesRow]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusEnablePassesOneAndReplacesRow]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusFailureKeepsRowAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testSetStatusFailureKeepsRowAndRetryable]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testUpdateFailureKeepsRowAndReports]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testUpdateFailureKeepsRowAndReports]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testUpdateReplacesRowInPlace]' started.\nTest Case '-[CoreKitTests.AdminClientsViewModelTests testUpdateReplacesRowInPlace]' passed (0.002 seconds).\nTest Suite 'AdminClientsViewModelTests' passed at 2026-10-27 00:07:41.356.\n\t Executed 11 tests, with 0 failures (0 unexpected) in 0.042 (0.045) seconds\nTest Suite 'AdminTenantsViewModelTests' started at 2026-10-27 00:07:41.356.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testCreateAppendsRowInPlaceWithoutReload]' started.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testCreateAppendsRowInPlaceWithoutReload]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testCreateConflictKeepsListAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testCreateConflictKeepsListAndRetryable]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testDeleteRemovesRowInPlace]' started.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testDeleteRemovesRowInPlace]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testLoadFailureKeepsEmptyAndRetryable]' started.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testLoadFailureKeepsEmptyAndRetryable]' passed (0.001 seconds).\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testLoadPopulatesTenantsWithoutPaging]' started.\nTest Case '-[CoreKitTests.AdminTenantsViewModelTests testLoadPopulatesTenantsWithoutPaging]' passed (0.002 seconds).\nTest Case '-[CoreKitTests.AdminTenantsViewMo"
     }
   ]
 }

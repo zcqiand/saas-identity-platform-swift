@@ -111,13 +111,20 @@ def main() -> int:
                 f"{envfix} xcodebuild -project {XCODEPROJ} -scheme {APP_SCHEME} "
                 f"-destination 'platform=iOS Simulator,name={SMOKE_DEVICE}' "
                 f"CODE_SIGNING_ALLOWED=NO -derivedDataPath .dd-sim build && "
-                f"SIM_APP=$(ls .dd-sim/Build/Products/Debug-iphonesimulator/*.app | head -1) && "
+                # 2026-10-26 指纹：ls 不带 -d 对单个 .app 目录会列出目录内容，
+                # head -1 拿到的是 Frameworks（app 内字母序第一项）而非 app 路径
+                # ——PlistBuddy 读 Frameworks/Info.plist 报「Print: Entry,
+                # CFBundleIdentifier, Does Not Exist」，此前被误诊为机器态。
+                f"SIM_APP=$(ls -d .dd-sim/Build/Products/Debug-iphonesimulator/*.app | head -1) && "
                 f'BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" '
                 f'"$SIM_APP/Info.plist") && '
-                f"xcrun simctl bootstatus -b {SMOKE_DEVICE} && "
-                f'xcrun simctl install {SMOKE_DEVICE} "$SIM_APP" && '
-                f'xcrun simctl launch {SMOKE_DEVICE} "$BUNDLE_ID" && '
-                f'xcrun simctl terminate {SMOKE_DEVICE} "$BUNDLE_ID"',
+                # bootstatus 语法是 <设备> [-b]，-b 放设备前报 Invalid device: -b；
+                # 设备名「iPhone 16」含空格，simctl 侧必须带引号（漏引报
+                # Invalid device: iPhone，只吃到 iPhone 一个词）。
+                f"xcrun simctl bootstatus '{SMOKE_DEVICE}' -b && "
+                f"xcrun simctl install '{SMOKE_DEVICE}' \"$SIM_APP\" && "
+                f"xcrun simctl launch '{SMOKE_DEVICE}' \"$BUNDLE_ID\" && "
+                f"xcrun simctl terminate '{SMOKE_DEVICE}' \"$BUNDLE_ID\"",
                 "模拟器安装冒烟（build→install→launch，XcodeGen 坑 5-8 收口）",
             )
         )

@@ -13,7 +13,9 @@ import AnyCodable
 public struct TenantMembersListTenantUsers200Response: Codable, JSONEncodable, Hashable {
 
     public var items: [TenantMemberUserView]
+    /** 页码，0 基（Spring Data Pageable）：首页 page=0。 */
     public var page: Int
+    /** 每页条数。 */
     public var pageSize: Int
     public var total: Int64
 

@@ -179,6 +179,7 @@ open class TenantRolesAPI {
 
     /**
      - GET /api/v1/tenants/{tenantId}/roles
+     - 分页：page 0 基（Spring Data Pageable），首页 page=0；pageSize 每页条数。
      - parameter tenantId: (path)  
      - parameter clientId: (query)  (optional)
      - parameter page: (query)  (optional)

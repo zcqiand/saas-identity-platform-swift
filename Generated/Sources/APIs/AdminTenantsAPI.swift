@@ -162,6 +162,7 @@ open class AdminTenantsAPI {
 
     /**
      - GET /api/v1/admin/tenants
+     - 分页：page 0 基（Spring Data Pageable），首页 page=0；pageSize 每页条数。
      - parameter page: (query)  (optional)
      - parameter pageSize: (query)  (optional)
      - returns: RequestBuilder<AdminTenantsListTenants200Response> 

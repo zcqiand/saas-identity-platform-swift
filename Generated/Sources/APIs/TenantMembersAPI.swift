@@ -327,6 +327,7 @@ open class TenantMembersAPI {
 
     /**
      - GET /api/v1/tenants/{tenantId}/members
+     - 分页：page 0 基（Spring Data Pageable），首页 page=0；pageSize 每页条数。
      - parameter tenantId: (path)  
      - parameter page: (query)  (optional)
      - parameter pageSize: (query)  (optional)
